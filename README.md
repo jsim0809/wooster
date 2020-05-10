@@ -22,17 +22,16 @@ Pandora users rejoice -- the single best feature of Pandora is now available for
 
 **Your music listening habits**
 
-Check out how your music tastes over time.
+Check out your music tastes over time.
 
 ## Technology
 
 Wooster was built with:
 
-* Bootstrap
-* Vue.js
-* Nuxt.js
-* Express.js
-* Node.js
-* Docker
-* ArangoDB
-
+* [Bootstrap](https://getbootstrap.com/)
+* [Vue.js](https://vuejs.org/)
+* [Express.js](https://expressjs.com/)
+* [Node.js](https://nodejs.org/)
+* [Docker](https://www.docker.com/)
+* [ArangoDB](https://www.arangodb.com/)
+* [Amazon Web Services](https://aws.amazon.com/)
