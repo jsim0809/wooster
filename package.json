@@ -1,0 +1,27 @@
+{
+  "name": "wooster",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start-dev": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jsim0809/wooster.git"
+  },
+  "author": "Jeremy Sim <jeremy_sim@hotmail.com> (https://github.com/jsim0809)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jsim0809/wooster/issues"
+  },
+  "homepage": "https://github.com/jsim0809/wooster#readme",
+  "dependencies": {
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "querystring": "^0.2.0",
+    "request": "^2.88.2"
+  }
+}
