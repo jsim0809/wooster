@@ -1,5 +1,4 @@
 # Wooster
-## Created by Jeremy Sim
 
 Wooster is a streamlined Spotify music player with data visualization and quality-of-life improvements.
 
@@ -7,11 +6,11 @@ Wooster is a streamlined Spotify music player with data visualization and qualit
 
 **Fast and snappy**
 
-As much as we love Spotify, there's no denying that the UI has grown more and more bloated over the years. We stripped out all the nonessentials and constructed a clean UI that is a pleasure to use.
+As much as we love Spotify, there's no denying that the UI has grown slower and more bloated over the years. We stripped out all the nonessentials and constructed a clean UI that is a pleasure to use.
 
 **One playlist**
 
-Spotify inundates you with recommendations, playlists, and random stuff that just saps your groove. Wooster doesn't do any of that. Just hit play. Wooster does the rest.
+Spotify inundates you with recommendations, playlists, and random stuff that just saps your groove. Wooster doesn't do any of that. Just hit play: Wooster does the rest.
 
 **Visualization**
 
