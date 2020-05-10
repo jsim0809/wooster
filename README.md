@@ -35,3 +35,7 @@ Wooster was built with:
 * [Docker](https://www.docker.com/)
 * [ArangoDB](https://www.arangodb.com/)
 * [Amazon Web Services](https://aws.amazon.com/)
+
+## Author
+
+Wooster was created by [Jeremy Sim](www.github.com/jsim0809).
