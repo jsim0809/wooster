@@ -41,14 +41,16 @@ const generateCookie = (length) => {
   * user-top-read: The user's top artists and tracks.
   * user-read-recently-played: The user's recently-played tracks.
   * user-read-email: The user's email address and username.
+  * user-modify-playback-state: Allows the app to play, pause, skip, the user's playback.
 
+ * Scopes documentation at https://developer.spotify.com/documentation/general/guides/scopes/
  */
 app.get('/login', (req, res) => {
 
   const state = generateCookie(16);
   res.cookie('spotify_auth_state', state);
 
-  var scope = 'user-read-currently-playing user-top-read user-read-recently-played user-read-email';
+  var scope = 'user-read-currently-playing user-top-read user-read-recently-played user-read-email user-modify-playback-state';
   res.redirect('https://accounts.spotify.com/authorize?' + 
     querystring.stringify({ 
       response_type: 'code', 

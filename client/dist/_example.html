@@ -1,8 +1,19 @@
 <!doctype html>
 <html>
   <head>
-    <title>Wooster</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <title>Example of the Authorization Code flow with Spotify</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <style type="text/css">
+      #login, #loggedin {
+        display: none;
+      }
+      .text-overflow {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 500px;
+      }
+    </style>
   </head>
 
   <body>
@@ -47,8 +58,6 @@
         <dt>Refresh token</dt><dd class="text-overflow">{{refresh_token}}</dd>
       </dl>
     </script>
-
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.1/handlebars.min.js"></script>
     <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
