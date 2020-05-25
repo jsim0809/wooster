@@ -39,7 +39,7 @@ Wooster was built with:
 
 ## Author
 
-Wooster was created by [Jeremy Sim](www.github.com/jsim0809).
+Wooster was created by [Jeremy Sim](https://www.github.com/jsim0809).
 
 ## Backlog
 
