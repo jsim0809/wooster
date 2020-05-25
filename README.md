@@ -28,6 +28,7 @@ Pore over extensive data about your music tastes, so you can finally answer the 
 
 Wooster was built with:
 
+* [Spotify Web API](https://developer.spotify.com/documentation/web-api/)
 * [Bootstrap](https://getbootstrap.com/)
 * [D3.js](https://d3js.org/)
 * [Vue.js](https://vuejs.org/)
@@ -40,7 +41,3 @@ Wooster was built with:
 ## Author
 
 Wooster was created by [Jeremy Sim](https://www.github.com/jsim0809).
-
-## Backlog
-
-* Refactor login flow to use Vue/Axios instead of Bootstrap/jQuery
