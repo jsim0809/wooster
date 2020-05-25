@@ -29,6 +29,7 @@ Pore over extensive data about your music tastes, so you can finally answer the 
 Wooster was built with:
 
 * [Bootstrap](https://getbootstrap.com/)
+* [D3.js](https://d3js.org/)
 * [Vue.js](https://vuejs.org/)
 * [Express.js](https://expressjs.com/)
 * [Node.js](https://nodejs.org/)
