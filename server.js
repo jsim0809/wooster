@@ -12,7 +12,7 @@ const client_id = secret.WOOSTER_CLIENT_ID;
 const client_secret = secret.WOOSTER_CLIENT_SECRET;
 const redirect_uri = 'http://localhost:1234/callback';
 
-app.use(express.static(`${__dirname}/client/dist`));
+app.use(express.static(`${__dirname}/public`));
 app.use(cors());
 app.use(cookieParser());
 
@@ -126,9 +126,8 @@ app.get('/callback', (req, res) => {
   }
 });
 
+// Client uses refresh token to request access token.
 app.get('/refresh_token', (req, res) => {
-
-  // Client uses refresh token to request access token.
   const authOptions = {
     url: 'https://accounts.spotify.com/api/token',
     headers: { 'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64')) },
