@@ -10,7 +10,7 @@ Wooster features a clean, streamlined UI that is a pleasure to use.
 
 **One playlist.**
 
-Whenever we use Spotify's default player, we feel overwhelmed with recommendations, playlists, and random stuff that saps our motivation to actually listen to music. Wooster replaces that with a single song entry field and 'Play' button.
+Whenever I use Spotify's default player, I feel overwhelmed with recommendations, playlists, and random stuff that saps my motivation to actually listen to music. With Wooster, I replaced that with a single song entry field and 'Play' button.
 
 **Visualization.**
 
@@ -18,7 +18,7 @@ Wooster uses D3.js to visualize song data in a beautiful way.
 
 **"I'm tired of this song."**
 
-This was the one feature that Spotify was missing for us -- Pandora's "I'm tired of this song" feature, which benches a song for 30 days if you want to give it a break. Wooster brings this functionality to Spotify.
+This was the one feature that Spotify was missing for me: the "I'm tired of this song" feature — from Pandora — which benches a song for 30 days if I want to give it a break. Wooster brings this functionality to Spotify.
 
 ## Technology
 
