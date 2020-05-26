@@ -10,7 +10,7 @@ Wooster features a clean, streamlined UI that is a pleasure to use.
 
 **One playlist.**
 
-Whenever we use Spotify, we feel overwhelmed with recommendations, playlists, and random stuff that saps our motivation to actually listen to music. Wooster replaces that with a single song entry field and 'Play' button.
+Whenever we use Spotify's default player, we feel overwhelmed with recommendations, playlists, and random stuff that saps our motivation to actually listen to music. Wooster replaces that with a single song entry field and 'Play' button.
 
 **Visualization.**
 
