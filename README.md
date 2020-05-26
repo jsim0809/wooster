@@ -6,19 +6,19 @@ Wooster is a music analysis project using the Spotify API.
 
 **Fast and snappy.**
 
-I plan to construct a clean, streamlined UI that is a pleasure to use.
+Wooster features a clean, streamlined UI that is a pleasure to use.
 
 **One playlist.**
 
-Whenever I use Spotify, I feel overwhelmed with recommendations, playlists, and random stuff that saps my motivation to actually listen to music. I want to replace that with a single song entry field and 'Play' button.
+Whenever we use Spotify, we feel overwhelmed with recommendations, playlists, and random stuff that saps our motivation to actually listen to music. Wooster replaces that with a single song entry field and 'Play' button.
 
 **Visualization.**
 
-I hope to use D3.js to visualize song data in a beautiful way, and gain a more insight into my music listening habits.
+Wooster uses D3.js to visualize song data in a beautiful way.
 
 **"I'm tired of this song."**
 
-This is the one feature that Spotify is missing for me -- Pandora's "I'm tired of this song" feature, which benches a song for 30 days if you want to give it a break. I want to reproduce this functionality for Wooster.
+This was the one feature that Spotify was missing for us -- Pandora's "I'm tired of this song" feature, which benches a song for 30 days if you want to give it a break. Wooster brings this functionality to Spotify.
 
 ## Technology
 
