@@ -3,7 +3,8 @@ const request = require('request');
 const cors = require('cors');
 const querystring = require('querystring');
 const cookieParser = require('cookie-parser');
-const secret = require('./secret.keys.js');
+// Disabled for now
+// const secret = require('./secret.keys.js');
 
 const app = express();
 const PORT = 1234;
