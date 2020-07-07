@@ -1,9 +1,36 @@
+/* Color variables */
+
+:root {
+  --pantone-old-gold: #EEB127;
+}
+
+/* Font */
+
+@font-face {
+  font-family: 'Antipasto';
+  src: url('./assets/Antipasto-Pro-Regular-trial.ttf'), url('./assets/Antipasto-Pro-ExtraLight-trial.ttf');
+}
+
+/* Overall app styling */
+
 #app {
+  /* Background */
   height: 100vh;
   width: 100vw;
   background-image: url('assets/denim.jpg');
+
+  /* Grid */
   display: grid;
   grid-template-columns: 1fr 850px 1fr;
   grid-template-rows: 100px 1fr 40px;
-  color: white;
+  place-items: center;
+
+  /* Text */
+  color: var(--pantone-old-gold);
+  font-family: 'Antipasto', sans-serif;
+  font-size: 3em;
+}
+
+.body-section {
+  grid-area: 2 / 2 / 3 / 3;
 }

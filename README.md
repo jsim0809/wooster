@@ -53,7 +53,7 @@ I want a page that gives information about the Wooster project.
 Wooster was built with:
 
 * [Spotify Web API](https://developer.spotify.com/documentation/web-api/)
-* [React](https://reactjs.org/)
+* [React (+Hooks)](https://reactjs.org/)
 * [Express.js](https://expressjs.com/)
 * [Node.js](https://nodejs.org/)
 

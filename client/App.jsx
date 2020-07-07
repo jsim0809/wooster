@@ -2,6 +2,9 @@ import React, { useEffect } from 'react';
 import { useMachine } from '@xstate/react';
 import woosterMachine from './woosterMachine.js';
 
+import WelcomeToWooster from './WelcomeToWooster.jsx';
+import LogIn from './LogIn.jsx';
+
 function App() {
   const [currentState, sendEvent] = useMachine(woosterMachine);
 
@@ -13,11 +16,11 @@ function App() {
 
   if (currentState.matches('intro')) {
     return (
-      <div>Welcome to Wooster</div>
+      <WelcomeToWooster />
     );
   } else if (currentState.matches('landing')) {
     return (
-      <div>Log in</div>
+      <LogIn />
     );
   }
 }
