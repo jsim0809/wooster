@@ -2,7 +2,8 @@
 
 Wooster is a music player project using the Spotify API.
 
-## Primary design goals (see Projects section for more detailed goals and user stories)
+## Primary design goals
+### (see Projects section for more detailed goals and user stories)
 
 **Beautiful UI.**
 
