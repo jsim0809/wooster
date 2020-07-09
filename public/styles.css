@@ -2,14 +2,22 @@
 
 :root {
   --pantone-old-gold: #EEB127;
+  --iscc-metallic-gold: #D4AF37;
 }
 
 /* Font */
 
 @font-face {
   font-family: 'Antipasto';
-  src: url('./assets/Antipasto-Pro-Regular-trial.ttf'), url('./assets/Antipasto-Pro-ExtraLight-trial.ttf');
+  src: url('./assets/Antipasto-Pro-Regular-trial.ttf');
 }
+
+@font-face {
+  font-family: 'Antipasto-Light';
+  src: url('./assets/Antipasto-Pro-ExtraLight-trial.ttf');
+}
+
+
 
 /* Overall app styling */
 
@@ -17,7 +25,7 @@
   /* Background */
   height: 100vh;
   width: 100vw;
-  background-image: url('assets/denim.jpg');
+  background-image: url('assets/black-denim-25.jpg');
 
   /* Grid */
   display: grid;
