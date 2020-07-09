@@ -31,7 +31,7 @@
   display: grid;
   grid-template-columns: 1fr 850px 1fr;
   grid-template-rows: 100px 1fr 40px;
-  place-items: center;
+  place-items: start center;
 
   /* Text */
   color: var(--pantone-old-gold);
@@ -41,4 +41,9 @@
 
 .body-section {
   grid-area: 2 / 2 / 3 / 3;
+}
+
+.center-spot {
+  position: relative;
+  top: 30%;
 }
