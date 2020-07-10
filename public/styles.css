@@ -1,7 +1,7 @@
 /* Color variables */
 
 :root {
-  --pantone-old-gold: #EEB127;
+  --pantone-old-gold: #eeb127;
   --iscc-metallic-gold: #D4AF37;
 }
 
@@ -45,5 +45,5 @@
 
 .center-spot {
   position: relative;
-  top: 30%;
+  top: 33%;
 }
