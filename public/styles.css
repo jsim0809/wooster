@@ -39,6 +39,8 @@
   font-size: 3em;
 }
 
+/* Placement classes */
+
 .body-section {
   grid-area: 2 / 2 / 3 / 3;
 }
@@ -46,4 +48,19 @@
 .center-spot {
   position: relative;
   top: 33%;
+}
+
+/* Animations */
+
+.welcome-box {
+  width: 537px;
+  height: 56px;
+}
+
+#wipe-animation {
+  background-image: url('./assets/welcome-to-wooster-rainbow.png');
+  background-size: cover;
+  transition: width 1s;
+  width: 0px;
+  height: 56px;
 }

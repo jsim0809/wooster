@@ -9,9 +9,10 @@ function App() {
   const [currentState, sendEvent] = useMachine(woosterMachine);
 
   useEffect(() => {
-    setTimeout(() => {
-      sendEvent('ANIMATION_DONE');
-    }, 3000);
+    document.querySelector('#wipe-animation').style.width = '537px';
+    // setTimeout(() => {
+    //   sendEvent('ANIMATION_DONE');
+    // }, 3000);
   }, []);
 
   if (currentState.matches('intro')) {
