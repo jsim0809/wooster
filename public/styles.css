@@ -53,14 +53,14 @@
 /* Animations */
 
 .welcome-box {
-  width: 537px;
-  height: 56px;
+  width: 523px;
+  height: 50px;
 }
 
 #wipe-animation {
-  background-image: url('./assets/welcome-to-wooster-rainbow.png');
+  background-image: url('./assets/welcome-to-wooster.png');
   background-size: cover;
   transition: width 1s;
   width: 0px;
-  height: 56px;
+  height: 50px;
 }
