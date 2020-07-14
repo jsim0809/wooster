@@ -25,7 +25,7 @@
   /* Background */
   height: 100vh;
   width: 100vw;
-  background-image: url('assets/black-denim-25.jpg');
+  /* background-image: url('assets/black-denim-25.jpg'); */
 
   /* Grid */
   display: grid;
@@ -64,3 +64,100 @@
   width: 0px;
   height: 50px;
 }
+
+/* SVG animation */
+
+.cls-1, .cls-3 {
+  fill: none;
+}
+
+.cls-2 {
+  clip-path: url(#clip-path);
+}
+
+.cls-3 {
+  stroke: #000;
+  stroke-miterlimit: 10;
+  stroke-width: 6px;
+
+  stroke-dasharray: 300;
+  stroke-dashoffset: 300;
+  animation: dash 5s forwards;
+  animation-timing-function: linear;
+}
+
+.animate-fast {
+  animation: dash 2.5s forwards;
+  animation-timing-function: linear;
+}
+
+.animate-slow {
+  animation: dash 18s forwards;
+  animation-timing-function: cubic-bezier(0, 0.4, 1, 0.09);
+}
+
+.cls-4 {
+  clip-path: url(#clip-path-2);
+}
+
+.cls-5 {
+  clip-path: url(#clip-path-3);
+}
+
+.cls-6 {
+  clip-path: url(#clip-path-4);
+}
+
+.cls-7 {
+  clip-path: url(#clip-path-5);
+}
+
+.cls-8 {
+  clip-path: url(#clip-path-6);
+}
+
+.cls-9 {
+  clip-path: url(#clip-path-7);
+}
+
+.cls-10 {
+  clip-path: url(#clip-path-8);
+}
+
+.cls-11 {
+  clip-path: url(#clip-path-9);
+}
+
+.cls-12 {
+  clip-path: url(#clip-path-10);
+}
+
+.cls-13 {
+  clip-path: url(#clip-path-11);
+}
+
+.cls-14 {
+  clip-path: url(#clip-path-12);
+}
+
+.cls-15 {
+  clip-path: url(#clip-path-13);
+}
+
+.cls-16 {
+  clip-path: url(#clip-path-14);
+}
+
+.cls-17 {
+  clip-path: url(#clip-path-15);
+}
+
+.cls-18 {
+  clip-path: url(#clip-path-16);
+}
+
+@keyframes dash {
+  to {
+   stroke-dashoffset: 0;
+   }
+  }
