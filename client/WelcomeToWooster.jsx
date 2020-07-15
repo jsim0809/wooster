@@ -5,7 +5,7 @@ function WelcomeToWooster() {
     <section className="body-section center-spot">
 
       {/* Big SVG mask definition */}
-      <svg id="letters" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="4.5 11 523 50">
+      <svg id="letter-mask" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="4.5 11 523 50">
   <defs>
     <clipPath id="clip-path" transform="translate(-380.549 -319.079)">
       <path id="W" class="cls-1" d="M422.708,377.02a3.97,3.97,0,0,1-3.587-2.453l-4.96-11.5-4.968,11.521a3.879,3.879,0,0,1-1.531,1.817,3.969,3.969,0,0,1-2.132.62c.027,0-.043,0-.113,0a4.017,4.017,0,0,1-2.069-.564,3.865,3.865,0,0,1-1.629-1.925l-15.635-36.27a3.781,3.781,0,0,1,0-3.136,3.974,3.974,0,0,1,2.2-2.095,3.769,3.769,0,0,1,1.494-.305,4.012,4.012,0,0,1,3.661,2.425l12.037,27.932,4.366-10.054-6.366-14.766a3.821,3.821,0,0,1-.036-3.1,3.908,3.908,0,0,1,2.2-2.129,3.783,3.783,0,0,1,1.5-.305,4.044,4.044,0,0,1,1.462.28,3.966,3.966,0,0,1,2.226,2.145l3.348,7.817,3.383-7.805a4.076,4.076,0,0,1,2.138-2.116,3.887,3.887,0,0,1,1.527-.317,4.055,4.055,0,0,1,3.665,2.4,3.792,3.792,0,0,1-.011,3.149L418.512,353l4.321,10.07,12.109-27.909a4.088,4.088,0,0,1,2.11-2.11,3.836,3.836,0,0,1,1.537-.323,4.057,4.057,0,0,1,1.514.3,3.938,3.938,0,0,1,2.168,2.127,3.838,3.838,0,0,1-.041,3.118l-9.633,22.3-6.048,14a3.794,3.794,0,0,1-1.648,1.889,4.052,4.052,0,0,1-2.034.549Q422.788,377.023,422.708,377.02Z"/>
@@ -140,12 +140,12 @@ function WelcomeToWooster() {
       <path id="r-path" class="cls-3" d="M890,338v45l2-31s19-9,21-6" transform="translate(-380.549 -319.079)"/>
     </g>
   </g>
+        <image id="letters" href="./assets/welcome-to-wooster.png" mask="url(#letter-animation-mask)" x="4.5" y="11" />
 </svg>
 
 
 
-        {/* <image href="./assets/welcome-to-wooster.png" mask="url(#letter-animation-mask)" /> */}
-        <rect x="0" y="0" width="600" height="60" style={{ stroke: 'none', fill: '#0000ff', mask: 'url(#letter-animation-mask)' }} />
+        {/* <rect x="0" y="0" width="600" height="60" style={{ stroke: 'none', fill: '#0000ff', mask: 'url(#letter-animation-mask)' }} /> */}
       <div id="wipe-animation"></div>
     </section >
   );
