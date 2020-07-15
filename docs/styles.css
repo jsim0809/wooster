@@ -23,7 +23,7 @@
   /* Background */
   height: 100vh;
   width: 100vw;
-  /* background-image: url('assets/black-denim-25.jpg'); */
+  background-image: url('assets/black-denim-25.jpg');
 
   /* Grid */
   display: grid;
@@ -48,27 +48,7 @@
   top: 33%;
 }
 
-/* Animations */
-
-.welcome-box {
-  width: 523px;
-  height: 50px;
-}
-
-#wipe-animation {
-  background-image: url('./assets/welcome-to-wooster.png');
-  background-size: cover;
-  transition: width 1s;
-  width: 0px;
-  height: 50px;
-}
-
-#letter-mask {
-  width: 523px;
-  height: 50px;
-}
-
-#letters {
+#letters-and-mask {
   width: 523px;
   height: 50px;
 }
@@ -85,14 +65,20 @@
 }
 
 .cls-3 {
-  stroke: #000;
+  stroke: #fff;
   stroke-miterlimit: 10;
   stroke-width: 12px;
 
   stroke-dasharray: 300;
   stroke-dashoffset: 300;
-  animation: dash 5s linear forwards;
+  animation: dash 5s forwards;
+  animation-timing-function: linear;
 }
+
+.animate-slow {
+  animation: dash 8s forwards;
+  animation-timing-function: cubic-bezier(0, 0.4, 1, 0.1);
+} 
 
 .cls-4 {
   clip-path: url(#clip-path-2);
@@ -153,16 +139,6 @@
 .cls-18 {
   clip-path: url(#clip-path-16);
 }
-
-/* .animate-fast {
-  animation: dash 2.5s forwards;
-  animation-timing-function: linear;
-}
-
-.animate-slow {
-  animation: dash 18s forwards;
-  animation-timing-function: cubic-bezier(0, 0.4, 1, 0.1);
-}  */
 
 @keyframes dash {
   to {
