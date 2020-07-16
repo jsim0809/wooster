@@ -53,14 +53,6 @@
   height: 50px;
 }
 
-.horizontal-scan {
-  position: relative;
-}
-
-.o-finish {
-  position: relative;
-}
-
 /* SVG animation */
 
 .cls-1 {
@@ -71,7 +63,7 @@
 
   stroke-dasharray: 15000;
   stroke-dashoffset: 15000;
-  animation: dash 5s forwards;
+  animation: dash 4s forwards;
   animation-timing-function: linear;
 }
 
@@ -100,9 +92,9 @@
 
   stroke-dasharray: 300;
   stroke-dashoffset: 300;
-  animation: dash 5s forwards;
-  animation-timing-function: linear;
-  /* animation-delay: 5s; */
+  animation: dash 4s forwards;
+  animation-timing-function: cubic-bezier(.01,.71,1,-0.52);
+  animation-delay: 3.5s;
 }
 
 .cls-4b {
