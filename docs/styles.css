@@ -93,7 +93,7 @@
   stroke-dasharray: 300;
   stroke-dashoffset: 300;
   animation: dash 4s forwards;
-  animation-timing-function: cubic-bezier(.01,.71,1,-0.52);
+  animation-timing-function: cubic-bezier(.24,.67,.53,-0.37);
   animation-delay: 3.5s;
 }
 
