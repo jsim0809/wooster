@@ -89,6 +89,7 @@
   stroke: #fff;
   stroke-miterlimit: 10;
   stroke-width: 11px;
+  stroke-linecap: round;
 
   stroke-dasharray: 300;
   stroke-dashoffset: 300;
