@@ -9,7 +9,6 @@ function App() {
   const [currentState, sendEvent] = useMachine(woosterMachine);
 
   useEffect(() => {
-    // document.querySelector('#wipe-animation').style.width = '523px';
     // setTimeout(() => {
     //   sendEvent('ANIMATION_DONE');
     // }, 3000);

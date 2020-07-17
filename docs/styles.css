@@ -3,10 +3,12 @@
 :root {
   --pantone-old-gold: #eeb127;
   --welcome-to-wooster-delay: 0.5s;
-  --welcome-to-wooster-duration: 7.5s;
+  --welcome-to-wooster-duration: 7s;
   --welcome-to-wooster-stagger: 0.125s;
-  --shine-delay: 5s;
+  --shine-delay: 4.5s;
   --shine-duration: 1.75s;
+  --fadeout-delay: 6s;
+  --fadeout-duration: 1s;
 }
 
 /* Font */
@@ -55,6 +57,12 @@
 #letters-and-mask {
   width: 523px;
   height: 50px;
+
+  animation-name: fadeout;
+  animation-delay: var(--fadeout-delay);
+  animation-duration: var(--fadeout-duration);
+  animation-fill-mode: forwards;
+  animation-timing-function: linear;
 }
 
 /* Letter-drawing animation */
@@ -270,5 +278,13 @@
   }
   100% {
     x: 400;
+  }
+}
+
+/* Fade out animation */
+
+@keyframes fadeout {
+  100% {
+    opacity: 0;
   }
 }
