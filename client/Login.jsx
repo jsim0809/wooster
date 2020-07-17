@@ -1,6 +1,6 @@
 import React from 'react';
 
-function LogIn() {
+function Login() {
   return (
     <section className="body-section center-spot login">
       <div>Log in</div>
@@ -8,4 +8,4 @@ function LogIn() {
   );
 }
 
-export default LogIn;
+export default Login;

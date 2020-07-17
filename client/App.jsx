@@ -3,24 +3,34 @@ import { useMachine } from '@xstate/react';
 import woosterMachine from './woosterMachine.js';
 
 import WelcomeToWooster from './WelcomeToWooster.jsx';
-import LogIn from './LogIn.jsx';
+import Header from './Header.jsx';
+import Login from './Login.jsx';
 
 function App() {
   const [currentState, sendEvent] = useMachine(woosterMachine);
 
   useEffect(() => {
-    // setTimeout(() => {
-    //   sendEvent('ANIMATION_DONE');
-    // }, 3000);
+    setTimeout(() => {
+      sendEvent('ANIMATION_DONE');
+    }, 8000);
   }, []);
 
   if (currentState.matches('intro')) {
     return (
-      <WelcomeToWooster />
+      <div id="body-section">
+        <div id="body-grid">
+          <WelcomeToWooster />
+        </div>
+      </div>
     );
   } else if (currentState.matches('landing')) {
     return (
-      <LogIn />
+      <div id="body-section">
+        <div id="body-grid">
+          <Header />
+          <Login />
+        </div>
+      </div>
     );
   }
 }

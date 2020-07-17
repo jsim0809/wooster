@@ -7,7 +7,7 @@
   --welcome-to-wooster-stagger: 0.125s;
   --shine-delay: 4.5s;
   --shine-duration: 1.75s;
-  --fadeout-delay: 6s;
+  --fadeout-delay: 5500s;
   --fadeout-duration: 1s;
 }
 
@@ -15,7 +15,7 @@
 
 @font-face {
   font-family: 'Antipasto';
-  src: url('./assets/Antipasto-Pro-Regular-trial.ttf');
+  src: url('assets/Antipasto-Pro-Regular-trial.ttf');
 }
 
 /* @font-face {
@@ -60,4 +60,8 @@
   grid-template-rows: repeat(14, 1fr);
   gap: 8px;
   place-items: start center;
+}
+
+#header {
+  grid-area: 1 / 8 / 2 / 5;
 }
