@@ -5,11 +5,13 @@
   --welcome-to-wooster-delay: 0.5s;
   --welcome-to-wooster-duration: 7s;
   --welcome-to-wooster-stagger: 0.125s;
-  --shine-delay: 4.5s;
-  --shine-duration: 1.75s;
+  --intro-shine-delay: 4.5s;
+  --intro-shine-duration: 1.75s;
   --fadeout-delay: 6s;
   --fadeout-duration: 1s;
   --fadein-duration: 1s;
+  --title-shine-duration: 1.75s;
+  --title-shine-multiplier: 10;
 }
 
 /* Font */
@@ -269,37 +271,68 @@
 
 /* Shimmer animation */
 
-#welcome-to-wooster {
+.shiny {
   mix-blend-mode: screen;
 }
 
-#shine {
+#intro-shine {
   position: relative;
   top: -56px;
 }
 
-#shine-mask-placement {
+#intro-shine-mask-placement {
   transform: scaleX(1.002) translate(4.25px, 6.25px);
 }
 
-.cls-shine {
+.shiny-white {
   fill: #fff;
 }
 
-#shine-rect {
-  animation-name: shine;
-  animation-delay: var(--shine-delay);
-  animation-duration: var(--shine-duration);
+#intro-shine-rect {
+  animation-name: intro-shine;
+  animation-delay: var(--intro-shine-delay);
+  animation-duration: var(--intro-shine-duration);
   animation-fill-mode: forwards;
   animation-timing-function: ease;
 }
 
-@keyframes shine {
+#title-shine {
+  position: relative;
+  top: -50px;
+}
+
+#title-shine-mask-placement {
+  transform: scaleX(0.98) translate(2px, 1px);
+}
+
+#title-shine-rect {
+  animation-name: title-shine;
+  animation-duration: calc(var(--title-shine-duration) * var(--title-shine-multiplier));
+  animation-iteration-count: infinite;
+  animation-timing-function: ease;
+}
+
+@keyframes intro-shine {
   0% {
     x: -400;
   }
   100% {
     x: 400;
+  }
+}
+
+@keyframes title-shine {
+  0% {
+    x: -220;
+  }
+  45% {
+    x: -220;
+  }
+  55% {
+    x: 220;
+  }
+  100% {
+    x: 220;
   }
 }
 
