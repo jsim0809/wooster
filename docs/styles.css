@@ -31,11 +31,10 @@
   width: 100vw;
   background-image: url('assets/black-denim-25.jpg');
 
-  /* Grid */
+  /* Outer grid */
   display: grid;
-  grid-template-columns: 1fr 850px 1fr;
-  grid-template-rows: 100px 1fr 40px;
-  place-items: start center;
+  grid-template-columns: 1fr 820px 1fr;
+  grid-template-rows: 30px 1fr 30px;
 
   /* Text */
   /* color: var(--pantone-old-gold);
@@ -45,16 +44,27 @@
 
 /* Placement classes */
 
-.body-section {
+#body-section {
   grid-area: 2 / 2 / 3 / 3;
+  height: 100%;
+  width: 100%;
 }
 
-.center-spot {
-  position: relative;
-  top: 33%;
+#body-grid {
+  height: 100%;
+  width: 100%;
+
+  /* Inner grid */
+  display: grid;
+  grid-template-columns: repeat(11, 1fr);
+  grid-template-rows: repeat(14, 1fr);
+  gap: 8px;
+  place-items: start center;
 }
 
 #letters-and-mask {
+  grid-area: 6 / 10 / 7 / 3;
+
   width: 523px;
   height: 50px;
 

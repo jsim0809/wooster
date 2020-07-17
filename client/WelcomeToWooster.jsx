@@ -2,7 +2,9 @@ import React from 'react';
 
 function WelcomeToWooster() {
   return (
-    <section className="body-section center-spot" id="letters-and-mask">
+    <section id="body-section">
+      <div id="body-grid">
+      <div id="letters-and-mask">
 
       <svg id="welcome-to-wooster" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 0 528.872 53.448">
         <defs>
@@ -182,8 +184,9 @@ function WelcomeToWooster() {
 
 
       </svg>
-
-    </section >
+      </div>
+      </div>
+    </section>
   );
 }
 
