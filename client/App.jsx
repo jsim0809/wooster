@@ -12,7 +12,7 @@ function App() {
   useEffect(() => {
     setTimeout(() => {
       sendEvent('ANIMATION_DONE');
-    }, 8000);
+    }, 7500);
   }, []);
 
   if (currentState.matches('intro')) {
