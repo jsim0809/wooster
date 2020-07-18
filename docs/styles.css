@@ -33,6 +33,7 @@
   height: 100vh;
   width: 100vw;
   background-image: url('assets/black-denim-25.jpg');
+  /* background-color: #111111; */
 
   /* Outer grid */
   display: grid;
@@ -57,6 +58,8 @@
   height: 100%;
   width: 100%;
 
+  overflow: hidden;
+
   /* Inner grid */
   display: grid;
   grid-template-columns: repeat(11, 1fr);
@@ -67,8 +70,20 @@
 
 /* Places items in their appropriate place in the body grid */
 
+#login {
+  grid-area: 6 / 8 / 7 / 5;
+}
+
+#login-button {
+  width: 100%;
+  height: auto;
+}
+
 #header {
   grid-area: 1 / 8 / 2 / 5;
+
+  width: 212px;
+  height: 50px;
 
   animation-name: fadein;
   animation-duration: var(--fadeout-duration);

@@ -2,9 +2,9 @@ import React from 'react';
 
 function Login() {
   return (
-    <section className="body-section center-spot login">
-      <div>Log in</div>
-    </section>
+    <div id="login">
+      <img id="login-button" src="assets/log-in-with-spotify.svg" alt="Log in with Spotify"/>
+    </div>
   );
 }
 
