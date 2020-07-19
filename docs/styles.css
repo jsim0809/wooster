@@ -6,14 +6,14 @@
   --spotify-green: #1DB954;
   --spotify-bright-green: #1ed760;
 
-  --welcome-to-wooster-delay: 0.5s;
-  --welcome-to-wooster-duration: 7s;
+  --welcome-to-wooster-delay: 0s;
+  --welcome-to-wooster-duration: 6.5s;
   --welcome-to-wooster-stagger: 0.125s;
-  --intro-shine-delay: 4.5s;
+  --intro-shine-delay: 3.25s;
   --intro-shine-duration: 1.75s;
-  --fadeout-delay: 6s;
-  --fadeout-duration: 1s;
-  --fadein-duration: 1s;
+  --fadeout-delay: 5s;
+  --fadeout-duration: 0.75s;
+  --fadein-duration: 0.75s;
   --base-shine-duration: 1.75s;
   --title-shine-multiplier: 10;
 }
@@ -151,7 +151,7 @@
 }
 
 .slow-o {
-  animation-duration: calc(var(--welcome-to-wooster-duration) * 1.75);
+  animation-duration: calc(var(--welcome-to-wooster-duration) * 1.4);
 }
 
 .group-1 {
