@@ -15,9 +15,13 @@ function App() {
     }, 6250);
   }, []);
 
+  const animationCancel = () => {
+    sendEvent('ANIMATION_DONE');
+  }
+
   if (currentState.matches('intro')) {
     return (
-      <div id="body-section">
+      <div id="body-section" onClick={animationCancel}>
         <div id="body-grid">
           <WelcomeToWooster />
         </div>
