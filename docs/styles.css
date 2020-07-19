@@ -85,6 +85,11 @@
   height: 50px;
 }
 
+#login a {
+  position: relative;
+  top: -50px;
+}
+
 .spotify-green {
   fill: var(--spotify-green);
 }
@@ -363,7 +368,7 @@
 
 #login-shine {
   position: relative;
-  top: -45px;
+  top: 5px;
 }
 
 #login-shine:hover > #login-shine-rect {

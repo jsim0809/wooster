@@ -3,7 +3,7 @@ const axios = require('axios');
 const secret = require('./secret.keys.js');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
-const querystring = require('querystring');
+const queryString = require('query-string');
 
 const app = express();
 const PORT = 1234;
@@ -52,19 +52,21 @@ app.get('/login', function (req, res) {
   res.cookie('spotify_auth_state', state);
 
   // Define the scopes we are going to request.
-  var scopes = 'streaming '
-    + 'user-read-email '
-    + 'user-top-read '
-    + 'user-read-playback-position '
-    + 'user-read-currently-playing '
-    + 'user-read-recently-played';
+  var scopes = [
+    'streaming',
+    'user-read-email',
+    'user-top-read',
+    'user-read-playback-position',
+    'user-read-currently-playing',
+    'user-read-recently-played'
+  ];
 
   // Pass all of the above into the redirect URL to Spotify's authorization servers.
-  res.redirect('https://accounts.spotify.com/authorize' +
-    querystring.stringify({
+  res.redirect('https://accounts.spotify.com/authorize?' +
+    queryString.stringify({
       response_type: 'code',
       client_id: WOOSTER_CLIENT_ID,
-      scope: scopes,
+      scope: scopes.join('%20'),
       redirect_uri: REDIRECT_URI,
       state: state
     }));
@@ -74,56 +76,57 @@ app.get('/login', function (req, res) {
  * After the user logs in, they are redirected back to my /callback route.
  */
 app.get('/callback', (req, res) => {
-
-  const code = req.query.code;
-  const state = req.query.state;
+  console.log('hello');
+  const { code, state, error } = req.query;
   const storedState = req.cookies ? req.cookies['spotify_auth_state'] : undefined;
 
   // If the cookie still matches (login succeeded), send Wooster's ID and secret to Spotify's music API servers.
-  if (!state || state !== storedState) {
+  if (error) {
     res.redirect('/#' +
-      querystring.stringify({
+      queryString.stringify({
+        error: error,
+      }));
+  } else if (!state || state !== storedState) {
+    res.redirect('/#' +
+      queryString.stringify({
         error: 'state_mismatch'
       }));
   } else {
     res.clearCookie('spotify_auth_state');
 
+    console.log(`===Samantha?`);
     axios({
       method: 'post',
       url: 'https://accounts.spotify.com/api/token',
-      data: {
+      data: queryString.stringify({
         code: code,
         redirect_uri: REDIRECT_URI,
         grant_type: 'authorization_code',
-      },
+      }),
       headers: {
-        'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64')),
+        'Authorization': 'Basic ' + Buffer.from(WOOSTER_CLIENT_ID + ':' + WOOSTER_CLIENT_SECRET).toString('base64'),
+        'Content-Type':'application/x-www-form-urlencoded',
       },
     })
       .then((response) => {
+        console.log(`Authorized: ${response.body}`);
         const access_token = response.body.access_token;
         const refresh_token = response.body.refresh_token;
 
-        // Finally, use the access token to access the user's personal /me API.
-        axios({
-          method: 'get',
-          url: 'https://api.spotify.com/v1/me',
-          headers: { 'Authorization': 'Bearer ' + access_token },
-        })
-
         // Pass our approved credentials to the URL bar to make further requests.
         res.redirect('/#' +
-          querystring.stringify({
+          queryString.stringify({
             access_token: access_token,
             refresh_token: refresh_token
           }));
       })
-      .catch(() => {
-        res.redirect('/#' +
-          querystring.stringify({
-            error: 'invalid_token'
-          }));
-      })
+      .catch((error) => {
+        console.log(error)
+        // res.redirect('/#' +
+        //   queryString.stringify({
+        //     error: 'invalid_token'
+        //   }));
+      });
   }
 });
 
@@ -134,12 +137,13 @@ app.get('/refresh_token', (req, res) => {
     method: 'post',
     url: 'https://accounts.spotify.com/api/token',
     headers: {
-      'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64'))
+      'Authorization': 'Basic ' + Buffer.from(WOOSTER_CLIENT_ID + ':' + WOOSTER_CLIENT_SECRET).toString('base64'),
+      'Content-Type':'application/x-www-form-urlencoded',
     },
-    data: {
+    data: queryString.stringify({
       grant_type: 'refresh_token',
       refresh_token: req.query.refresh_token
-    },
+    }),
   })
     .then((response) => {
       res.send({
