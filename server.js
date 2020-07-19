@@ -117,36 +117,35 @@ app.get('/callback', (req, res) => {
           }));
       })
       .catch((error) => {
-        console.log(error)
-        // res.redirect('/#' +
-        //   queryString.stringify({
-        //     error: 'invalid_token'
-        //   }));
+        res.redirect('/#' +
+          queryString.stringify({
+            error: 'invalid_token'
+          }));
       });
   }
 });
 
 // When we need a new access token, use the refresh token to request it.
-app.get('/refresh_token', (req, res) => {
+// app.get('/refresh_token', (req, res) => {
 
-  axios({
-    method: 'post',
-    url: 'https://accounts.spotify.com/api/token',
-    headers: {
-      'Authorization': 'Basic ' + Buffer.from(WOOSTER_CLIENT_ID + ':' + WOOSTER_CLIENT_SECRET).toString('base64'),
-      'Content-Type':'application/x-www-form-urlencoded',
-    },
-    data: queryString.stringify({
-      grant_type: 'refresh_token',
-      refresh_token: req.query.refresh_token
-    }),
-  })
-    .then((response) => {
-      res.send({
-        'access_token': response.body.access_token,
-      });
-    });
-});
+//   axios({
+//     method: 'post',
+//     url: 'https://accounts.spotify.com/api/token',
+//     headers: {
+//       'Authorization': 'Basic ' + Buffer.from(WOOSTER_CLIENT_ID + ':' + WOOSTER_CLIENT_SECRET).toString('base64'),
+//       'Content-Type':'application/x-www-form-urlencoded',
+//     },
+//     data: queryString.stringify({
+//       grant_type: 'refresh_token',
+//       refresh_token: req.query.refresh_token
+//     }),
+//   })
+//     .then((response) => {
+//       res.send({
+//         'access_token': response.body.access_token,
+//       });
+//     });
+// });
 
 app.listen(PORT, () => {
   console.log(`Wooster is listening on port ${PORT}.`);
