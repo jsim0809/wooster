@@ -2,7 +2,6 @@ const express = require('express');
 const axios = require('axios');
 const secret = require('./secret.keys.js');
 const cors = require('cors');
-const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const querystring = require('querystring');
 
@@ -14,7 +13,7 @@ const REDIRECT_URI = 'http://localhost:1234/callback';
 
 app.use(express.static('docs'));
 app.use(cors());
-app.use(bodyParser());
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 /**
