@@ -74,8 +74,15 @@
 
 /* Places items in their appropriate place in the body grid */
 
+.pointer {
+  cursor: pointer;
+}
+
 #login {
   grid-area: 6 / 8 / 7 / 5;
+
+  width: 210px;
+  height: 50px;
 }
 
 .spotify-green {
@@ -88,7 +95,6 @@
 
 #header {
   grid-area: 1 / 8 / 2 / 5;
-  cursor: pointer;
 
   width: 212px;
   height: 50px;
@@ -307,8 +313,12 @@
   transform: scaleX(1.002) translate(4.25px, 6.25px);
 }
 
-.shiny-white {
+.mask-white {
   fill: #fff;
+}
+
+.mask-black {
+  fill: #000;
 }
 
 #intro-shine-rect {
@@ -349,8 +359,6 @@
   animation-duration: var(--fadeout-duration);
   animation-fill-mode: forwards;
   animation-timing-function: linear;
-
-  cursor: pointer;
 }
 
 #login-shine {
@@ -363,6 +371,14 @@
   animation-duration: var(--base-shine-duration);
   animation-fill-mode: forwards;
   animation-timing-function: ease;
+}
+
+#login-shine-mask {
+  height: 40px;
+}
+
+#login-shine-mask-placement {
+  transform: scale(0.522) translate(0px, 5.5px);
 }
 
 @keyframes intro-shine {
