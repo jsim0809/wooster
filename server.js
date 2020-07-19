@@ -76,7 +76,6 @@ app.get('/login', function (req, res) {
  * After the user logs in, they are redirected back to my /callback route.
  */
 app.get('/callback', (req, res) => {
-  console.log('hello');
   const { code, state, error } = req.query;
   const storedState = req.cookies ? req.cookies['spotify_auth_state'] : undefined;
 
@@ -94,7 +93,6 @@ app.get('/callback', (req, res) => {
   } else {
     res.clearCookie('spotify_auth_state');
 
-    console.log(`===Samantha?`);
     axios({
       method: 'post',
       url: 'https://accounts.spotify.com/api/token',
@@ -109,9 +107,7 @@ app.get('/callback', (req, res) => {
       },
     })
       .then((response) => {
-        console.log(`Authorized: ${response.body}`);
-        const access_token = response.body.access_token;
-        const refresh_token = response.body.refresh_token;
+        const { access_token, refresh_token } = response.data;
 
         // Pass our approved credentials to the URL bar to make further requests.
         res.redirect('/#' +
