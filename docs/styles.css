@@ -12,8 +12,8 @@
   --intro-shine-delay: 3.25s;
   --intro-shine-duration: 1.75s;
   --fadeout-delay: 5s;
-  --fadeout-duration: 0.75s;
-  --fadein-duration: 0.75s;
+  --fadeout-duration: 0.5s;
+  --fadein-duration: 0.5s;
   --base-shine-duration: 1.75s;
   --title-shine-multiplier: 10;
 }
@@ -293,9 +293,9 @@
 
 @keyframes dash {
   0% {
-    opacity: 0%;
+    opacity: 50%;
   }
-  7.5% {
+  5% {
     opacity: 100%;
   }
   100% {

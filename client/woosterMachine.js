@@ -8,6 +8,7 @@ const woosterMachine = Machine({
     intro: {
       on: {
         ANIMATION_DONE: 'landing',
+        ALREADY_LOGGED_IN: 'loggedInNotPlaying',
       }
     },
     landing: {

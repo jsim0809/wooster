@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useMachine } from '@xstate/react';
+import queryString from 'query-string';
 import woosterMachine from './woosterMachine.js';
 
 import WelcomeToWooster from './WelcomeToWooster.jsx';
@@ -7,12 +8,19 @@ import Header from './Header.jsx';
 import Login from './Login.jsx';
 
 function App() {
+  const URL_HASH = queryString.parse(window.location.hash);
   const [currentState, sendEvent] = useMachine(woosterMachine);
+  const [accessToken, setAccessToken] = useState(URL_HASH.access_token);
+  const [refreshToken, setRefreshToken] = useState(URL_HASH.refresh_token);
 
   useEffect(() => {
-    setTimeout(() => {
-      sendEvent('ANIMATION_DONE');
-    }, 6250);
+    if (accessToken) {
+      sendEvent('ALREADY_LOGGED_IN');
+    } else {
+      setTimeout(() => {
+        sendEvent('ANIMATION_DONE');
+      }, 6000);
+    }
   }, []);
 
   const animationCancel = () => {
@@ -36,6 +44,10 @@ function App() {
         </div>
       </div>
     );
+  } else if (currentState.matches('loggedInNotPlaying')) {
+    return (
+      <div style={{backgroundColor: 'pink'}}>You're logged in!</div>
+    )
   }
 }
 

@@ -1,10 +1,6 @@
 import React from 'react';
 
 function Login() {
-  const loginClick = () => {
-
-  }
-
   return (
     <div id="login">
       <svg id="log-in-with-spotify" className="shiny" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 404 76.5">
