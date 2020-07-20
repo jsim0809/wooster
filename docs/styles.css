@@ -42,7 +42,7 @@
   /* Outer grid */
   display: grid;
   grid-template-columns: minmax(0, 1fr) 820px minmax(0, 1fr);
-  grid-template-rows: 30px minmax(0, 1fr) 30px;
+  grid-template-rows: 32px minmax(0, 1fr) 32px;
 
   /* Text */
   /* color: var(--pantone-old-gold);
@@ -69,7 +69,7 @@
   grid-template-columns: repeat(11, minmax(0, 1fr));
   grid-template-rows: repeat(14, minmax(0, 1fr));
   gap: 8px;
-  place-items: start center;
+  place-items: center;
 }
 
 /* Places items in their appropriate place in the body grid */
