@@ -6,6 +6,7 @@ import woosterMachine from './woosterMachine.js';
 import WelcomeToWooster from './WelcomeToWooster.jsx';
 import Header from './Header.jsx';
 import Login from './Login.jsx';
+import PlayButton from './PlayButton.jsx';
 
 function App() {
   const URL_HASH = queryString.parse(window.location.hash);
@@ -46,7 +47,12 @@ function App() {
     );
   } else if (currentState.matches('loggedInNotPlaying')) {
     return (
-      <div style={{backgroundColor: 'pink'}}>You're logged in!</div>
+      <div id="body-section">
+        <div id="body-grid">
+          <Header />
+          <PlayButton />
+        </div>
+      </div>
     )
   }
 }

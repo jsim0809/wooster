@@ -2,7 +2,9 @@ import React from 'react';
 
 function PlayButton() {
   return (
-    <button>Play</button>
+    <div id="play-button" className="pointer">
+      <button>Play</button>
+    </div>
   )
 }
 

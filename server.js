@@ -38,6 +38,7 @@ const generateRandomString = (length) => {
   
  * streaming: Allows you to stream music!
  * user-read-email: The user's email address and username.
+ * user-read-private: The user's subscription details (Premium or Free).
  * user-top-read: The user's top artists and tracks. Used to generate random seeds.
  * user-read-playback-position: Used to track how long you listen to each track in seconds.
  * user-read-currently-playing: Used to properly flag likes, unlikes,  and woos.
@@ -55,6 +56,7 @@ app.get('/login', function (req, res) {
   var scopes = [
     'streaming',
     'user-read-email',
+    'user-read-private',
     'user-top-read',
     'user-read-playback-position',
     'user-read-currently-playing',

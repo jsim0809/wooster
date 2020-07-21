@@ -4,9 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start-dev": "nodemon server.js",
-    "build": "webpack",
-    "build-dev": "webpack -w"
+    "dev": "webpack -w & nodemon server.js",
+    "build": "webpack"
   },
   "repository": {
     "type": "git",
