@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useMachine } from '@xstate/react';
+import axios from 'axios';
 import queryString from 'query-string';
 import woosterMachine from './woosterMachine.js';
 
@@ -14,8 +15,25 @@ function App() {
   const [accessToken, setAccessToken] = useState(URL_HASH.access_token);
   const [refreshToken, setRefreshToken] = useState(URL_HASH.refresh_token);
 
+  const getNewToken = () => {
+    // Use our refresh token to request a new access token.
+    axios({
+      method: 'get',
+      url: '/refresh_token?' +
+        queryString.stringify({
+          refresh_token: refreshToken,
+        }),
+    })
+      .then((response) => {
+        setAccessToken(response.data.access_token);
+      });
+  };
+
   useEffect(() => {
     if (accessToken) {
+      window.location.hash = '';
+      // Spotify access tokens last for 60 minutes. Every 55 minutes, grab a new one.
+      setInterval(getNewToken, 3300000);
       sendEvent('ALREADY_LOGGED_IN');
     } else {
       setTimeout(() => {
@@ -50,7 +68,11 @@ function App() {
       <div id="body-section">
         <div id="body-grid">
           <Header />
-          <Player />
+          <Player
+            accessToken={accessToken}
+            setAccessToken={setAccessToken}
+            refreshToken={refreshToken}
+          />
         </div>
       </div>
     )
