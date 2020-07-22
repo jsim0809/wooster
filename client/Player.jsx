@@ -16,7 +16,8 @@ function Player({ accessToken, refreshToken }) {
     });
     player.connect().then(success => {
       if (success) {
-        console.log('The Web Playback SDK successfully connected to Spotify!');
+        console.log(`Wooster is connected to Spotify's Web Playback SDK.`);
+        console.log(`Requesting new token in 55 minutes.`);
       }
     })
   };
