@@ -20,9 +20,6 @@ function Player({ accessToken, refreshToken }) {
     })
   };
 
-
-
-
   return (
     <div id="play-button" className="pointer">
       <button>Play</button>
