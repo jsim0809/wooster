@@ -1,6 +1,6 @@
 import React from 'react';
 
-function PlayButton() {
+function Player() {
   return (
     <div id="play-button" className="pointer">
       <button>Play</button>
@@ -8,4 +8,4 @@ function PlayButton() {
   )
 }
 
-export default PlayButton;
+export default Player;
