@@ -1,7 +1,8 @@
 import React from 'react';
 import $script from 'scriptjs';
+import axios from 'axios';
 
-function Player({ accessToken, refreshToken }) {
+function Player({ accessToken }) {
   // Load Spotify's player
   $script('https://sdk.scdn.co/spotify-player.js');
 
@@ -20,9 +21,25 @@ function Player({ accessToken, refreshToken }) {
     })
   };
 
+  // Love Story by Taylor Swift
+  const LOVE_STORY = 'spotify:track:1vrd6UOGamcKNGnSHJQlSt';
+
+  const handlePlayClick = () => {
+    axios({
+      method: 'put',
+      url: 'https://api.spotify.com/v1/me/player/play',
+      data: {
+        context_uri: LOVE_STORY,
+      },
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      },
+    })
+  }
+
   return (
     <div id="play-button" className="pointer">
-      <button>Play</button>
+      <button onClick={handlePlayClick}>Play</button>
     </div>
   )
 }

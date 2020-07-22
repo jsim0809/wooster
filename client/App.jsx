@@ -70,8 +70,6 @@ function App() {
           <Header />
           <Player
             accessToken={accessToken}
-            setAccessToken={setAccessToken}
-            refreshToken={refreshToken}
           />
         </div>
       </div>
