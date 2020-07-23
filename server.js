@@ -43,6 +43,7 @@ const generateRandomString = (length) => {
  * user-read-playback-position: Used to track how long you listen to each track in seconds.
  * user-read-currently-playing: Used to properly flag likes, unlikes,  and woos.
  * user-read-recently-played: Recently played tracks. For liking and unliking songs that you recently played.
+ * user-modify-playback-state: Allows Wooster to start and stop songs.
 
  * Scopes documentation at https://developer.spotify.com/documentation/general/guides/scopes/
  */
@@ -60,7 +61,8 @@ app.get('/login', function (req, res) {
     'user-top-read',
     'user-read-playback-position',
     'user-read-currently-playing',
-    'user-read-recently-played'
+    'user-read-recently-played',
+    'user-modify-playback-state',
   ];
 
   // Pass all of the above into the redirect URL to Spotify's authorization servers.
