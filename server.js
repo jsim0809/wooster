@@ -1,9 +1,12 @@
 const express = require('express');
 const axios = require('axios');
-const secret = require('./secret.keys.js');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const queryString = require('query-string');
+
+const dynamodb = require('dynamodb');
+
+const secret = require('./secret.keys.js');
 
 const app = express();
 const PORT = 1234;
