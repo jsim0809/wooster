@@ -18,12 +18,11 @@
   },
   "homepage": "https://github.com/jsim0809/wooster#readme",
   "dependencies": {
+    "aws-sdk": "^2.725.0",
     "axios": "^0.19.2",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
-    "dynamodb": "^1.2.1",
     "express": "^4.17.1",
-    "joi": "^17.1.1",
     "nodemon": "^2.0.4",
     "query-string": "^6.13.1",
     "scriptjs": "^2.5.9"
