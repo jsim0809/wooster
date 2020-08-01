@@ -5,51 +5,74 @@ AWS.config.update({
   accessKeyId: secret.AWS_ACCESS_KEY_ID,
   secretAccessKey: secret.AWS_SECRET_ACCESS_KEY,
   region: 'us-west-2',
-  endpoint: '',
+  endpoint: 'https://dynamodb.us-west-2.amazonaws.com',
 });
 
-// Create a table
-const dynamodb = new AWS.DynamoDB();
-
-const params = {
-  TableName: "Wooster",
-  KeySchema: [
-    { AttributeName: "email", KeyType: "HASH" }
-  ],
-  AttributeDefinitions: [
-    { AttributeName: "email", AttributeType: "S" }
-  ],
-  ProvisionedThroughput: {
-    ReadCapacityUnits: 0,
-    WriteCapacityUnits: 0
-  }
-};
-
-dynamodb.createTable(params, (err, data) => {
-  if (err) {
-      console.error("Unable to create table. Error JSON:", JSON.stringify(err, null, 2));
-  } else {
-      console.log("Created table. Table description JSON:", JSON.stringify(data, null, 2));
-  }
-});
-
-
-// Write new user to table
 const docClient = new AWS.DynamoDB.DocumentClient();
 
-const writeData = (email, spotify_user_id) => {
+// When the user finishes playing a song
+// (listened to the end, skipped forward, benched/disliked, or hit repeat),
+// we will record the start_time and end_time of the just-played song.
+// If the user's email address has changed, we will update it.
+
+const recordSong = (spotify_user_id, email, track_id, start_time, end_time, callback) => {
   const params = {
     TableName: "Wooster",
-    Item: {
-        "email": email,
-        "spotify_user_id": spotify_user_id,
+    Key: {
+      "spotify_user_id": spotify_user_id,
     },
+    UpdateExpression: `SET songs.${track_id}.plays.${start_time} = ${end_time}, email = ${email}`,
   };
-  docClient.put(params, function(err, data) {
+
+  docClient.update(params, (err, data) => {
     if (err) {
-        console.error("Unable to add user", email, ". Error JSON:", JSON.stringify(err, null, 2));
+      callback(err, null);
     } else {
-        console.log("New user added:", email);
+      callback(null, data);
     }
- });
+  });
+};
+
+// When the user woos a song,
+// record a timestamp
+
+const woo = (spotify_user_id, track_id, woo_time, callback) => {
+  const wooPath = `songs.${track_id}.woos`;
+  const params = {
+    TableName: "Wooster",
+    Key: {
+      "spotify_user_id": spotify_user_id,
+    },
+    UpdateExpression: `SET ${wooPath} = list_append(if_not_exists(${wooPath}, []), [${woo_time}])`,
+  };
+
+  docClient.update(params, (err, data) => {
+    if (err) {
+      callback(err, null);
+    } else {
+      callback(null, data);
+    }
+  });
+};
+
+// When the user benches a song,
+// record a timestamp
+
+const bench = (spotify_user_id, track_id, bench_time, callback) => {
+  const benchPath = `songs.${track_id}.benches`;
+  const params = {
+    TableName: "Wooster",
+    Key: {
+      "spotify_user_id": spotify_user_id,
+    },
+    UpdateExpression: `SET ${benchPath} = list_append(if_not_exists(${benchPath}, []), [${bench_time}])`,
+  };
+
+  docClient.update(params, (err, data) => {
+    if (err) {
+      callback(err, null);
+    } else {
+      callback(null, data);
+    }
+  });
 };
