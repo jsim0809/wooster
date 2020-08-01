@@ -3,7 +3,9 @@ const axios = require('axios');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const queryString = require('query-string');
+
 const secret = require('./secret.keys.js');
+const database = require('./database.js');
 
 const app = express();
 const PORT = 1234;
