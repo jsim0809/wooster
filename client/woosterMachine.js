@@ -8,23 +8,14 @@ const woosterMachine = Machine({
     intro: {
       on: {
         ANIMATION_DONE: 'landing',
-        ALREADY_LOGGED_IN: 'loggedInNotPlaying',
+        LOGGED_IN: 'readyToPlay',
       }
     },
     landing: {
-      on: {
-        LOGIN_CLICK: 'loggedInNotPlaying',
-      }
+      type: 'final',
     },
-    loggedInNotPlaying: {
-      on: {
-        PLAY_CLICK: 'loggedInPlaying',
-      }
-    },
-    loggedInPlaying: {
-      on: {
-        PAUSE_CLICK: 'loggedInNotPlaying',
-      }
+    readyToPlay: {
+      type: 'final',
     },
   },
 });
