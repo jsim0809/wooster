@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import queryString from 'query-string';
 
-function Player({ accessToken, deviceId }) {
+function Player({ accessToken, deviceId, playbackState, setPlaybackState }) {
   
 
   // Love Story by Taylor Swift
   const LOVE_STORY = 'spotify:track:1vrd6UOGamcKNGnSHJQlSt';
+  const GETAWAY_CAR = 'spotify:track:0VE4kBnHJUgtMf0dy6DRmW';
 
   const handlePlayClick = () => {
     axios({
@@ -16,7 +17,7 @@ function Player({ accessToken, deviceId }) {
           device_id: deviceId,
         }),
       data: JSON.stringify({
-        uris: [LOVE_STORY],
+        uris: [LOVE_STORY, GETAWAY_CAR],
       }),
       headers: {
         'Accept': 'application/json',

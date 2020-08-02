@@ -23,8 +23,8 @@ function App() {
   const [deviceId, setDeviceId] = useState(null);
   const [playbackState, setPlaybackState] = useState({
     currentSongId: null,
-    startTimestamp: +Infinity,
-    latestTimestamp: -Infinity,
+    startTimestamp: 0,
+    listenDuration: 0,
   });
 
   useEffect(() => {
@@ -108,13 +108,7 @@ function App() {
         console.log('Device ID is not ready for playback', device_id);
       });
       player.addListener('player_state_changed', (retrievedPlaybackState) => {
-        console.log(`Playing ${retrievedPlaybackState.track_window.current_track.artists[0].name} - ${retrievedPlaybackState.track_window.current_track.name}`);
-        // current
-        setPlaybackState({
-          currentSongId: retrievedPlaybackState.track_window.current_track.id,
-          startTimestamp: Math.min(playbackState.startTimestamp, retrievedPlaybackState.timestamp),
-          latestTimestamp: Math.max(playbackState.latestTimestamp, retrievedPlaybackState.timestamp),
-        });
+        console.log(retrievedPlaybackState);
       });
 
       player.connect().then(success => {
@@ -156,6 +150,8 @@ function App() {
           <Player
             accessToken={accessToken}
             deviceId={deviceId}
+            playbackState={playbackState}
+            setPlaybackState={setPlaybackState}
           />
         </div>
       </div>
