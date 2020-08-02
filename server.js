@@ -14,8 +14,9 @@ const { WOOSTER_CLIENT_ID, WOOSTER_CLIENT_SECRET } = secret;
 const REDIRECT_URI = 'http://localhost:1234/callback';
 
 app.use(express.static('docs'));
-app.use(cors());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(cors());
 app.use(cookieParser());
 
 /**
@@ -132,7 +133,7 @@ app.get('/callback', (req, res) => {
 });
 
 // When necessary, the client will request a new access token from us. We use their refresh token to request it from Spotify.
-app.get('/refresh_token', (req, res) => {
+app.get('/api/refresh', (req, res) => {
   axios({
     method: 'post',
     url: 'https://accounts.spotify.com/api/token',
@@ -146,12 +147,72 @@ app.get('/refresh_token', (req, res) => {
     }),
   })
     .then((response) => {
-      res.send({
+      res.status(200).send({
         'access_token': response.data.access_token,
       });
     });
 });
 
+
+// Grab a user's entire data object
+app.get('/api/:spotify_user_id', (req, res) => {
+  database.getData(req.params.spotify_user_id, (err, data) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.status(200).send(data);
+    }
+  });
+});
+
+// Update the user's email in the database.
+app.put('/api/:spotify_user_id/email', (req, res) => {
+  const { email } = req.body;
+  database.updateEmail(req.params.spotify_user_id, email, (err, data) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.status(201).send(data);
+    }
+  });
+});
+
+// Record the song that a user just listened to.
+app.post('/api/:spotify_user_id/song', (req, res) => {
+  const { track_id, start_time, end_time } = req.body;
+  database.recordSongPlayTime(req.params.spotify_user_id, track_id, start_time, end_time, (err, data) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.status(201).send(data);
+    }
+  });
+});
+
+// Woo a song.
+app.post('/api/:spotify_user_id/woo', (req, res) => {
+  const { track_id, woo_time } = req.body;
+  database.woo(req.params.spotify_user_id, track_id, woo_time, (err, data) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.status(201).send(data);
+    }
+  });
+});
+
+// Bench a song.
+app.post('/api/:spotify_user_id/bench', (req, res) => {
+  const { track_id, bench_time } = req.body;
+  database.bench(req.params.spotify_user_id, track_id, bench_time, (err, data) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.status(201).send(data);
+    }
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`Wooster is listening on port ${PORT}.`);
-})
+});

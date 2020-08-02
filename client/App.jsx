@@ -19,7 +19,7 @@ function App() {
     // Use our refresh token to request a new access token.
     axios({
       method: 'get',
-      url: '/refresh_token?' +
+      url: '/api/refresh?' +
         queryString.stringify({
           refresh_token: refreshToken,
         }),

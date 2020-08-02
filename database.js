@@ -10,8 +10,25 @@ AWS.config.update({
 
 const docClient = new AWS.DynamoDB.DocumentClient();
 
-// Update the user's email address.
+// Grab the entire user object.
+module.exports.getData = (spotify_user_id, callback) => {
+  const params = {
+    TableName: "Wooster",
+    Key: {
+      "spotify_user_id": spotify_user_id,
+    },
+  };
 
+  docClient.get(params, (err, data) => {
+    if (err) {
+      callback(err, null);
+    } else {
+      callback(null, data);
+    }
+  });
+};
+
+// Update the user's email address.
 module.exports.updateEmail = (spotify_user_id, email, callback) => {
   const params = {
     TableName: "Wooster",
@@ -33,7 +50,6 @@ module.exports.updateEmail = (spotify_user_id, email, callback) => {
 // When the user finishes playing a song
 // (listened to the end, skipped forward, benched/disliked, or hit repeat),
 // we will record the start_time and end_time of the just-played song.
-
 module.exports.recordSongPlayTime = (spotify_user_id, track_id, start_time, end_time, callback) => {
   const params = {
     TableName: "Wooster",
@@ -53,8 +69,7 @@ module.exports.recordSongPlayTime = (spotify_user_id, track_id, start_time, end_
 };
 
 // When the user woos a song,
-// record a timestamp
-
+// record a timestamp.
 module.exports.woo = (spotify_user_id, track_id, woo_time, callback) => {
   const wooPath = `songs.${track_id}.woos`;
   const params = {
@@ -75,8 +90,7 @@ module.exports.woo = (spotify_user_id, track_id, woo_time, callback) => {
 };
 
 // When the user benches a song,
-// record a timestamp
-
+// record a timestamp.
 module.exports.bench = (spotify_user_id, track_id, bench_time, callback) => {
   const benchPath = `songs.${track_id}.benches`;
   const params = {
@@ -88,25 +102,6 @@ module.exports.bench = (spotify_user_id, track_id, bench_time, callback) => {
   };
 
   docClient.update(params, (err, data) => {
-    if (err) {
-      callback(err, null);
-    } else {
-      callback(null, data);
-    }
-  });
-};
-
-// Grab the entire user object.
-
-module.exports.getData = (spotify_user_id, callback) => {
-  const params = {
-    TableName: "Wooster",
-    Key: {
-      "spotify_user_id": spotify_user_id,
-    },
-  };
-
-  docClient.get(params, (err, data) => {
     if (err) {
       callback(err, null);
     } else {
