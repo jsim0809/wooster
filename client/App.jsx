@@ -16,7 +16,7 @@ function App() {
   const [currentState, sendEvent] = useMachine(woosterMachine);
   const [accessToken, setAccessToken] = useState(URL_HASH.access_token);
   const [refreshToken, setRefreshToken] = useState(URL_HASH.refresh_token);
-  const [activeUser, setActiveUser] = useState({
+  const [currentUser, setCurrentUser] = useState({
     spotifyUserId: '',
     email: '',
   })
@@ -35,7 +35,7 @@ function App() {
     readyToPost: false,
   });
 
-  // Runs on component mount.
+  // Triggered effect: Runs once on component mount.
   // Detect logged-in state, removes access codes from URL bar, and runs initialization code.
   useEffect(() => {
     if (accessToken) {
@@ -52,8 +52,8 @@ function App() {
     }
   }, []);
 
-  // Runs when Spotify reports a change in playback state.
-  // Updates the playbackLog, which keeps track of listening time for updating the database.
+  // Triggered effect: Runs when Spotify reports a change in playback state.
+  // Updates the playbackLog, which keeps track of listening time so we can update the database with it..
   useEffect(() => {
     if (!playbackLog.currentSongId) {
       setPlaybackLog({
@@ -76,16 +76,15 @@ function App() {
     }
   }, [playbackState]);
 
-  // Runs when playBacklog changes.
+  // Triggered effect: Runs whenever playBacklog.readyToPost changes.
   // When playbackLog.readyToPost is true,
   // Post song listen timestamp and duration to database.
   // Then clear current song log so that we can log the next song's data.
   useEffect(() => {
-    console.log('playbackLog.readyToPost changed to', playbackLog.readyToPost);
     if (playbackLog.readyToPost) {
       axios({
         method: 'post',
-        url: `/api/${activeUser.spotifyUserId}/song`,
+        url: `/api/${currentUser.spotifyUserId}/song`,
         data: playbackLog,
       })
         .then(() => {
@@ -98,17 +97,24 @@ function App() {
           console.log('Successfully logged data!');
         })
         .catch((error) => {
-          console.error('Server/database error. Did not log last song.')
-          console.error(error);
           setPlaybackLog({
             currentSongId: playbackState.track_window.current_track.id,
             startTimestamp: playbackState.timestamp,
             latestPosition: playbackState.position,
             readyToPost: false,
           });
+          console.error('Server/database error. Did not log last song. :(')
         });
     }
   }, [playbackLog.readyToPost]);
+
+  // Triggered effect: Runs when currentUser is set (when initializing user).
+  useEffect(() => {
+    if (!Object.keys(currentUser).length) {
+      
+    }
+  }, [currentUser]);
+
 
   // Helper function: Use our refresh token to request a new access token.
   const getNewToken = () => {
@@ -135,7 +141,7 @@ function App() {
         },
       })
         .then((response) => {
-          setActiveUser({
+          setCurrentUser({
             spotifyUserId: response.data.id,
             email: response.data.email,
           })
@@ -219,8 +225,7 @@ function App() {
             <Player
               accessToken={accessToken}
               deviceId={deviceId}
-              playbackState={playbackState}
-              setPlaybackState={setPlaybackState}
+              currentUser={currentUser}
             />
           </div>
         </div>

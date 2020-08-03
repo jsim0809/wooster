@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import queryString from 'query-string';
 
-function Player({ accessToken, deviceId, playbackState, setPlaybackState }) {
+function Player({ accessToken, deviceId, currentUser }) {
   
 
   // Love Story by Taylor Swift
   const LOVE_STORY = 'spotify:track:1vrd6UOGamcKNGnSHJQlSt';
   const GETAWAY_CAR = 'spotify:track:0VE4kBnHJUgtMf0dy6DRmW';
 
-  const handlePlayClick = () => {
+  const testHandlePlayClick = () => {
     axios({
       method: 'put',
       url: 'https://api.spotify.com/v1/me/player/play?' +
@@ -27,9 +27,20 @@ function Player({ accessToken, deviceId, playbackState, setPlaybackState }) {
     });
   };
 
+  const handlePlayClick = () => {
+    axios(`/api/${currentUser.spotifyUserId}`)
+      .then((response) => {
+        console.log('OKaY');
+        console.log(response.data);
+      })
+      .catch((err) => {
+        console.error('Failed to retrieve user data.');
+      })
+  }
+
   return (
     <div id="play-button" className="pointer">
-      <button onClick={handlePlayClick}>Play</button>
+      <button type="button "onClick={handlePlayClick}>Play</button>
     </div>
   );
 }
