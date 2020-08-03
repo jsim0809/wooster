@@ -21,7 +21,13 @@ function App() {
     email: '',
   })
   const [deviceId, setDeviceId] = useState(null);
-  const [playbackState, setPlaybackState] = useState({});
+  const [playbackState, setPlaybackState] = useState({
+    track_window: {
+      current_track: '',
+    },
+    timestamp: 0,
+    position: 0,
+  });
   const [playbackLog, setPlaybackLog] = useState({
     currentSongId: '',
     startTimestamp: 0,
@@ -78,7 +84,7 @@ function App() {
     if (playbackLog.readyToPost) {
       axios({
         method: 'post',
-        url: `/api/${activeUser}/song`,
+        url: `/api/${activeUser.spotifyUserId}/song`,
         data: playbackLog,
       })
         .then(() => {
@@ -88,9 +94,15 @@ function App() {
             latestPosition: playbackState.position,
             readyToPost: false,
           });
+          console.log('Successfully logged data!');
         })
-        .catch(() => {
+        .catch((error) => {
           console.error('Server/database error. Did not log last song.')
+          console.error(error);
+          setPlaybackLog({
+            ...playbackLog,
+            readyToPost: false,
+          });
         });
     }
   }, [playbackLog]);
