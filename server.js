@@ -179,8 +179,8 @@ app.put('/api/:spotify_user_id/email', (req, res) => {
 
 // Record the song that a user just listened to.
 app.post('/api/:spotify_user_id/song', (req, res) => {
-  const { track_id, start_time, end_time } = req.body;
-  database.recordSongPlayTime(req.params.spotify_user_id, track_id, start_time, end_time, (err, data) => {
+  const { currentSongId, startTimestamp, latestPosition } = req.body;
+  database.recordSongPlayTime(req.params.spotify_user_id, currentSongId, startTimestamp, latestPosition, (err, data) => {
     if (err) {
       res.status(500).send(err);
     } else {
@@ -191,8 +191,8 @@ app.post('/api/:spotify_user_id/song', (req, res) => {
 
 // Woo a song.
 app.post('/api/:spotify_user_id/woo', (req, res) => {
-  const { track_id, woo_time } = req.body;
-  database.woo(req.params.spotify_user_id, track_id, woo_time, (err, data) => {
+  const { currentSongId, wooTimestamp } = req.body;
+  database.woo(req.params.spotify_user_id, currentSongId, wooTimestamp, (err, data) => {
     if (err) {
       res.status(500).send(err);
     } else {
@@ -203,8 +203,8 @@ app.post('/api/:spotify_user_id/woo', (req, res) => {
 
 // Bench a song.
 app.post('/api/:spotify_user_id/bench', (req, res) => {
-  const { track_id, bench_time } = req.body;
-  database.bench(req.params.spotify_user_id, track_id, bench_time, (err, data) => {
+  const { currentSongId, benchTimestamp } = req.body;
+  database.bench(req.params.spotify_user_id, currentSongId, benchTimestamp, (err, data) => {
     if (err) {
       res.status(500).send(err);
     } else {

@@ -50,13 +50,13 @@ module.exports.updateEmail = (spotify_user_id, email, callback) => {
 // When the user finishes playing a song
 // (listened to the end, skipped forward, benched/disliked, or hit repeat),
 // we will record the start_time and end_time of the just-played song.
-module.exports.recordSongPlayTime = (spotify_user_id, track_id, start_time, end_time, callback) => {
+module.exports.recordSongPlayTime = (spotify_user_id, track_id, start_time, duration, callback) => {
   const params = {
     TableName: "Wooster",
     Key: {
       "spotify_user_id": spotify_user_id,
     },
-    UpdateExpression: `SET songs.${track_id}.plays.${start_time} = ${end_time}`,
+    UpdateExpression: `SET songs.${track_id}.plays.${start_time} = ${duration}`,
   };
 
   docClient.update(params, (err, data) => {
