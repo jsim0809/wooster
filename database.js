@@ -36,7 +36,13 @@ module.exports.updateEmail = (spotify_user_id, email, callback) => {
     Key: {
       "spotify_user_id": spotify_user_id,
     },
-    UpdateExpression: `SET email = ${email}`,
+    UpdateExpression: `SET #email = :email`,
+    ExpressionAttributeNames: {
+      "#email" : "email",
+    },
+    ExpressionAttributeValues: {
+      ":email" : email,
+    },
   };
 
   docClient.update(params, (err, data) => {
@@ -57,7 +63,16 @@ module.exports.recordSongPlayTime = (spotify_user_id, track_id, start_time, dura
     Key: {
       "spotify_user_id": spotify_user_id,
     },
-    UpdateExpression: `SET songs.${track_id}.plays.${start_time} = ${duration}`,
+    UpdateExpression: `SET #songs.#track_id.#plays.#start_time = :duration`,
+    ExpressionAttributeNames: {
+      "#songs" : "songs",
+      "#track_id" : track_id,
+      "#plays" : "plays",
+      "#start_time" : start_time,
+    },
+    ExpressionAttributeValues: {
+      ":duration" : duration,
+    },
   };
 
   docClient.update(params, (err, data) => {
@@ -72,13 +87,21 @@ module.exports.recordSongPlayTime = (spotify_user_id, track_id, start_time, dura
 // When the user woos a song,
 // record a timestamp.
 module.exports.woo = (spotify_user_id, track_id, woo_time, callback) => {
-  const wooPath = `songs.${track_id}.woos`;
   const params = {
     TableName: "Wooster",
     Key: {
       "spotify_user_id": spotify_user_id,
     },
-    UpdateExpression: `SET ${wooPath} = list_append(if_not_exists(${wooPath}, []), [${woo_time}])`,
+    UpdateExpression: `SET #songs.#track_id.#woos = list_append(if_not_exists(#songs.#track_id.#woos, :empty_list), :woo_time)`,
+    ExpressionAttributeNames: {
+      "#songs" : "songs",
+      "#track_id" : track_id,
+      "#woos" : "woos",      
+    },
+    ExpressionAttributeValues: {
+      ":empty_list" : [],
+      ":woo_time" : [woo_time],
+    },
   };
 
   docClient.update(params, (err, data) => {
@@ -93,13 +116,21 @@ module.exports.woo = (spotify_user_id, track_id, woo_time, callback) => {
 // When the user benches a song,
 // record a timestamp.
 module.exports.bench = (spotify_user_id, track_id, bench_time, callback) => {
-  const benchPath = `songs.${track_id}.benches`;
   const params = {
     TableName: "Wooster",
     Key: {
       "spotify_user_id": spotify_user_id,
     },
-    UpdateExpression: `SET ${benchPath} = list_append(if_not_exists(${benchPath}, []), [${bench_time}])`,
+    UpdateExpression: `SET #songs.#track_id.#benches = list_append(if_not_exists(#songs.#track_id.#benches, :empty_list), :bench_time)`,
+    ExpressionAttributeNames: {
+      "#songs" : "songs",
+      "#track_id" : track_id,
+      "#benches" : "benches",      
+    },
+    ExpressionAttributeValues: {
+      ":empty_list" : [],
+      ":bench_time" : [bench_time],
+    },
   };
 
   docClient.update(params, (err, data) => {
