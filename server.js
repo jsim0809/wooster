@@ -180,10 +180,17 @@ app.put('/api/:spotify_user_id/email', (req, res) => {
 // Record the song that a user just listened to.
 app.post('/api/:spotify_user_id/song', (req, res) => {
   const { currentSongId, startTimestamp, latestPosition } = req.body;
+  console.log('Attempting to log data for user ', req.params.spotify_user_id);
+  console.log('currentSongId:', currentSongId);
+  console.log('startTimestamp:', startTimestamp);
+  console.log('latestPosition:', latestPosition);
   database.recordSongPlayTime(req.params.spotify_user_id, currentSongId, startTimestamp, latestPosition, (err, data) => {
     if (err) {
+      console.log('Failed!')
+      console.log(err)
       res.status(500).send(err);
     } else {
+      console.log('Success!')
       res.status(201).send(data);
     }
   });

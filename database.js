@@ -6,6 +6,7 @@ AWS.config.update({
   secretAccessKey: secret.AWS_SECRET_ACCESS_KEY,
   region: 'us-west-2',
   endpoint: 'https://dynamodb.us-west-2.amazonaws.com',
+  correctClockSkew: true,
 });
 
 const docClient = new AWS.DynamoDB.DocumentClient();

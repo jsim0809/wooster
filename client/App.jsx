@@ -105,7 +105,7 @@ function App() {
           });
         });
     }
-  }, [playbackLog]);
+  }, [playbackLog.readyToPost]);
 
   // Helper function: Use our refresh token to request a new access token.
   const getNewToken = () => {
