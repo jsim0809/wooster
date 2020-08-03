@@ -62,7 +62,7 @@ function App() {
         latestPosition: playbackState.position,
         readyToPost: false,
       });
-    } else if (playbackLog.currentSongId === playbackState.track_window.current_track.id) {
+    } else if (playbackLog.currentSongId == playbackState.track_window.current_track.id) {
       setPlaybackLog({
         ...playbackLog,
         latestPosition: Math.max(playbackLog.latestPosition, playbackState.position),
@@ -81,6 +81,7 @@ function App() {
   // Post song listen timestamp and duration to database.
   // Then clear current song log so that we can log the next song's data.
   useEffect(() => {
+    console.log('playbackLog.readyToPost changed to', playbackLog.readyToPost);
     if (playbackLog.readyToPost) {
       axios({
         method: 'post',
@@ -100,7 +101,9 @@ function App() {
           console.error('Server/database error. Did not log last song.')
           console.error(error);
           setPlaybackLog({
-            ...playbackLog,
+            currentSongId: playbackState.track_window.current_track.id,
+            startTimestamp: playbackState.timestamp,
+            latestPosition: playbackState.position,
             readyToPost: false,
           });
         });
