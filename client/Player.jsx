@@ -30,8 +30,7 @@ function Player({ accessToken, deviceId, currentUser }) {
   const handlePlayClick = () => {
     axios(`/api/${currentUser.spotifyUserId}`)
       .then((response) => {
-        console.log('OKaY');
-        console.log(response.data);
+        
       })
       .catch((err) => {
         console.error('Failed to retrieve user data.');

@@ -29,6 +29,25 @@ module.exports.getData = (spotify_user_id, callback) => {
   });
 };
 
+// Create the skeleton of a user's data object
+module.exports.createSkeleton = (spotify_user_id, callback) => {
+  var params = {
+    TableName: "Wooster",
+    Item: {
+      "spotify_user_id": spotify_user_id,
+      "email": '',
+      "songs": {},
+    },
+  };
+  docClient.put(params, function (err, data) {
+    if (err) {
+      callback(err, null);
+    } else {
+      callback(null, data);
+    }
+  });
+}
+
 // Update the user's email address.
 module.exports.updateEmail = (spotify_user_id, email, callback) => {
   const params = {
@@ -38,10 +57,10 @@ module.exports.updateEmail = (spotify_user_id, email, callback) => {
     },
     UpdateExpression: `SET #email = :email`,
     ExpressionAttributeNames: {
-      "#email" : "email",
+      "#email": "email",
     },
     ExpressionAttributeValues: {
-      ":email" : email,
+      ":email": email,
     },
   };
 
@@ -65,13 +84,13 @@ module.exports.recordSongPlayTime = (spotify_user_id, track_id, start_time, dura
     },
     UpdateExpression: `SET #songs.#track_id.#plays.#start_time = :duration`,
     ExpressionAttributeNames: {
-      "#songs" : "songs",
-      "#track_id" : track_id,
-      "#plays" : "plays",
-      "#start_time" : start_time,
+      "#songs": "songs",
+      "#track_id": track_id,
+      "#plays": "plays",
+      "#start_time": start_time,
     },
     ExpressionAttributeValues: {
-      ":duration" : duration,
+      ":duration": duration,
     },
   };
 
@@ -94,13 +113,13 @@ module.exports.woo = (spotify_user_id, track_id, woo_time, callback) => {
     },
     UpdateExpression: `SET #songs.#track_id.#woos = list_append(if_not_exists(#songs.#track_id.#woos, :empty_list), :woo_time)`,
     ExpressionAttributeNames: {
-      "#songs" : "songs",
-      "#track_id" : track_id,
-      "#woos" : "woos",      
+      "#songs": "songs",
+      "#track_id": track_id,
+      "#woos": "woos",
     },
     ExpressionAttributeValues: {
-      ":empty_list" : [],
-      ":woo_time" : [woo_time],
+      ":empty_list": [],
+      ":woo_time": [woo_time],
     },
   };
 
@@ -123,13 +142,13 @@ module.exports.bench = (spotify_user_id, track_id, bench_time, callback) => {
     },
     UpdateExpression: `SET #songs.#track_id.#benches = list_append(if_not_exists(#songs.#track_id.#benches, :empty_list), :bench_time)`,
     ExpressionAttributeNames: {
-      "#songs" : "songs",
-      "#track_id" : track_id,
-      "#benches" : "benches",      
+      "#songs": "songs",
+      "#track_id": track_id,
+      "#benches": "benches",
     },
     ExpressionAttributeValues: {
-      ":empty_list" : [],
-      ":bench_time" : [bench_time],
+      ":empty_list": [],
+      ":bench_time": [bench_time],
     },
   };
 

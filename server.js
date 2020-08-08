@@ -110,7 +110,7 @@ app.get('/callback', (req, res) => {
       }),
       headers: {
         'Authorization': 'Basic ' + Buffer.from(WOOSTER_CLIENT_ID + ':' + WOOSTER_CLIENT_SECRET).toString('base64'),
-        'Content-Type':'application/x-www-form-urlencoded',
+        'Content-Type': 'application/x-www-form-urlencoded',
       },
     })
       .then((response) => {
@@ -139,7 +139,7 @@ app.get('/api/refresh', (req, res) => {
     url: 'https://accounts.spotify.com/api/token',
     headers: {
       'Authorization': 'Basic ' + Buffer.from(WOOSTER_CLIENT_ID + ':' + WOOSTER_CLIENT_SECRET).toString('base64'),
-      'Content-Type':'application/x-www-form-urlencoded',
+      'Content-Type': 'application/x-www-form-urlencoded',
     },
     data: queryString.stringify({
       grant_type: 'refresh_token',
@@ -165,6 +165,17 @@ app.get('/api/:spotify_user_id', (req, res) => {
   });
 });
 
+// Create the skeleton of a user's data object
+app.post('/api/:spotify_user_id/new', (req, res) => {
+  database.createSkeleton(req.params.spotify_user_id, (err, data) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.status(201).send(data);
+    }
+  });
+});
+
 // Update the user's email in the database.
 app.put('/api/:spotify_user_id/email', (req, res) => {
   const { email } = req.body;
@@ -180,17 +191,10 @@ app.put('/api/:spotify_user_id/email', (req, res) => {
 // Record the song that a user just listened to.
 app.post('/api/:spotify_user_id/song', (req, res) => {
   const { currentSongId, startTimestamp, latestPosition } = req.body;
-  console.log('Attempting to log data for user ', req.params.spotify_user_id);
-  console.log('currentSongId:', currentSongId);
-  console.log('startTimestamp:', startTimestamp);
-  console.log('latestPosition:', latestPosition);
   database.recordSongPlayTime(req.params.spotify_user_id, currentSongId, startTimestamp, latestPosition, (err, data) => {
     if (err) {
-      console.log('Failed!')
-      console.log(err)
       res.status(500).send(err);
     } else {
-      console.log('Success!')
       res.status(201).send(data);
     }
   });
