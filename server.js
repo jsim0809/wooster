@@ -35,6 +35,7 @@ const generateRandomString = (length) => {
 // This app reads the following information from user's account:
 // streaming: Allows you to stream music!
 // user-read-email: The user's email address and username.
+// user-read-private: The user's Spotify subscription information (Premium or Free).
 // Scopes documentation at https://developer.spotify.com/documentation/general/guides/scopes/
 app.get('/login', function (req, res) {
   // Generate a random string.
@@ -46,6 +47,7 @@ app.get('/login', function (req, res) {
   var scopes = [
     'streaming',
     'user-read-email',
+    'user-read-private',
   ];
 
   // Pass all of the above into the redirect URL to Spotify's authorization servers.

@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import queryString from 'query-string';
 
-function Player({ accessToken, deviceId, populateSongs }) {
-  
+function FakePlayer({ accessToken, deviceId, populateSongs }) {
+
 
   // Sample songs
   const LOVE_STORY = 'spotify:track:1vrd6UOGamcKNGnSHJQlSt';
@@ -28,18 +28,27 @@ function Player({ accessToken, deviceId, populateSongs }) {
     });
   };
 
-  // const handlePlayClick = () => {
-  //   // populateSongs();
+  const handlePlayClick = () => {
+    populateSongs();
+  }
 
-  // }
-  
+  const handleLikeClick = () => {
+    console.log('beep');
+  }
+
   // TODO: CHECK IF THE USER HAS ANY LIKED SONGS. IF NOT, PROMPT THEM FOR ONE!
 
   return (
+    <>
     <div id="play-button" className="pointer">
-      <button type="button "onClick={testhandlePlayClick}>Play</button>
+      <button type="button" onClick={testhandlePlayClick}>Play</button>
     </div>
+
+    <div id="like-button" className="pointer">
+      <button type="button" onClick={handleLikeClick}>Thumbs Up</button>
+    </div>
+    </>
   );
 }
 
-export default Player;
+export default FakePlayer;

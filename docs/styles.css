@@ -91,6 +91,10 @@
   grid-area: 5 / 7 / 6 / 6;
 }
 
+#like-button {
+  grid-area: 3 / 7 / 4 / 6;
+}
+
 #header {
   grid-area: 1 / 8 / 2 / 5;
 

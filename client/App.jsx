@@ -8,7 +8,7 @@ import woosterMachine from './woosterMachine.js';
 
 import Header from './Header.jsx';
 import Login from './Login.jsx';
-import InitialPlayButton from './InitialPlayButton.jsx';
+import FakePlayer from './FakePlayer.jsx';
 
 function App() {
   const URL_HASH = queryString.parse(window.location.hash);
@@ -17,10 +17,11 @@ function App() {
   const [refreshToken, setRefreshToken] = useState(URL_HASH.refresh_token);
   const [deviceId, setDeviceId] = useState(null);
   const [currentUser, setCurrentUser] = useState({
-    spotify_user_id: '',
+    spotifyUserId: '',
     email: '',
     songs: {},
   });
+  const [usersLikedSongs, setUsersLikedSongs] = useState([]);
   const [songQueue, setSongQueue] = useState([]);
   const [playbackState, setPlaybackState] = useState({
     track_window: {
@@ -119,7 +120,6 @@ function App() {
       // And save it to state.
       .then((response) => response.data)
       .then((databaseObject) => {
-        setCurrentUser(databaseObject.Item);
         if (databaseObject.Item.email !== usersCurrentSpotifyEmail) {
           axios({
             method: 'put',
@@ -129,6 +129,7 @@ function App() {
             },
           });
         }
+        setCurrentUser(databaseObject.Item);
       });
   };
 
@@ -180,22 +181,85 @@ function App() {
     };
   };
 
+  // // Handle song queueing and playing
+
+  const getRandomLikedSong = () => {
+    return usersLikedSongs[Math.floor(Math.random() * usersLikedSongs)];
+  };
+
+  const populateSongs = () => {
+    const randomSong1 = getRandomLikedSong();
+    setSongQueue([randomSong1]);
+  };
+
+  useEffect(() => {
+    if (songQueue.length === 1) {
+      const randomSong2 = getRandomLikedSong();
+      loadThreeSongs(songQueue[0], randomSong2);
+    }
+    if (songQueue.length > 1) {
+      axios({
+        method: 'put',
+        url: 'https://api.spotify.com/v1/me/player/play?' +
+          queryString.stringify({
+            device_id: deviceId,
+          }),
+        data: JSON.stringify({
+          uris: [songQueue[0]],
+        }),
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`,
+        },
+      });
+    }
+  }, songQueue);
+
+  const loadThreeSongs = (song1, song2) => {
+    axios({
+      method: 'get',
+      url: 'https://api.spotify.com/v1/recommendations?' +
+        queryString.stringify({
+          limit: 100,
+          seed_tracks: `${song1},${song2}`,
+        }),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+      },
+    })
+      .then((response) => response.tracks)
+      .then((recommendations) => {
+        let middleSong = recommendations.find((song) => {
+          return currentUser.songs[song.id] !== false;
+        }) ?? getRandomLikedSong();
+        setSongQueue([...songQueue, middleSong, songOption]);
+      });
+  };
+
+  // // Handle song logging
+
   // Triggered effect: Runs when Spotify reports a change in playback state.
   // Updates the playbackLog, which keeps track of listening time so we can update the database with it..
   useEffect(() => {
-    if (!playbackLog.currentSongId) {
+    // If song is just starting, initialize the playback log.
+    if (!playbackState.position) {
       setPlaybackLog({
         currentSongId: playbackState.track_window.current_track.id,
         startTimestamp: playbackState.timestamp,
         latestPosition: playbackState.position,
         readyToPost: false,
       });
-    } else if (playbackLog.currentSongId == playbackState.track_window.current_track.id) {
+      // If song is somewhere in the middle, update the latest listening position.
+    } else if (playbackLog.currentSongId === playbackState.track_window.current_track.id) {
       setPlaybackLog({
         ...playbackLog,
         latestPosition: Math.max(playbackLog.latestPosition, playbackState.position),
       });
-    } else {
+      // If song ended, log the playtime.
+    } else if (!playbackState.paused && playbackState.restrictions.disallow_resuming_reasons[0] === 'not_paused') {
       setPlaybackLog({
         ...playbackLog,
         latestPosition: Math.max(playbackLog.latestPosition, playbackState.position),
@@ -214,84 +278,20 @@ function App() {
         method: 'post',
         url: `/api/${currentUser.spotifyUserId}/song`,
         data: playbackLog,
-      })
-        .then(() => {
-          setPlaybackLog({
-            currentSongId: playbackState.track_window.current_track.id,
-            startTimestamp: playbackState.timestamp,
-            latestPosition: playbackState.position,
-            readyToPost: false,
-          });
-        })
-        .catch((error) => {
-          setPlaybackLog({
-            currentSongId: playbackState.track_window.current_track.id,
-            startTimestamp: playbackState.timestamp,
-            latestPosition: playbackState.position,
-            readyToPost: false,
-          });
-        });
+      });
+      playNextSong();
     }
   }, [playbackLog.readyToPost]);
 
-  const populateSongs = () => {
-    if (!songQueue.length) {
-      const randomSong1 = currentUser.liked_songs[Math.floor(Math.random() * currentUser.liked_songs.length)];
-      setSongQueue([randomSong1]);
-    }
-  };
+  // Triggers the play of the next song by moving the song queue forward.
+  const playnextSong = () => {
+    setSongQueue(songQueue.slice(1));
+  }
 
-  useEffect(() => {
-    if (songQueue.length === 1) {
-      const randomSong2 = currentUser.liked_songs[Math.floor(Math.random() * currentUser.liked_songs.length)];
-      loadThreeSongs(songQueue[0], randomSong2);
-    }
-    if (songQueue.length === 3) {
-      axios({
-        method: 'put',
-        url: 'https://api.spotify.com/v1/me/player/play?' +
-          queryString.stringify({
-            device_id: deviceId,
-          }),
-        data: JSON.stringify({
-          uris: [songQueue],
-        }),
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${accessToken}`,
-        },
-      });
-    }
-  }, songQueue);
-
-  const loadThreeSongs = (song1, song2) => {
-    axios({
-      method: 'get',
-      url: 'https://api.spotify.com/v1/recommendations?' +
-        queryString.stringify({
-          limit: 100,
-          seed_tracks: `${songQueue[0]},${songOption}`,
-        }),
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`,
-      },
-    })
-      .then((response) => response.tracks)
-      .then((recommendations) => {
-        let middleSong = recommendations.find((song) => {
-          return !currentUser.disliked_songs[song.id];
-        });
-        if (!middleSong) {
-          middleSong = currentUser.liked_songs[Math.floor(Math.random() * currentUser.liked_songs.length)];
-        }
-        setSongQueue([...songQueue, middleSong, songOption]);
-      });
-  };
+  // // Handle page rendering.
 
   // Render page based on state machine.
+
   if (currentState.matches('landing')) {
     return (
       <div id="body-section">
@@ -306,7 +306,7 @@ function App() {
       <div id="body-section">
         <div id="body-grid">
           <Header />
-          <InitialPlayButton
+          <FakePlayer
             accessToken={accessToken}
             deviceId={deviceId}
             currentUser={currentUser}
