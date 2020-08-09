@@ -149,11 +149,11 @@ function App() {
                 method: 'post',
                 url: `/api/${userData.id}/new`,
               })
-              // Then, grab that skeleton object.
+                // Then, grab that skeleton object.
                 .then(() => {
                   grabUserObjectAndSaveItToState(userData.id, userData.email);
                 });
-            // If it does exist though, just grab it and save it to state.
+              // If it does exist though, just grab it and save it to state.
             } else {
               grabUserObjectAndSaveItToState(userData.id, userData.email);
             }
@@ -168,11 +168,11 @@ function App() {
       method: 'get',
       url: `/api/${spotifyUserId}`,
     })
-    // And save it to state.
+      // And save it to state.
       .then((response) => response.data)
       .then((databaseObject) => {
         setCurrentUser(databaseObject.Item);
-        if(databaseObject.Item.email !== usersCurrentSpotifyEmail) {
+        if (databaseObject.Item.email !== usersCurrentSpotifyEmail) {
           axios({
             method: 'put',
             url: `/api/${spotifyUserId}/email`,
@@ -183,26 +183,6 @@ function App() {
         }
       });
   };
-
-  // Triggered effect: Runs when currentUser is set (when initializing user).
-  useEffect(() => {
-    axios({
-      method: 'get',
-      url: `/api/${currentUser.spotifyUserId}`,
-    })
-      .then((response) => {
-        if (!Object.keys(response.data).length) {
-          axios({
-            method: 'post',
-            url: `/api/${currentUser.spotifyUserId}`,
-          });
-        }
-      })
-      .then(() => {
-
-      })
-  }, [currentUser]);
-
 
   // Helper function: Load Spotify's player, and set up listeners to update state while playing song
   const initializeSpotifyPlayer = () => {
@@ -251,42 +231,61 @@ function App() {
   };
 
   const populateSongs = () => {
-    while (!songQueue.length) {
-      const songOption = currentUser.songs[Math.floor(Math.random() * currentUser.songs.length)];
-      if (songOption.liked) {
-        setSongQueue([...songQueue, songOption])
-      }
-    }
-    while (songQueue.length === 1) {
-      const songOption = currentUser.songs[Math.floor(Math.random() * currentUser.songs.length)];
-      if (songOption.liked) {
-        axios({
-          method: 'get',
-          url: 'https://api.spotify.com/v1/recommendations?' +
-            queryString.stringify({
-              limit: 1,
-              seed_tracks: `${songQueue[0]},${songOption}`,
-            }),
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${accessToken}`,
-          },
-        })
-          .then((response) => {
-            const middleSong = response.tracks[0].id;
-            setSongQueue([...songQueue, middleSong, songOption]);
-          });
-      }
+    if (!songQueue.length) {
+      const randomSong1 = currentUser.liked_songs[Math.floor(Math.random() * currentUser.liked_songs.length)];
+      setSongQueue([randomSong1]);
     }
   };
 
   useEffect(() => {
+    if (songQueue.length === 1) {
+      const randomSong2 = currentUser.liked_songs[Math.floor(Math.random() * currentUser.liked_songs.length)];
+      synthesizeSongBatch(songQueue[0], randomSong2);
+    }
     if (songQueue.length === 3) {
-
+      axios({
+        method: 'put',
+        url: 'https://api.spotify.com/v1/me/player/play?' +
+          queryString.stringify({
+            device_id: deviceId,
+          }),
+        data: JSON.stringify({
+          uris: [songQueue],
+        }),
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`,
+        },
+      });
     }
   }, songQueue);
 
+  const synthesizeSongBatch = (song1, song2) => {
+    axios({
+      method: 'get',
+      url: 'https://api.spotify.com/v1/recommendations?' +
+        queryString.stringify({
+          limit: 100,
+          seed_tracks: `${songQueue[0]},${songOption}`,
+        }),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+      },
+    })
+      .then((response) => response.tracks)
+      .then((recommendations) => {
+        let middleSong = recommendations.find((song) => {
+          return !currentUser.disliked_songs[song.id];
+        });
+        if (!middleSong) {
+          middleSong = currentUser.liked_songs[Math.floor(Math.random() * currentUser.liked_songs.length)];
+        }
+        setSongQueue([...songQueue, middleSong, songOption]);
+      });
+  };
 
   // Helper function: Cancel the animation when the user clicks.
   const animationCancel = () => {

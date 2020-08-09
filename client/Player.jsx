@@ -7,7 +7,7 @@ function Player({ accessToken, deviceId, populateSongs }) {
 
   // Sample songs
   const LOVE_STORY = 'spotify:track:1vrd6UOGamcKNGnSHJQlSt';
-  const NIGHT_CHANGES = 'spotify:track:zgSbyGVlRjSM7eV6EPE5nA';
+  const NIGHT_CHANGES = 'spotify:track:5O2P9iiztwhomNh8xkR9lJ';
   const GETAWAY_CAR = 'spotify:track:0VE4kBnHJUgtMf0dy6DRmW';
 
   const testHandlePlayClick = () => {
@@ -28,14 +28,18 @@ function Player({ accessToken, deviceId, populateSongs }) {
     });
   };
 
-  const handlePlayClick = () => {
-    populateSongs();
+  https://open.spotify.com/track/5O2P9iiztwhomNh8xkR9lJ?si=_5bec-y8TnSLLzWUqWmlVQ
 
-  }
+  // const handlePlayClick = () => {
+  //   // populateSongs();
+
+  // }
+  
+  // TODO: CHECK IF THE USER HAS ANY LIKED SONGS. IF NOT, PROMPT THEM FOR ONE!
 
   return (
     <div id="play-button" className="pointer">
-      <button type="button "onClick={handlePlayClick}>Play</button>
+      <button type="button "onClick={testHandlePlayClick}>Play</button>
     </div>
   );
 }

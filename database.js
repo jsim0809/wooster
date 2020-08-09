@@ -36,7 +36,8 @@ module.exports.createSkeleton = (spotify_user_id, callback) => {
     Item: {
       "spotify_user_id": spotify_user_id,
       "email": '',
-      "songs": {},
+      "liked_songs": {},
+      "disliked_songs": {},
     },
   };
   docClient.put(params, function (err, data) {
