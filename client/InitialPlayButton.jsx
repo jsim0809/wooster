@@ -10,7 +10,7 @@ function Player({ accessToken, deviceId, populateSongs }) {
   const NIGHT_CHANGES = 'spotify:track:5O2P9iiztwhomNh8xkR9lJ';
   const GETAWAY_CAR = 'spotify:track:0VE4kBnHJUgtMf0dy6DRmW';
 
-  const testHandlePlayClick = () => {
+  const testhandlePlayClick = () => {
     axios({
       method: 'put',
       url: 'https://api.spotify.com/v1/me/player/play?' +
@@ -28,8 +28,6 @@ function Player({ accessToken, deviceId, populateSongs }) {
     });
   };
 
-  https://open.spotify.com/track/5O2P9iiztwhomNh8xkR9lJ?si=_5bec-y8TnSLLzWUqWmlVQ
-
   // const handlePlayClick = () => {
   //   // populateSongs();
 
@@ -39,7 +37,7 @@ function Player({ accessToken, deviceId, populateSongs }) {
 
   return (
     <div id="play-button" className="pointer">
-      <button type="button "onClick={testHandlePlayClick}>Play</button>
+      <button type="button "onClick={testhandlePlayClick}>Play</button>
     </div>
   );
 }

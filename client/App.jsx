@@ -6,11 +6,9 @@ import $script from 'scriptjs';
 
 import woosterMachine from './woosterMachine.js';
 
-import WelcomeToWooster from './WelcomeToWooster.jsx';
 import Header from './Header.jsx';
 import Login from './Login.jsx';
-import Player from './Player.jsx';
-import { createSkeleton } from '../database.js';
+import InitialPlayButton from './InitialPlayButton.jsx';
 
 function App() {
   const URL_HASH = queryString.parse(window.location.hash);
@@ -44,16 +42,143 @@ function App() {
     if (accessToken) {
       window.location.hash = '';
       sendEvent('LOGGED_IN');
-      // Spotify access tokens last for 60 minutes. Every 55 minutes, grab a new one.
-      setInterval(getNewToken, 3300000);
+      initializeRefreshLoop();
       initializeUser();
       initializeSpotifyPlayer();
-    } else {
-      setTimeout(() => {
-        sendEvent('ANIMATION_DONE');
-      }, 6000);
     }
   }, []);
+
+  // // Initializing the refresh loop
+
+  // Spotify access tokens last for 60 minutes. Every 55 minutes, grab a new one.
+  const initializeRefreshLoop = () => {
+    setInterval(getNewToken, 3300000);
+  }
+
+  // Helper function: Use our refresh token to request a new access token.
+  const getNewToken = () => {
+    axios({
+      method: 'get',
+      url: '/api/refresh?' +
+        queryString.stringify({
+          refresh_token: refreshToken,
+        }),
+    })
+      .then((response) => {
+        setAccessToken(response.data.access_token);
+      });
+  };
+
+  // // Initializing the user
+
+  // Helper function: Grab basic user information from Spotify and populate database if needed, then state.
+  const initializeUser = () => {
+    // Get the user data from Spotify.
+    axios({
+      method: 'get',
+      url: 'https://api.spotify.com/v1/me',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+      },
+    })
+      .then((response) => response.data)
+      // Use that data to grab the database's object for that user.
+      .then((userData) => {
+        axios({
+          method: 'get',
+          url: `/api/${userData.id}`,
+        })
+          .then((response) => response.data)
+          .then((databaseObject) => {
+            // But if no such object exists...
+            if (!Object.keys(databaseObject).length) {
+              // Create a new skeleton object for that user.
+              axios({
+                method: 'post',
+                url: `/api/${userData.id}/new`,
+              })
+                // Then, grab that skeleton object.
+                .then(() => {
+                  getUserRecordFromDBAndSaveToState(userData.id, userData.email);
+                });
+              // If it does exist though, just grab it and save it to state.
+            } else {
+              getUserRecordFromDBAndSaveToState(userData.id, userData.email);
+            }
+          });
+      });
+  };
+
+  // Helper function. Grabs user object from database and saves it to state.
+  // If needed, updates a user's email in the database.
+  const getUserRecordFromDBAndSaveToState = (spotifyUserId, usersCurrentSpotifyEmail) => {
+    axios({
+      method: 'get',
+      url: `/api/${spotifyUserId}`,
+    })
+      // And save it to state.
+      .then((response) => response.data)
+      .then((databaseObject) => {
+        setCurrentUser(databaseObject.Item);
+        if (databaseObject.Item.email !== usersCurrentSpotifyEmail) {
+          axios({
+            method: 'put',
+            url: `/api/${spotifyUserId}/email`,
+            data: {
+              email: usersCurrentSpotifyEmail,
+            },
+          });
+        }
+      });
+  };
+
+  // // Initializing Spotify's Web Player
+
+  // Helper function: Load Spotify's player, and set up listeners to update state while playing song
+  const initializeSpotifyPlayer = () => {
+    $script('https://sdk.scdn.co/spotify-player.js');
+    // Initialize my Player object
+    window.onSpotifyWebPlaybackSDKReady = () => {
+      const player = new Spotify.Player({
+        name: 'Wooster',
+        getOAuthToken: (callback) => {
+          callback(accessToken);
+        },
+      });
+
+      // Error listeners
+      player.on('initialization_error', ({ message }) => {
+        console.error('Failed to initialize', message);
+      });
+      player.on('authentication_error', ({ message }) => {
+        console.error('Failed to authenticate', message);
+      });
+      player.on('account_error', ({ message }) => {
+        console.error('Failed to validate Spotify account', message);
+      });
+      player.on('playback_error', ({ message }) => {
+        console.error('Failed to perform playback', message);
+      });
+
+      // Reporting
+      player.addListener('ready', ({ device_id }) => {
+        setDeviceId(device_id);
+      });
+      player.addListener('not_ready', ({ device_id }) => {
+        console.log('Device ID is not ready for playback', device_id);
+      });
+      player.addListener('player_state_changed', (retrievedPlaybackState) => {
+        console.log('Playback state:', retrievedPlaybackState);
+        setPlaybackState(retrievedPlaybackState);
+      });
+
+      player.connect().then(success => {
+        if (success) {
+          console.log(`Wooster is connected to Spotify's Web Playback SDK.`);
+        }
+      })
+    };
+  };
 
   // Triggered effect: Runs when Spotify reports a change in playback state.
   // Updates the playbackLog, which keeps track of listening time so we can update the database with it..
@@ -108,127 +233,6 @@ function App() {
         });
     }
   }, [playbackLog.readyToPost]);
-
-  // Helper function: Use our refresh token to request a new access token.
-  const getNewToken = () => {
-    axios({
-      method: 'get',
-      url: '/api/refresh?' +
-        queryString.stringify({
-          refresh_token: refreshToken,
-        }),
-    })
-      .then((response) => {
-        setAccessToken(response.data.access_token);
-      });
-  };
-
-  // Helper function: Grab basic user information from Spotify and populate database if needed, then state.
-  const initializeUser = () => {
-    // Get the user data from Spotify.
-    axios({
-      method: 'get',
-      url: 'https://api.spotify.com/v1/me',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-      },
-    })
-      .then((response) => response.data)
-      // Use that data to grab the database's object for that user.
-      .then((userData) => {
-        axios({
-          method: 'get',
-          url: `/api/${userData.id}`,
-        })
-          .then((response) => response.data)
-          .then((databaseObject) => {
-            // But if no such object exists...
-            if (!Object.keys(databaseObject).length) {
-              // Create a new skeleton object for that user.
-              axios({
-                method: 'post',
-                url: `/api/${userData.id}/new`,
-              })
-                // Then, grab that skeleton object.
-                .then(() => {
-                  grabUserObjectAndSaveItToState(userData.id, userData.email);
-                });
-              // If it does exist though, just grab it and save it to state.
-            } else {
-              grabUserObjectAndSaveItToState(userData.id, userData.email);
-            }
-          });
-      });
-  };
-
-  // Helper function. Grabs user object from database and saves it to state.
-  // If needed, updates a user's email in the database.
-  const grabUserObjectAndSaveItToState = (spotifyUserId, usersCurrentSpotifyEmail) => {
-    axios({
-      method: 'get',
-      url: `/api/${spotifyUserId}`,
-    })
-      // And save it to state.
-      .then((response) => response.data)
-      .then((databaseObject) => {
-        setCurrentUser(databaseObject.Item);
-        if (databaseObject.Item.email !== usersCurrentSpotifyEmail) {
-          axios({
-            method: 'put',
-            url: `/api/${spotifyUserId}/email`,
-            data: {
-              email: usersCurrentSpotifyEmail,
-            },
-          });
-        }
-      });
-  };
-
-  // Helper function: Load Spotify's player, and set up listeners to update state while playing song
-  const initializeSpotifyPlayer = () => {
-    $script('https://sdk.scdn.co/spotify-player.js');
-    // Initialize my Player object
-    window.onSpotifyWebPlaybackSDKReady = () => {
-      const player = new Spotify.Player({
-        name: 'Wooster',
-        getOAuthToken: (callback) => {
-          callback(accessToken);
-        },
-      });
-
-      // Error listeners
-      player.on('initialization_error', ({ message }) => {
-        console.error('Failed to initialize', message);
-      });
-      player.on('authentication_error', ({ message }) => {
-        console.error('Failed to authenticate', message);
-      });
-      player.on('account_error', ({ message }) => {
-        console.error('Failed to validate Spotify account', message);
-      });
-      player.on('playback_error', ({ message }) => {
-        console.error('Failed to perform playback', message);
-      });
-
-      // Reporting
-      player.addListener('ready', ({ device_id }) => {
-        setDeviceId(device_id);
-      });
-      player.addListener('not_ready', ({ device_id }) => {
-        console.log('Device ID is not ready for playback', device_id);
-      });
-      player.addListener('player_state_changed', (retrievedPlaybackState) => {
-        console.log('Playback state:', retrievedPlaybackState);
-        setPlaybackState(retrievedPlaybackState);
-      });
-
-      player.connect().then(success => {
-        if (success) {
-          console.log(`Wooster is connected to Spotify's Web Playback SDK.`);
-        }
-      })
-    };
-  };
 
   const populateSongs = () => {
     if (!songQueue.length) {
@@ -287,21 +291,8 @@ function App() {
       });
   };
 
-  // Helper function: Cancel the animation when the user clicks.
-  const animationCancel = () => {
-    sendEvent('ANIMATION_DONE');
-  }
-
   // Render page based on state machine.
-  if (currentState.matches('intro')) {
-    return (
-      <div id="body-section" onClick={animationCancel}>
-        <div id="body-grid">
-          <WelcomeToWooster />
-        </div>
-      </div>
-    );
-  } else if (currentState.matches('landing')) {
+  if (currentState.matches('landing')) {
     return (
       <div id="body-section">
         <div id="body-grid">
@@ -315,7 +306,7 @@ function App() {
       <div id="body-section">
         <div id="body-grid">
           <Header />
-          <Player
+          <InitialPlayButton
             accessToken={accessToken}
             deviceId={deviceId}
             currentUser={currentUser}

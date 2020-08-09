@@ -6,14 +6,7 @@
   --spotify-green: #1DB954;
   --spotify-bright-green: #1ed760;
 
-  --welcome-to-wooster-delay: 0s;
-  --welcome-to-wooster-duration: 6.5s;
-  --welcome-to-wooster-stagger: 0.125s;
-  --intro-shine-delay: 3.25s;
-  --intro-shine-duration: 1.75s;
-  --fadeout-delay: 5s;
-  --fadeout-duration: 0.5s;
-  --fadein-duration: 0.5s;
+  --fade-duration: 0.5s;
   --base-shine-duration: 1.75s;
   --title-shine-multiplier: 10;
 }
@@ -25,11 +18,6 @@
   src: url('assets/Antipasto-Pro-Regular-trial.ttf');
 }
 
-/* @font-face {
-  font-family: 'Antipasto-Light';
-  src: url('./assets/Antipasto-Pro-ExtraLight-trial.ttf');
-} */
-
 /* Overall app styling */
 
 #app {
@@ -37,7 +25,7 @@
   height: 100vh;
   width: 100vw;
   background-image: url('assets/black-denim-25.jpg');
-  /* background-color: #111111; */
+  /* background-color: #202020; */
 
   /* Outer grid */
   display: grid;
@@ -111,202 +99,9 @@
   height: 50px;
 
   animation-name: fadein;
-  animation-duration: var(--fadeout-duration);
+  animation-duration: var(--fade-duration);
   animation-fill-mode: forwards;
   animation-timing-function: linear;
-}
-
-#letters-and-mask {
-  grid-area: 6 / 10 / 7 / 3;
-
-  width: 523px;
-  height: 50px;
-
-  animation-name: fadeout;
-  animation-delay: var(--fadeout-delay);
-  animation-duration: var(--fadeout-duration);
-  animation-fill-mode: forwards;
-  animation-timing-function: linear;
-}
-
-/* Letter-drawing animation */
-
-.cls-1, .cls-3 {
-  fill: none;
-}
-
-.cls-2 {
-  clip-path: url(#clip-path);
-}
-
-.cls-3 {
-  stroke: #fff;
-  stroke-linecap: round;
-  stroke-miterlimit: 10;
-  stroke-width: 9px;
-
-  stroke-dasharray: 400;
-  stroke-dashoffset: 400;
-  animation-name: dash;
-  animation-duration: var(--welcome-to-wooster-duration);
-  animation-fill-mode: forwards;
-  animation-timing-function: linear;
-}
-
-.slow-e-bar {
-  animation-duration: calc(var(--welcome-to-wooster-duration) * 1.5);
-}
-
-.slow-t-bar {
-  animation-duration: calc(var(--welcome-to-wooster-duration) * 2);
-}
-
-.slow-o {
-  animation-duration: calc(var(--welcome-to-wooster-duration) * 1.4);
-}
-
-.group-1 {
-  animation-delay: calc(var(--welcome-to-wooster-delay) + var(--welcome-to-wooster-stagger));
-}
-
-.group-2 {
-  animation-delay: calc(var(--welcome-to-wooster-delay) + var(--welcome-to-wooster-stagger) * 2)
-}
-
-.group-3 {
-  animation-delay: calc(var(--welcome-to-wooster-delay) + var(--welcome-to-wooster-stagger) * 3);
-}
-
-.group-4 {
-  animation-delay: calc(var(--welcome-to-wooster-delay) + var(--welcome-to-wooster-stagger) * 4);
-}
-
-.group-5 {
-  animation-delay: calc(var(--welcome-to-wooster-delay) + var(--welcome-to-wooster-stagger) * 5);
-}
-
-.group-6 {
-  animation-delay: calc(var(--welcome-to-wooster-delay) + var(--welcome-to-wooster-stagger) * 6);
-}
-
-.group-7 {
-  animation-delay: calc(var(--welcome-to-wooster-delay) + var(--welcome-to-wooster-stagger) * 7);
-}
-
-.group-8 {
-  animation-delay: calc(var(--welcome-to-wooster-delay) + var(--welcome-to-wooster-stagger) * 8);
-}
-
-.group-9 {
-  animation-delay: calc(var(--welcome-to-wooster-delay) + var(--welcome-to-wooster-stagger) * 9);
-}
-
-.group-10 {
-  animation-delay: calc(var(--welcome-to-wooster-delay) + var(--welcome-to-wooster-stagger) * 10);
-}
-
-.group-11 {
-  animation-delay: calc(var(--welcome-to-wooster-delay) + var(--welcome-to-wooster-stagger) * 11);
-}
-
-.group-12 {
-  animation-delay: calc(var(--welcome-to-wooster-delay) + var(--welcome-to-wooster-stagger) * 12);
-}
-
-.group-13 {
-  animation-delay: calc(var(--welcome-to-wooster-delay) + var(--welcome-to-wooster-stagger) * 13);
-}
-
-.group-14 {
-  animation-delay: calc(var(--welcome-to-wooster-delay) + var(--welcome-to-wooster-stagger) * 14);
-}
-
-.group-15 {
-  animation-delay: calc(var(--welcome-to-wooster-delay) + var(--welcome-to-wooster-stagger) * 15);
-}
-
-.group-16 {
-  animation-delay: calc(var(--welcome-to-wooster-delay) + var(--welcome-to-wooster-stagger) * 16);
-}
-
-.group-17 {
-  animation-delay: calc(var(--welcome-to-wooster-delay) + var(--welcome-to-wooster-stagger) * 17);
-}
-
-.group-18 {
-  animation-delay: calc(var(--welcome-to-wooster-delay) + var(--welcome-to-wooster-stagger) * 18);
-}
-
-.cls-4 {
-  clip-path: url(#clip-path-2);
-}
-
-.cls-5 {
-  clip-path: url(#clip-path-3);
-}
-
-.cls-6 {
-  clip-path: url(#clip-path-4);
-}
-
-.cls-7 {
-  clip-path: url(#clip-path-5);
-}
-
-.cls-8 {
-  clip-path: url(#clip-path-6);
-}
-
-.cls-9 {
-  clip-path: url(#clip-path-7);
-}
-
-.cls-10 {
-  clip-path: url(#clip-path-8);
-}
-
-.cls-11 {
-  clip-path: url(#clip-path-9);
-}
-
-.cls-12 {
-  clip-path: url(#clip-path-10);
-}
-
-.cls-13 {
-  clip-path: url(#clip-path-11);
-}
-
-.cls-14 {
-  clip-path: url(#clip-path-12);
-}
-
-.cls-15 {
-  clip-path: url(#clip-path-13);
-}
-
-.cls-16 {
-  clip-path: url(#clip-path-14);
-}
-
-.cls-17 {
-  clip-path: url(#clip-path-15);
-}
-
-.cls-18 {
-  clip-path: url(#clip-path-16);
-}
-
-@keyframes dash {
-  0% {
-    opacity: 50%;
-  }
-  5% {
-    opacity: 100%;
-  }
-  100% {
-   stroke-dashoffset: 0;
-  }
 }
 
 /* Shimmer animation */
@@ -315,29 +110,8 @@
   mix-blend-mode: screen;
 }
 
-#intro-shine {
-  position: relative;
-  top: -56px;
-}
-
-#intro-shine-mask-placement {
-  transform: scaleX(1.002) translate(4.25px, 6.25px);
-}
-
 .mask-white {
   fill: #fff;
-}
-
-.mask-black {
-  fill: #000;
-}
-
-#intro-shine-rect {
-  animation-name: intro-shine;
-  animation-delay: var(--intro-shine-delay);
-  animation-duration: var(--intro-shine-duration);
-  animation-fill-mode: forwards;
-  animation-timing-function: ease;
 }
 
 #title-shine {
@@ -367,7 +141,7 @@
   height: 40px;
 
   animation-name: fadein;
-  animation-duration: var(--fadeout-duration);
+  animation-duration: var(--fade-duration);
   animation-fill-mode: forwards;
   animation-timing-function: linear;
 }
@@ -390,15 +164,6 @@
 
 #login-shine-mask-placement {
   transform: scale(0.522) translate(0px, 5.5px);
-}
-
-@keyframes intro-shine {
-  0% {
-    x: -400;
-  }
-  100% {
-    x: 400;
-  }
 }
 
 @keyframes title-shine-long {

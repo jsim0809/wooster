@@ -1,21 +1,23 @@
 import { Machine } from 'xstate';
 
-// This machine is completely decoupled from React
 const woosterMachine = Machine({
   id: 'wooster',
-  initial: 'intro',
+  initial: 'landing',
   states: {
-    intro: {
+    landing: {
       on: {
-        ANIMATION_DONE: 'landing',
         LOGGED_IN: 'readyToPlay',
       }
     },
-    landing: {
-      type: 'final',
-    },
     readyToPlay: {
-      type: 'final',
+      on: {
+        PLAY: 'playing',
+      }
+    },
+    playing: {
+      on: {
+        STOP: 'readyToPlay',
+      }
     },
   },
 });
