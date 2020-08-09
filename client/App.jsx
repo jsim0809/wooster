@@ -240,7 +240,7 @@ function App() {
   useEffect(() => {
     if (songQueue.length === 1) {
       const randomSong2 = currentUser.liked_songs[Math.floor(Math.random() * currentUser.liked_songs.length)];
-      synthesizeSongBatch(songQueue[0], randomSong2);
+      loadThreeSongs(songQueue[0], randomSong2);
     }
     if (songQueue.length === 3) {
       axios({
@@ -261,7 +261,7 @@ function App() {
     }
   }, songQueue);
 
-  const synthesizeSongBatch = (song1, song2) => {
+  const loadThreeSongs = (song1, song2) => {
     axios({
       method: 'get',
       url: 'https://api.spotify.com/v1/recommendations?' +

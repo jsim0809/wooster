@@ -156,7 +156,7 @@ app.get('/api/refresh', (req, res) => {
 
 // Grab a user's entire data object
 app.get('/api/:spotify_user_id', (req, res) => {
-  database.getData(req.params.spotify_user_id, (err, data) => {
+  database.getFullUserData(req.params.spotify_user_id, (err, data) => {
     if (err) {
       res.status(500).send(err);
     } else {
@@ -165,9 +165,9 @@ app.get('/api/:spotify_user_id', (req, res) => {
   });
 });
 
-// Create the skeleton of a user's data object
+// Create the skeleton of a user's data object.
 app.post('/api/:spotify_user_id/new', (req, res) => {
-  database.createSkeleton(req.params.spotify_user_id, (err, data) => {
+  database.createUserSkeleton(req.params.spotify_user_id, (err, data) => {
     if (err) {
       res.status(500).send(err);
     } else {
@@ -180,6 +180,18 @@ app.post('/api/:spotify_user_id/new', (req, res) => {
 app.put('/api/:spotify_user_id/email', (req, res) => {
   const { email } = req.body;
   database.updateEmail(req.params.spotify_user_id, email, (err, data) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.status(201).send(data);
+    }
+  });
+});
+
+// Create the skeleton of a new song.
+app.post('/api/:spotify_user_id/song/new', (req, res) => {
+  const { currentSongId } = req.body;
+  database.createSongSkeleton(req.params.spotify_user_id, currentSongId, (err, data) => {
     if (err) {
       res.status(500).send(err);
     } else {

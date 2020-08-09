@@ -12,7 +12,7 @@ AWS.config.update({
 const docClient = new AWS.DynamoDB.DocumentClient();
 
 // Grab the entire user object.
-module.exports.getData = (spotify_user_id, callback) => {
+module.exports.getFullUserData = (spotify_user_id, callback) => {
   const params = {
     TableName: "Wooster",
     Key: {
@@ -29,15 +29,14 @@ module.exports.getData = (spotify_user_id, callback) => {
   });
 };
 
-// Create the skeleton of a user's data object
-module.exports.createSkeleton = (spotify_user_id, callback) => {
+// Create the skeleton of a new user's data object.
+module.exports.createUserSkeleton = (spotify_user_id, callback) => {
   var params = {
     TableName: "Wooster",
     Item: {
       "spotify_user_id": spotify_user_id,
       "email": '',
-      "liked_songs": {},
-      "disliked_songs": {},
+      "songs": {},
     },
   };
   docClient.put(params, function (err, data) {
@@ -56,12 +55,12 @@ module.exports.updateEmail = (spotify_user_id, email, callback) => {
     Key: {
       "spotify_user_id": spotify_user_id,
     },
-    UpdateExpression: `SET #email = :email`,
+    UpdateExpression: `SET #email = :new_email`,
     ExpressionAttributeNames: {
       "#email": "email",
     },
     ExpressionAttributeValues: {
-      ":email": email,
+      ":new_email": email,
     },
   };
 
@@ -74,10 +73,41 @@ module.exports.updateEmail = (spotify_user_id, email, callback) => {
   });
 };
 
+// Create the skeleton of a new song.
+module.exports.createSongSkeleton = (spotify_user_id, track_id, callback) => {
+  var params = {
+    TableName: "Wooster",
+    Key: {
+      "spotify_user_id": spotify_user_id,
+    },
+    UpdateExpression: `SET #songs.#track_id = :new_track`,
+    ExpressionAttributeNames: {
+      "#songs": "songs",
+      "#track_id": track_id,
+    },
+    ExpressionAttributeValues: {
+      ":new_track": {
+        "liked": undefined,
+        "plays": {},
+        "woos": [],
+        "benches": [],
+      },
+    },
+  };
+
+  docClient.update(params, function (err, data) {
+    if (err) {
+      callback(err, null);
+    } else {
+      callback(null, data);
+    }
+  });
+}
+
 // When the user finishes playing a song
 // (listened to the end, skipped forward, benched/disliked, or hit repeat),
-// we will record the start_time and end_time of the just-played song.
-module.exports.recordSongPlayTime = (spotify_user_id, track_id, start_time, duration, callback) => {
+// we will record the start_time and duration of the just-played song.
+module.exports.logPlaytime = (spotify_user_id, track_id, start_time, duration, callback) => {
   const params = {
     TableName: "Wooster",
     Key: {
@@ -112,14 +142,13 @@ module.exports.woo = (spotify_user_id, track_id, woo_time, callback) => {
     Key: {
       "spotify_user_id": spotify_user_id,
     },
-    UpdateExpression: `SET #songs.#track_id.#woos = list_append(if_not_exists(#songs.#track_id.#woos, :empty_list), :woo_time)`,
+    UpdateExpression: `SET #songs.#track_id.#woos = list_append(#songs.#track_id.#woos, :woo_time)`,
     ExpressionAttributeNames: {
       "#songs": "songs",
       "#track_id": track_id,
       "#woos": "woos",
     },
     ExpressionAttributeValues: {
-      ":empty_list": [],
       ":woo_time": [woo_time],
     },
   };
@@ -141,14 +170,13 @@ module.exports.bench = (spotify_user_id, track_id, bench_time, callback) => {
     Key: {
       "spotify_user_id": spotify_user_id,
     },
-    UpdateExpression: `SET #songs.#track_id.#benches = list_append(if_not_exists(#songs.#track_id.#benches, :empty_list), :bench_time)`,
+    UpdateExpression: `SET #songs.#track_id.#benches = list_append(#songs.#track_id.#benches, :bench_time)`,
     ExpressionAttributeNames: {
       "#songs": "songs",
       "#track_id": track_id,
       "#benches": "benches",
     },
     ExpressionAttributeValues: {
-      ":empty_list": [],
       ":bench_time": [bench_time],
     },
   };
