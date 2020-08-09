@@ -19,11 +19,9 @@ app.use(express.json());
 app.use(cors());
 app.use(cookieParser());
 
-/**
- * Generates a random base-62 string to be used as a cookie.
- * @param  {number} length The length of the string
- * @return {string} The generated string
- */
+// // Interacting with Spotify's login servers
+
+// Generate a random base-62 string to be used as a cookie.
 const generateRandomString = (length) => {
   let result = '';
   const alphanumeric = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -33,23 +31,11 @@ const generateRandomString = (length) => {
   return result;
 };
 
-/**
- * Login route.
- * Client requests authorization from Spotify.
- 
- * This app reads the following information from user's account:
-  
- * streaming: Allows you to stream music!
- * user-read-email: The user's email address and username.
- * user-read-private: The user's subscription details (Premium or Free).
- * user-top-read: The user's top artists and tracks. Used to generate random seeds.
- * user-read-playback-position: Used to track how long you listen to each track in seconds.
- * user-read-currently-playing: Used to properly flag likes, unlikes,  and woos.
- * user-read-recently-played: Recently played tracks. For liking and unliking songs that you recently played.
- * user-modify-playback-state: Allows Wooster to start and stop songs.
-
- * Scopes documentation at https://developer.spotify.com/documentation/general/guides/scopes/
- */
+// Login route. Client requests authorization from Spotify.
+// This app reads the following information from user's account:
+// streaming: Allows you to stream music!
+// user-read-email: The user's email address and username.
+// Scopes documentation at https://developer.spotify.com/documentation/general/guides/scopes/
 app.get('/login', function (req, res) {
   // Generate a random string.
   const state = generateRandomString(16);
@@ -60,12 +46,6 @@ app.get('/login', function (req, res) {
   var scopes = [
     'streaming',
     'user-read-email',
-    'user-read-private',
-    'user-top-read',
-    'user-read-playback-position',
-    'user-read-currently-playing',
-    'user-read-recently-played',
-    'user-modify-playback-state',
   ];
 
   // Pass all of the above into the redirect URL to Spotify's authorization servers.
@@ -79,9 +59,8 @@ app.get('/login', function (req, res) {
     }));
 });
 
-/**
- * After the user logs in, they are redirected back to my /callback route.
- */
+
+//After the user logs in, they are redirected back to my /callback route.
 app.get('/callback', (req, res) => {
   const { code, state, error } = req.query;
   const storedState = req.cookies ? req.cookies['spotify_auth_state'] : undefined;
@@ -132,7 +111,8 @@ app.get('/callback', (req, res) => {
   }
 });
 
-// When necessary, the client will request a new access token from us. We use their refresh token to request it from Spotify.
+// Every 55 minutes, the client will request a new access token. (It expires in 60.) 
+// We use their refresh token to request it from Spotify.
 app.get('/api/refresh', (req, res) => {
   axios({
     method: 'post',
@@ -153,6 +133,7 @@ app.get('/api/refresh', (req, res) => {
     });
 });
 
+// // Interacting with DynamoDB
 
 // Grab a user's entire data object
 app.get('/api/:spotify_user_id', (req, res) => {
@@ -203,7 +184,7 @@ app.post('/api/:spotify_user_id/song/new', (req, res) => {
 // Record the song that a user just listened to.
 app.post('/api/:spotify_user_id/song', (req, res) => {
   const { currentSongId, startTimestamp, latestPosition } = req.body;
-  database.recordSongPlayTime(req.params.spotify_user_id, currentSongId, startTimestamp, latestPosition, (err, data) => {
+  database.logPlaytime(req.params.spotify_user_id, currentSongId, startTimestamp, latestPosition, (err, data) => {
     if (err) {
       res.status(500).send(err);
     } else {
