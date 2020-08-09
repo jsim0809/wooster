@@ -23,6 +23,7 @@ function App() {
     email: '',
     songs: {},
   });
+  const [songQueue, setSongQueue] = useState([]);
   const [playbackState, setPlaybackState] = useState({
     track_window: {
       current_track: '',
@@ -249,6 +250,44 @@ function App() {
     };
   };
 
+  const populateSongs = () => {
+    while (!songQueue.length) {
+      const songOption = currentUser.songs[Math.floor(Math.random() * currentUser.songs.length)];
+      if (songOption.liked) {
+        setSongQueue([...songQueue, songOption])
+      }
+    }
+    while (songQueue.length === 1) {
+      const songOption = currentUser.songs[Math.floor(Math.random() * currentUser.songs.length)];
+      if (songOption.liked) {
+        axios({
+          method: 'get',
+          url: 'https://api.spotify.com/v1/recommendations?' +
+            queryString.stringify({
+              limit: 1,
+              seed_tracks: `${songQueue[0]},${songOption}`,
+            }),
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${accessToken}`,
+          },
+        })
+          .then((response) => {
+            const middleSong = response.tracks[0].id;
+            setSongQueue([...songQueue, middleSong, songOption]);
+          });
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (songQueue.length === 3) {
+
+    }
+  }, songQueue);
+
+
   // Helper function: Cancel the animation when the user clicks.
   const animationCancel = () => {
     sendEvent('ANIMATION_DONE');
@@ -281,6 +320,7 @@ function App() {
             accessToken={accessToken}
             deviceId={deviceId}
             currentUser={currentUser}
+            populateSongs={populateSongs}
           />
         </div>
       </div>

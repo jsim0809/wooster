@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import queryString from 'query-string';
 
-function Player({ accessToken, deviceId, currentUser }) {
+function Player({ accessToken, deviceId, populateSongs }) {
   
 
-  // Love Story by Taylor Swift
+  // Sample songs
   const LOVE_STORY = 'spotify:track:1vrd6UOGamcKNGnSHJQlSt';
+  const NIGHT_CHANGES = 'spotify:track:zgSbyGVlRjSM7eV6EPE5nA';
   const GETAWAY_CAR = 'spotify:track:0VE4kBnHJUgtMf0dy6DRmW';
 
   const testHandlePlayClick = () => {
@@ -17,7 +18,7 @@ function Player({ accessToken, deviceId, currentUser }) {
           device_id: deviceId,
         }),
       data: JSON.stringify({
-        uris: [LOVE_STORY, GETAWAY_CAR],
+        uris: [LOVE_STORY, NIGHT_CHANGES, GETAWAY_CAR],
       }),
       headers: {
         'Accept': 'application/json',
@@ -28,13 +29,8 @@ function Player({ accessToken, deviceId, currentUser }) {
   };
 
   const handlePlayClick = () => {
-    axios(`/api/${currentUser.spotifyUserId}`)
-      .then((response) => {
-        
-      })
-      .catch((err) => {
-        console.error('Failed to retrieve user data.');
-      })
+    populateSongs();
+
   }
 
   return (
