@@ -24,8 +24,7 @@
   /* Background */
   height: 100vh;
   width: 100vw;
-  background-image: url('assets/black-denim-25.jpg');
-  /* background-color: #202020; */
+  background-image: url('assets/black-denim-25-dark.jpg');
 
   /* Outer grid */
   display: grid;
