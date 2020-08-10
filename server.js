@@ -195,6 +195,18 @@ app.post('/api/:spotify_user_id/song', (req, res) => {
   });
 });
 
+// Like a song.
+app.post('/api/:spotify_user_id/like', (req, res) => {
+  const { currentSongId } = req.body;
+  database.woo(req.params.spotify_user_id, currentSongId, (err, data) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.status(201).send(data);
+    }
+  });
+});
+
 // Woo a song.
 app.post('/api/:spotify_user_id/woo', (req, res) => {
   const { currentSongId, wooTimestamp } = req.body;

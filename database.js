@@ -38,6 +38,7 @@ module.exports.createUserSkeleton = (spotify_user_id, callback) => {
       "email": '',
       "songs": {},
     },
+    ConditionExpression: "attribute_not_exists(spotify_user_id)",
   };
   docClient.put(params, function (err, data) {
     if (err) {
@@ -80,6 +81,7 @@ module.exports.createSongSkeleton = (spotify_user_id, track_id, callback) => {
     Key: {
       "spotify_user_id": spotify_user_id,
     },
+    ConditionExpression: "attribute_not_exists(#songs.#track_id)",
     UpdateExpression: `SET #songs.#track_id = :new_track`,
     ExpressionAttributeNames: {
       "#songs": "songs",
@@ -133,6 +135,33 @@ module.exports.logPlaytime = (spotify_user_id, track_id, start_time, duration, c
     }
   });
 };
+
+// When the user likes a song, update the 'liked' field.
+module.exports.like = (spotify_user_id, track_id, callback) => {
+  var params = {
+    TableName: "Wooster",
+    Key: {
+      "spotify_user_id": spotify_user_id,
+    },
+    UpdateExpression: `SET #songs.#track_id.#liked = :new_status`,
+    ExpressionAttributeNames: {
+      "#songs": "songs",
+      "#track_id": track_id,
+      "#liked": "liked",
+    },
+    ExpressionAttributeValues: {
+      ":new_status": true,
+    },
+  };
+
+  docClient.update(params, function (err, data) {
+    if (err) {
+      callback(err, null);
+    } else {
+      callback(null, data);
+    }
+  });
+}
 
 // When the user woos a song,
 // record a timestamp.

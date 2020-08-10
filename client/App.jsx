@@ -17,7 +17,7 @@ function App() {
   const [refreshToken, setRefreshToken] = useState(URL_HASH.refresh_token);
   const [deviceId, setDeviceId] = useState(null);
   const [currentUser, setCurrentUser] = useState({
-    spotifyUserId: '',
+    spotify_user_id: '',
     email: '',
     songs: {},
   });
@@ -100,36 +100,30 @@ function App() {
               })
                 // Then, grab that skeleton object.
                 .then(() => {
-                  getUserRecordFromDBAndSaveToState(userData.id, userData.email);
+                  axios({
+                    method: 'get',
+                    url: `/api/${spotifyUserId}`,
+                  })
+                    // And save it to state.
+                    .then((response) => response.data)
+                    .then((databaseObject) => {
+                      if (databaseObject.Item.email !== usersCurrentSpotifyEmail) {
+                        axios({
+                          method: 'put',
+                          url: `/api/${spotifyUserId}/email`,
+                          data: {
+                            email: usersCurrentSpotifyEmail,
+                          },
+                        });
+                      }
+                      setCurrentUser(databaseObject.Item);
+                    });
                 });
               // If it does exist though, just grab it and save it to state.
             } else {
-              getUserRecordFromDBAndSaveToState(userData.id, userData.email);
+              setCurrentUser(databaseObject.Item);
             }
           });
-      });
-  };
-
-  // Helper function. Grabs user object from database and saves it to state.
-  // If needed, updates a user's email in the database.
-  const getUserRecordFromDBAndSaveToState = (spotifyUserId, usersCurrentSpotifyEmail) => {
-    axios({
-      method: 'get',
-      url: `/api/${spotifyUserId}`,
-    })
-      // And save it to state.
-      .then((response) => response.data)
-      .then((databaseObject) => {
-        if (databaseObject.Item.email !== usersCurrentSpotifyEmail) {
-          axios({
-            method: 'put',
-            url: `/api/${spotifyUserId}/email`,
-            data: {
-              email: usersCurrentSpotifyEmail,
-            },
-          });
-        }
-        setCurrentUser(databaseObject.Item);
       });
   };
 
@@ -187,9 +181,14 @@ function App() {
     return usersLikedSongs[Math.floor(Math.random() * usersLikedSongs)];
   };
 
+  const LOVE_STORY = '1vrd6UOGamcKNGnSHJQlSt';
+  const NIGHT_CHANGES = '5O2P9iiztwhomNh8xkR9lJ';
+  const GETAWAY_CAR = '0VE4kBnHJUgtMf0dy6DRmW';
+
   const populateSongs = () => {
-    const randomSong1 = getRandomLikedSong();
-    setSongQueue([randomSong1]);
+    setSongQueue([LOVE_STORY, NIGHT_CHANGES, GETAWAY_CAR]);
+    // const randomSong1 = getRandomLikedSong();
+    // setSongQueue([randomSong1]);
   };
 
   useEffect(() => {
@@ -205,7 +204,7 @@ function App() {
             device_id: deviceId,
           }),
         data: JSON.stringify({
-          uris: [songQueue[0]],
+          uris: [`spotify:track:${songQueue[0]}`],
         }),
         headers: {
           'Accept': 'application/json',
@@ -214,7 +213,7 @@ function App() {
         },
       });
     }
-  }, songQueue);
+  }, [songQueue]);
 
   const loadThreeSongs = (song1, song2) => {
     axios({
@@ -235,7 +234,7 @@ function App() {
         let middleSong = recommendations.find((song) => {
           return currentUser.songs[song.id] !== false;
         }) ?? getRandomLikedSong();
-        setSongQueue([...songQueue, middleSong, songOption]);
+        setSongQueue([song1, middleSong, song2]);
       });
   };
 
@@ -245,7 +244,7 @@ function App() {
   // Updates the playbackLog, which keeps track of listening time so we can update the database with it..
   useEffect(() => {
     // If song is just starting, initialize the playback log.
-    if (!playbackState.position) {
+    if (playbackLog.currentSongId !== playbackState.track_window.current_track.id) {
       setPlaybackLog({
         currentSongId: playbackState.track_window.current_track.id,
         startTimestamp: playbackState.timestamp,
@@ -253,18 +252,18 @@ function App() {
         readyToPost: false,
       });
       // If song is somewhere in the middle, update the latest listening position.
-    } else if (playbackLog.currentSongId === playbackState.track_window.current_track.id) {
-      setPlaybackLog({
-        ...playbackLog,
-        latestPosition: Math.max(playbackLog.latestPosition, playbackState.position),
-      });
-      // If song ended, log the playtime.
-    } else if (!playbackState.paused && playbackState.restrictions.disallow_resuming_reasons[0] === 'not_paused') {
+    } else if (playbackState.paused && playbackState.restrictions.disallow_resuming_reasons?.[0] === 'not_paused') {
       setPlaybackLog({
         ...playbackLog,
         latestPosition: Math.max(playbackLog.latestPosition, playbackState.position),
         readyToPost: true,
       });
+    } else if (playbackLog.currentSongId === playbackState.track_window.current_track.id) {
+      setPlaybackLog({
+        ...playbackLog,
+        latestPosition: Math.max(playbackLog.latestPosition, playbackState.position),
+      });
+      // If song ended naturally, log the playtime.
     }
   }, [playbackState]);
 
@@ -276,7 +275,7 @@ function App() {
     if (playbackLog.readyToPost) {
       axios({
         method: 'post',
-        url: `/api/${currentUser.spotifyUserId}/song`,
+        url: `/api/${currentUser.spotify_user_id}/song`,
         data: playbackLog,
       });
       playNextSong();
@@ -284,7 +283,7 @@ function App() {
   }, [playbackLog.readyToPost]);
 
   // Triggers the play of the next song by moving the song queue forward.
-  const playnextSong = () => {
+  const playNextSong = () => {
     setSongQueue(songQueue.slice(1));
   }
 
@@ -309,8 +308,10 @@ function App() {
           <FakePlayer
             accessToken={accessToken}
             deviceId={deviceId}
-            currentUser={currentUser}
+            currentUserId={currentUser.spotify_user_id}
+            currentSongId={playbackLog.currentSongId}
             populateSongs={populateSongs}
+            setSongQueue={setSongQueue}
           />
         </div>
       </div>
