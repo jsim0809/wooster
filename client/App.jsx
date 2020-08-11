@@ -232,7 +232,7 @@ function App() {
       .then((response) => response.tracks)
       .then((recommendations) => {
         let middleSong = recommendations.find((song) => {
-          return currentUser.songs[song.id] !== false;
+          return currentUser.songs[song.id].liked !== false;
         }) ?? getRandomLikedSong();
         setSongQueue([song1, middleSong, song2]);
       });
@@ -275,10 +275,23 @@ function App() {
     if (playbackLog.readyToPost) {
       axios({
         method: 'post',
-        url: `/api/${currentUser.spotify_user_id}/song`,
-        data: playbackLog,
-      });
-      playNextSong();
+        url: `/api/${currentUser.spotify_user_id}/song/new`,
+        data: {
+          currentSongId: playbackLog.currentSongId,
+          artists: playbackLog.track_window.current_track.artists.map(artist => artist.name),
+          name: playbackLog.track_window.current_track.name,
+        },
+      })
+        .then(() => {
+          axios({
+            method: 'post',
+            url: `/api/${currentUser.spotify_user_id}/song`,
+            data: playbackLog,
+          })
+            .then(() => {
+              playNextSong();
+            })
+        })
     }
   }, [playbackLog.readyToPost]);
 

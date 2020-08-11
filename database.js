@@ -75,7 +75,7 @@ module.exports.updateEmail = (spotify_user_id, email, callback) => {
 };
 
 // Create the skeleton of a new song.
-module.exports.createSongSkeleton = (spotify_user_id, track_id, callback) => {
+module.exports.createSongSkeleton = (spotify_user_id, track_id, track_artists, track_name, callback) => {
   var params = {
     TableName: "Wooster",
     Key: {
@@ -89,6 +89,8 @@ module.exports.createSongSkeleton = (spotify_user_id, track_id, callback) => {
     },
     ExpressionAttributeValues: {
       ":new_track": {
+        "artists": track_artists,
+        "name": track_name,
         "liked": undefined,
         "plays": {},
         "woos": [],
@@ -151,6 +153,33 @@ module.exports.like = (spotify_user_id, track_id, callback) => {
     },
     ExpressionAttributeValues: {
       ":new_status": true,
+    },
+  };
+
+  docClient.update(params, function (err, data) {
+    if (err) {
+      callback(err, null);
+    } else {
+      callback(null, data);
+    }
+  });
+}
+
+// When the user dislikes a song, update the 'liked' field.
+module.exports.dislike = (spotify_user_id, track_id, callback) => {
+  var params = {
+    TableName: "Wooster",
+    Key: {
+      "spotify_user_id": spotify_user_id,
+    },
+    UpdateExpression: `SET #songs.#track_id.#liked = :new_status`,
+    ExpressionAttributeNames: {
+      "#songs": "songs",
+      "#track_id": track_id,
+      "#liked": "liked",
+    },
+    ExpressionAttributeValues: {
+      ":new_status": false,
     },
   };
 

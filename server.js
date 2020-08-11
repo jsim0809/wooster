@@ -173,8 +173,8 @@ app.put('/api/:spotify_user_id/email', (req, res) => {
 
 // Create the skeleton of a new song.
 app.post('/api/:spotify_user_id/song/new', (req, res) => {
-  const { currentSongId } = req.body;
-  database.createSongSkeleton(req.params.spotify_user_id, currentSongId, (err, data) => {
+  const { currentSongId, artists, name } = req.body;
+  database.createSongSkeleton(req.params.spotify_user_id, currentSongId, artists, name, (err, data) => {
     if (err) {
       res.status(500).send(err);
     } else {
@@ -198,7 +198,19 @@ app.post('/api/:spotify_user_id/song', (req, res) => {
 // Like a song.
 app.post('/api/:spotify_user_id/like', (req, res) => {
   const { currentSongId } = req.body;
-  database.woo(req.params.spotify_user_id, currentSongId, (err, data) => {
+  database.like(req.params.spotify_user_id, currentSongId, (err, data) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.status(201).send(data);
+    }
+  });
+});
+
+// Dislike a song.
+app.post('/api/:spotify_user_id/dislike', (req, res) => {
+  const { currentSongId } = req.body;
+  database.dislike(req.params.spotify_user_id, currentSongId, (err, data) => {
     if (err) {
       res.status(500).send(err);
     } else {
