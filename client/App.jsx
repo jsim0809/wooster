@@ -19,6 +19,7 @@ function App() {
   const [deviceId, setDeviceId] = useState('');
   const [currentUser, setCurrentUser] = useState(null);
   const [usersLikedSongs, setUsersLikedSongs] = useState([]);
+  const [noPlayList, setNoPlayList] = useState([]);
   const [songQueue, setSongQueue] = useState([]);
   const [playbackState, setPlaybackState] = useState({});
   const [playbackLog, setPlaybackLog] = useState({});
@@ -116,9 +117,19 @@ function App() {
       });
   };
 
-  // When currentUser is set, populate the user's liked songs array.
+  // When currentUser is set, populate the user's liked and benched songs s.
   useEffect(() => {
     if (currentUser) {
+      const likes = [];
+      const bans = [];
+      for (let songId in currentUser.songs) {
+        if (currentUser.songs[songId].liked === false ||) {
+
+        } else if (currentUser.songs[songId].liked) {
+          likes.push(songId);
+        }
+      }
+
       setUsersLikedSongs(Object.keys(currentUser.songs).filter((song) => {
         return currentUser.songs[song].liked;
       }));
