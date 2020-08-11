@@ -16,8 +16,8 @@ function App() {
   const [currentState, sendEvent] = useMachine(woosterMachine);
   const [accessToken, setAccessToken] = useState(URL_HASH.access_token);
   const [refreshToken, setRefreshToken] = useState(URL_HASH.refresh_token);
-  const [deviceId, setDeviceId] = useState(null);
-  const [currentUser, setCurrentUser] = useState({});
+  const [deviceId, setDeviceId] = useState('');
+  const [currentUser, setCurrentUser] = useState(null);
   const [usersLikedSongs, setUsersLikedSongs] = useState([]);
   const [songQueue, setSongQueue] = useState([]);
   const [playbackState, setPlaybackState] = useState({});
@@ -116,6 +116,15 @@ function App() {
       });
   };
 
+  // When currentUser is set, populate the user's liked songs array.
+  useEffect(() => {
+    if (currentUser) {
+      setUsersLikedSongs(Object.keys(currentUser.songs).filter((song) => {
+        return currentUser.songs[song].liked;
+      }));
+    }
+  }, [currentUser]);
+
   // // Initializing Spotify's Web Player
 
   // Helper function: Load Spotify's player, and set up listeners to update state while playing song
@@ -167,7 +176,7 @@ function App() {
   // // Handle song queueing and playing
 
   const getRandomLikedSong = () => {
-    return usersLikedSongs[Math.floor(Math.random() * usersLikedSongs)];
+    return usersLikedSongs[Math.floor(Math.random() * usersLikedSongs.length)];
   };
 
   const LOVE_STORY = '1vrd6UOGamcKNGnSHJQlSt';
@@ -175,9 +184,9 @@ function App() {
   const GETAWAY_CAR = '0VE4kBnHJUgtMf0dy6DRmW';
 
   const populateSongs = () => {
-    setSongQueue([LOVE_STORY, NIGHT_CHANGES, GETAWAY_CAR]);
-    // const randomSong1 = getRandomLikedSong();
-    // setSongQueue([randomSong1]);
+    // setSongQueue([LOVE_STORY, NIGHT_CHANGES, GETAWAY_CAR]);
+    const randomSong1 = getRandomLikedSong();
+    setSongQueue([randomSong1]);
   };
 
   useEffect(() => {
@@ -221,12 +230,12 @@ function App() {
         'Authorization': `Bearer ${accessToken}`,
       },
     })
-      .then((response) => response.tracks)
+      .then((response) => response.data.tracks)
       .then((recommendations) => {
         let middleSong = recommendations.find((song) => {
-          return currentUser.songs[song.id].liked !== false;
+          return currentUser.songs[song.id]?.liked !== false;
         }) ?? getRandomLikedSong();
-        setSongQueue([song1, middleSong, song2]);
+        setSongQueue([song1, middleSong.id, song2]);
       });
   };
 
