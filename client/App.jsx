@@ -175,7 +175,7 @@ function App() {
         if (success) {
           console.log(`Wooster is connected to Spotify's Web Playback SDK.`);
         }
-      })
+      });
     };
   };
 
@@ -331,12 +331,15 @@ function App() {
         </div>
       </div>
     )
-  } else if (currentState.matches('playing')) {
+  } else if (currentState.matches('playing') || currentState.matches('paused')) {
     return (
       <div id="body-section">
         <div id="body-grid">
           <Header />
           <Player
+            currentState={currentState}
+            sendEvent={sendEvent}
+            accessToken={accessToken}
             currentUserId={currentUser.spotify_user_id}
             currentSongId={playbackLog.currentSongId}
           />

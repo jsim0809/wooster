@@ -16,9 +16,14 @@ const woosterMachine = Machine({
     },
     playing: {
       on: {
-        STOP: 'readyToPlay',
+        PAUSE: 'paused',
       }
     },
+    paused: {
+      on: {
+        PLAY: 'playing',
+      }
+    }
   },
 });
 
