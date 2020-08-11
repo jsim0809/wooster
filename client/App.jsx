@@ -78,7 +78,7 @@ function App() {
         })
           .then((response) => response.data)
           .then((databaseObject) => {
-            // But if no such object exists...
+            // But if no such object exists..
             if (!Object.keys(databaseObject).length) {
               // Create a new skeleton object for that user.
               axios({
@@ -282,19 +282,19 @@ function App() {
         ...noPlayList,
         [playbackState.track_window.current_track.id]: true,
       });
-      // If song is somewhere in the middle, update the latest listening position.
+      // If song ended naturally, log the playtime.
     } else if (playbackState.paused && playbackState.restrictions.disallow_resuming_reasons?.[0] === 'not_paused') {
       setPlaybackLog({
         ...playbackLog,
         latestPosition: Math.max(playbackLog.latestPosition, playbackState.position),
         readyToPost: true,
       });
+      // If song is somewhere in the middle, update the latest listening position.
     } else if (playbackLog.currentSongId === playbackState.track_window?.current_track.id) {
       setPlaybackLog({
         ...playbackLog,
         latestPosition: Math.max(playbackLog.latestPosition, playbackState.position),
       });
-      // If song ended naturally, log the playtime.
     }
   }, [playbackState]);
 
@@ -355,6 +355,10 @@ function App() {
             accessToken={accessToken}
             currentUserId={currentUser.spotify_user_id}
             currentSongId={playbackLog.currentSongId}
+            usersLikedSongs={usersLikedSongs}
+            setUsersLikedSongs={setUsersLikedSongs}
+            noPlayList={noPlayList}
+            setnoPlayList={setnoPlayList}
           />
         </div>
       </div>

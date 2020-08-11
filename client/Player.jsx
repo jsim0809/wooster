@@ -1,7 +1,17 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-function Player({ currentState, sendEvent, accessToken, currentUserId, currentSongId }) {
+function Player({
+  currentState,
+  sendEvent,
+  accessToken,
+  currentUserId,
+  currentSongId,
+  usersLikedSongs,
+  setUsersLikedSongs,
+  noPlayList,
+  setNoPlayList
+}) {
 
   const handlePauseClick = () => {
     axios({
@@ -36,7 +46,13 @@ function Player({ currentState, sendEvent, accessToken, currentUserId, currentSo
       data: {
         currentSongId,
       },
-    });
+    })
+      .then(() => {
+        setUsersLikedSongs([
+          ...usersLikedSongs,
+          currentSongId
+        ])
+      });
   };
 
   // TODO: CHECK IF THE USER HAS ANY LIKED SONGS. IF NOT, PROMPT THEM FOR ONE!
@@ -47,7 +63,7 @@ function Player({ currentState, sendEvent, accessToken, currentUserId, currentSo
         <div id="play-button" className="pointer">
           <button type="button" onClick={handlePauseClick}>Pause</button>
         </div>
-  
+
         <div id="like-button" className="pointer">
           <button type="button" onClick={handleLikeClick}>Thumbs Up</button>
         </div>
@@ -59,7 +75,7 @@ function Player({ currentState, sendEvent, accessToken, currentUserId, currentSo
         <div id="play-button" className="pointer">
           <button type="button" onClick={handlePlayClick}>Play</button>
         </div>
-  
+
         <div id="like-button" className="pointer">
           <button type="button" onClick={handleLikeClick}>Thumbs Up</button>
         </div>
