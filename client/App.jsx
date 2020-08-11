@@ -19,7 +19,7 @@ function App() {
   const [deviceId, setDeviceId] = useState('');
   const [currentUser, setCurrentUser] = useState(null);
   const [usersLikedSongs, setUsersLikedSongs] = useState([]);
-  const [noPlayList, setNoPlayList] = useState([]);
+  const [noPlayList, setNoPlayList] = useState({});
   const [songQueue, setSongQueue] = useState([]);
   const [playbackState, setPlaybackState] = useState({});
   const [playbackLog, setPlaybackLog] = useState({});
@@ -117,22 +117,22 @@ function App() {
       });
   };
 
-  // When currentUser is set, populate the user's liked and benched songs s.
+  // When currentUser is set, populate the user's liked and banned songs.
   useEffect(() => {
     if (currentUser) {
       const likes = [];
-      const bans = [];
+      const bans = {};
       for (let songId in currentUser.songs) {
-        if (currentUser.songs[songId].liked === false ||) {
-
+        const benches = currentUser.songs[songId].benches;
+        if (currentUser.songs[songId].liked === false ||
+          Number(benches[benches.length - 1]) + 7_884_000_000 > Date.now()) {
+          bans[songId] === true;
         } else if (currentUser.songs[songId].liked) {
           likes.push(songId);
         }
       }
-
-      setUsersLikedSongs(Object.keys(currentUser.songs).filter((song) => {
-        return currentUser.songs[song].liked;
-      }));
+      setUsersLikedSongs(likes);
+      setNoPlayList(bans);
     }
   }, [currentUser]);
 
@@ -190,12 +190,12 @@ function App() {
     return usersLikedSongs[Math.floor(Math.random() * usersLikedSongs.length)];
   };
 
-  const LOVE_STORY = '1vrd6UOGamcKNGnSHJQlSt';
-  const NIGHT_CHANGES = '5O2P9iiztwhomNh8xkR9lJ';
-  const GETAWAY_CAR = '0VE4kBnHJUgtMf0dy6DRmW';
+  // const LOVE_STORY = '1vrd6UOGamcKNGnSHJQlSt';
+  // const NIGHT_CHANGES = '5O2P9iiztwhomNh8xkR9lJ';
+  // const GETAWAY_CAR = '0VE4kBnHJUgtMf0dy6DRmW';
+  // setSongQueue([LOVE_STORY, NIGHT_CHANGES, GETAWAY_CAR]);
 
   const populateSongs = () => {
-    // setSongQueue([LOVE_STORY, NIGHT_CHANGES, GETAWAY_CAR]);
     const randomSong1 = getRandomLikedSong();
     setSongQueue([randomSong1]);
   };
@@ -206,24 +206,28 @@ function App() {
       loadThreeSongs(songQueue[0], randomSong2);
     }
     if (songQueue.length > 1) {
-      axios({
-        method: 'put',
-        url: 'https://api.spotify.com/v1/me/player/play?' +
-          queryString.stringify({
-            device_id: deviceId,
+      if (!noPlayList[songQueue[0]]) {
+        axios({
+          method: 'put',
+          url: 'https://api.spotify.com/v1/me/player/play?' +
+            queryString.stringify({
+              device_id: deviceId,
+            }),
+          data: JSON.stringify({
+            uris: [`spotify:track:${songQueue[0]}`],
           }),
-        data: JSON.stringify({
-          uris: [`spotify:track:${songQueue[0]}`],
-        }),
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${accessToken}`,
-        },
-      })
-        .then(() => {
-          sendEvent('PLAY');
-         });
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${accessToken}`,
+          },
+        })
+          .then(() => {
+            sendEvent('PLAY');
+          });
+      } else {
+        playNextSong();
+      }
     }
   }, [songQueue]);
 
@@ -244,7 +248,7 @@ function App() {
       .then((response) => response.data.tracks)
       .then((recommendations) => {
         let middleSong = recommendations.find((song) => {
-          return currentUser.songs[song.id]?.liked !== false;
+          return !noPlayList[song.id];
         }) ?? getRandomLikedSong();
         setSongQueue([song1, middleSong.id, song2]);
       });
@@ -263,6 +267,7 @@ function App() {
         latestPosition: playbackState.position,
         readyToPost: false,
       });
+      // Attempt to post the song skeleton (if it doesn't exist in DB yet);
       axios({
         method: 'post',
         url: `/api/${currentUser.spotify_user_id}/song/new`,
@@ -271,7 +276,12 @@ function App() {
           artists: playbackState.track_window.current_track.artists.map(artist => artist.name),
           name: playbackState.track_window.current_track.name,
         },
-      })
+      });
+      //Add the song to the noPlayList so it doesn't play again this session.
+      setNoPlayList({
+        ...noPlayList,
+        [playbackState.track_window.current_track.id]: true,
+      });
       // If song is somewhere in the middle, update the latest listening position.
     } else if (playbackState.paused && playbackState.restrictions.disallow_resuming_reasons?.[0] === 'not_paused') {
       setPlaybackLog({
