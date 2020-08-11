@@ -17,28 +17,11 @@ function App() {
   const [accessToken, setAccessToken] = useState(URL_HASH.access_token);
   const [refreshToken, setRefreshToken] = useState(URL_HASH.refresh_token);
   const [deviceId, setDeviceId] = useState(null);
-  const [currentUser, setCurrentUser] = useState({
-    spotify_user_id: '',
-    email: '',
-    songs: {},
-  });
+  const [currentUser, setCurrentUser] = useState({});
   const [usersLikedSongs, setUsersLikedSongs] = useState([]);
   const [songQueue, setSongQueue] = useState([]);
-  const [playbackState, setPlaybackState] = useState({
-    track_window: {
-      current_track: {
-        id: '',
-      },
-    },
-    timestamp: 0,
-    position: 0,
-  });
-  const [playbackLog, setPlaybackLog] = useState({
-    currentSongId: '',
-    startTimestamp: 0,
-    latestPosition: 0,
-    readyToPost: false,
-  });
+  const [playbackState, setPlaybackState] = useState({});
+  const [playbackLog, setPlaybackLog] = useState({});
 
   // Triggered effect: Runs once on component mount.
   // Detect logged-in state, removes access codes from URL bar, and runs initialization code.
@@ -253,7 +236,7 @@ function App() {
   // Updates the playbackLog, which keeps track of listening time so we can update the database with it..
   useEffect(() => {
     // If song is just starting, initialize the playback log.
-    if (playbackLog.currentSongId !== playbackState.track_window.current_track.id) {
+    if (playbackLog.currentSongId !== playbackState.track_window?.current_track.id) {
       setPlaybackLog({
         currentSongId: playbackState.track_window.current_track.id,
         startTimestamp: playbackState.timestamp,
@@ -268,7 +251,7 @@ function App() {
           artists: playbackState.track_window.current_track.artists.map(artist => artist.name),
           name: playbackState.track_window.current_track.name,
         },
-      });
+      })
       // If song is somewhere in the middle, update the latest listening position.
     } else if (playbackState.paused && playbackState.restrictions.disallow_resuming_reasons?.[0] === 'not_paused') {
       setPlaybackLog({
@@ -276,7 +259,7 @@ function App() {
         latestPosition: Math.max(playbackLog.latestPosition, playbackState.position),
         readyToPost: true,
       });
-    } else if (playbackLog.currentSongId === playbackState.track_window.current_track.id) {
+    } else if (playbackLog.currentSongId === playbackState.track_window?.current_track.id) {
       setPlaybackLog({
         ...playbackLog,
         latestPosition: Math.max(playbackLog.latestPosition, playbackState.position),

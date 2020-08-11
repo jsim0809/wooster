@@ -178,7 +178,8 @@ app.put('/api/:spotify_user_id/email', (req, res) => {
 app.post('/api/:spotify_user_id/song/new', (req, res) => {
   const { currentSongId, artists, name } = req.body;
   database.createSongSkeleton(req.params.spotify_user_id, currentSongId, artists, name, (err, data) => {
-    if (err) {
+    // Song skeleton was already created.
+    if (err && err.code !== 'ConditionalCheckFailedException') {
       res.status(500).send(err);
     } else {
       res.status(201).send(data);
