@@ -26,7 +26,9 @@ function App() {
   const [songQueue, setSongQueue] = useState([]);
   const [playbackState, setPlaybackState] = useState({
     track_window: {
-      current_track: '',
+      current_track: {
+        id: '',
+      },
     },
     timestamp: 0,
     position: 0,
@@ -218,7 +220,7 @@ function App() {
       })
         .then(() => {
           sendEvent('PLAY');
-        });
+         });
     }
   }, [songQueue]);
 
@@ -258,6 +260,15 @@ function App() {
         latestPosition: playbackState.position,
         readyToPost: false,
       });
+      axios({
+        method: 'post',
+        url: `/api/${currentUser.spotify_user_id}/song/new`,
+        data: {
+          currentSongId: playbackState.track_window.current_track.id,
+          artists: playbackState.track_window.current_track.artists.map(artist => artist.name),
+          name: playbackState.track_window.current_track.name,
+        },
+      });
       // If song is somewhere in the middle, update the latest listening position.
     } else if (playbackState.paused && playbackState.restrictions.disallow_resuming_reasons?.[0] === 'not_paused') {
       setPlaybackLog({
@@ -282,23 +293,12 @@ function App() {
     if (playbackLog.readyToPost) {
       axios({
         method: 'post',
-        url: `/api/${currentUser.spotify_user_id}/song/new`,
-        data: {
-          currentSongId: playbackLog.currentSongId,
-          artists: playbackLog.track_window.current_track.artists.map(artist => artist.name),
-          name: playbackLog.track_window.current_track.name,
-        },
+        url: `/api/${currentUser.spotify_user_id}/song`,
+        data: playbackLog,
       })
         .then(() => {
-          axios({
-            method: 'post',
-            url: `/api/${currentUser.spotify_user_id}/song`,
-            data: playbackLog,
-          })
-            .then(() => {
-              playNextSong();
-            })
-        })
+          playNextSong();
+        });
     }
   }, [playbackLog.readyToPost]);
 

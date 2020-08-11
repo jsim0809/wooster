@@ -91,7 +91,6 @@ module.exports.createSongSkeleton = (spotify_user_id, track_id, track_artists, t
       ":new_track": {
         "artists": track_artists,
         "name": track_name,
-        "liked": undefined,
         "plays": {},
         "woos": [],
         "benches": [],
