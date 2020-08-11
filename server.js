@@ -150,7 +150,8 @@ app.get('/api/:spotify_user_id', (req, res) => {
 
 // Create the skeleton of a user's data object.
 app.post('/api/:spotify_user_id/new', (req, res) => {
-  database.createUserSkeleton(req.params.spotify_user_id, (err, data) => {
+  const { email } = req.body;
+  database.createUserSkeleton(req.params.spotify_user_id, email, (err, data) => {
     if (err) {
       res.status(500).send(err);
     } else {

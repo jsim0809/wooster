@@ -98,6 +98,9 @@ function App() {
               axios({
                 method: 'post',
                 url: `/api/${userData.id}/new`,
+                data: {
+                  email: userData.email,
+                }
               })
                 // Then, grab that skeleton object.
                 .then(() => {
@@ -108,20 +111,20 @@ function App() {
                     // And save it to state.
                     .then((response) => response.data)
                     .then((databaseObject) => {
-                      if (databaseObject.Item.email !== userData.email) {
-                        axios({
-                          method: 'put',
-                          url: `/api/${userData.id}/email`,
-                          data: {
-                            email: userData.email,
-                          },
-                        });
-                      }
                       setCurrentUser(databaseObject.Item);
                     });
                 });
               // If it does exist though, just grab it and save it to state.
             } else {
+              if (databaseObject.Item.email !== userData.email) {
+                axios({
+                  method: 'put',
+                  url: `/api/${userData.id}/email`,
+                  data: {
+                    email: userData.email,
+                  },
+                });
+              }
               setCurrentUser(databaseObject.Item);
             }
           });
