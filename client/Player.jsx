@@ -1,10 +1,10 @@
 import React from 'react';
 import axios from 'axios';
 
-function FakePlayer({ accessToken, deviceId,currentUserId, currentSongId, populateSongs }) {
+function Player({ currentUserId, currentSongId }) {
 
   const handlePlayClick = () => {
-    populateSongs();
+    // Pause / Play
   };
 
   const handleLikeClick = () => {
@@ -22,7 +22,7 @@ function FakePlayer({ accessToken, deviceId,currentUserId, currentSongId, popula
   return (
     <>
     <div id="play-button" className="pointer">
-      <button type="button" onClick={handlePlayClick}>Play</button>
+      <button type="button" onClick={handlePlayClick}>Pause</button>
     </div>
 
     <div id="like-button" className="pointer">
@@ -32,4 +32,4 @@ function FakePlayer({ accessToken, deviceId,currentUserId, currentSongId, popula
   );
 }
 
-export default FakePlayer;
+export default Player;

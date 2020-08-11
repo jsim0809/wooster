@@ -9,6 +9,7 @@ import woosterMachine from './woosterMachine.js';
 import Header from './Header.jsx';
 import Login from './Login.jsx';
 import FakePlayer from './FakePlayer.jsx';
+import Player from './Player.jsx';
 
 function App() {
   const URL_HASH = queryString.parse(window.location.hash);
@@ -102,17 +103,17 @@ function App() {
                 .then(() => {
                   axios({
                     method: 'get',
-                    url: `/api/${spotifyUserId}`,
+                    url: `/api/${userData.id}`,
                   })
                     // And save it to state.
                     .then((response) => response.data)
                     .then((databaseObject) => {
-                      if (databaseObject.Item.email !== usersCurrentSpotifyEmail) {
+                      if (databaseObject.Item.email !== userData.email) {
                         axios({
                           method: 'put',
-                          url: `/api/${spotifyUserId}/email`,
+                          url: `/api/${userData.id}/email`,
                           data: {
-                            email: usersCurrentSpotifyEmail,
+                            email: userData.email,
                           },
                         });
                       }
@@ -211,7 +212,10 @@ function App() {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${accessToken}`,
         },
-      });
+      })
+        .then(() => {
+          sendEvent('PLAY');
+        });
     }
   }, [songQueue]);
 
@@ -319,12 +323,19 @@ function App() {
         <div id="body-grid">
           <Header />
           <FakePlayer
-            accessToken={accessToken}
-            deviceId={deviceId}
+            populateSongs={populateSongs}
+          />
+        </div>
+      </div>
+    )
+  } else if (currentState.matches('playing')) {
+    return (
+      <div id="body-section">
+        <div id="body-grid">
+          <Header />
+          <Player
             currentUserId={currentUser.spotify_user_id}
             currentSongId={playbackLog.currentSongId}
-            populateSongs={populateSongs}
-            setSongQueue={setSongQueue}
           />
         </div>
       </div>
