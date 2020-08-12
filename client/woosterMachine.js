@@ -11,8 +11,12 @@ const woosterMachine = Machine({
     },
     readyToPlay: {
       on: {
+        NO_LIKES: 'promptForFirstSong',
         PLAY: 'playing',
       }
+    },
+    promptForFirstSong: {
+      ENTERED: 'playing',
     },
     playing: {
       on: {
