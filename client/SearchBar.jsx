@@ -18,7 +18,7 @@ function SearchBar() {
   return (
     <div id="search-container">
       <p>It looks like you're new to Wooster.</p>
-      <form autocomplete="off" onSubmit={handleSubmit}>
+      <form autoComplete="off" onSubmit={handleSubmit}>
         <label htmlFor="search-bar">Find a song to start with:</label>
         <input type="text" onChange={handleChange} value={search} />
         <input type="submit" value="Go" />
