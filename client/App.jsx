@@ -10,6 +10,7 @@ import Header from './Header.jsx';
 import Login from './Login.jsx';
 import FakePlayer from './FakePlayer.jsx';
 import Player from './Player.jsx';
+import SearchBar from './SearchBar.jsx';
 
 function App() {
   const URL_HASH = queryString.parse(window.location.hash);
@@ -131,8 +132,12 @@ function App() {
           likes.push(songId);
         }
       }
-      setUsersLikedSongs(likes);
       setNoPlayList(bans);
+      if (!likes.length) {
+        sendEvent('NO_LIKES');
+      } else {
+        setUsersLikedSongs(likes);
+      }
     }
   }, [currentUser]);
 
@@ -339,8 +344,19 @@ function App() {
         <div id="body-grid">
           <Header />
           <FakePlayer
+            currentState={currentState}
+            sendEvent={sendEvent}
             populateSongs={populateSongs}
           />
+        </div>
+      </div>
+    )
+  } else if (currentState.matches('promptForFirstSong')) {
+    return (
+      <div id="body-section">
+        <div id="body-grid">
+          <Header />
+          <SearchBar />
         </div>
       </div>
     )

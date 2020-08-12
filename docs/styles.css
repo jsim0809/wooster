@@ -30,11 +30,6 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) 820px minmax(0, 1fr);
   grid-template-rows: 32px minmax(0, 1fr) 32px;
-
-  /* Text */
-  /* color: var(--pantone-old-gold);
-  font-family: 'Antipasto', sans-serif;
-  font-size: 2rem; */
 }
 
 /* Creates the main body section grid */
@@ -83,6 +78,15 @@
 
 .spotify-white {
   fill: #fff;
+}
+
+
+/* Search bar */
+#search-container {
+  grid-area: 5 / 9 / 7 / 4;
+  color: var(--pantone-old-gold);
+  font-family: 'Antipasto', sans-serif;
+  font-size: 1.4rem;
 }
 
 /* Buttons */
