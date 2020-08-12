@@ -40,6 +40,7 @@ function Player({
   };
 
   const handleLikeClick = () => {
+    console.log('Like sent.');
     axios({
       method: 'post',
       url: `/api/${currentUserId}/like`,
@@ -56,6 +57,7 @@ function Player({
   };
 
   const handleDislikeClick = () => {
+    console.log('Dislike sent.');
     axios({
       method: 'post',
       url: `/api/${currentUserId}/dislike`,
@@ -72,21 +74,25 @@ function Player({
   };
 
   const handleWooClick = () => {
+    console.log('Woo sent.');
     axios({
       method: 'post',
       url: `/api/${currentUserId}/woo`,
       data: {
         currentSongId,
+        wooTimestamp: Date.now(),
       },
     })
   };
 
   const handleBenchClick = () => {
+    console.log('Bench sent.');
     axios({
       method: 'post',
       url: `/api/${currentUserId}/bench`,
       data: {
         currentSongId,
+        benchTimestamp: Date.now(),
       },
     })
       .then(() => {
