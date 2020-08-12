@@ -87,12 +87,24 @@
 
 /* Buttons */
 
+#bench-button {
+  grid-area: 5 / 5 / 6 / 4;
+}
+
+#dislike-button {
+  grid-area: 5 / 6 / 6 / 5;
+}
+
 #play-button {
   grid-area: 5 / 7 / 6 / 6;
 }
 
 #like-button {
-  grid-area: 3 / 7 / 4 / 6;
+  grid-area: 5 / 8 / 6 / 7;
+}
+
+#woo-button {
+  grid-area: 5 / 9 / 6 / 8;
 }
 
 #header {

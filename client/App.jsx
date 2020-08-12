@@ -358,7 +358,7 @@ function App() {
             usersLikedSongs={usersLikedSongs}
             setUsersLikedSongs={setUsersLikedSongs}
             noPlayList={noPlayList}
-            setnoPlayList={setnoPlayList}
+            setNoPlayList={setNoPlayList}
           />
         </div>
       </div>

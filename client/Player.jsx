@@ -55,43 +55,77 @@ function Player({
       });
   };
 
-  // TODO: CHECK IF THE USER HAS ANY LIKED SONGS. IF NOT, PROMPT THEM FOR ONE!
+  const handleDislikeClick = () => {
+    axios({
+      method: 'post',
+      url: `/api/${currentUserId}/dislike`,
+      data: {
+        currentSongId,
+      },
+    })
+      .then(() => {
+        setNoPlayList({
+          ...noPlayList,
+          [currentSongId]: true,
+        });
+      });
+  };
 
+  const handleWooClick = () => {
+    axios({
+      method: 'post',
+      url: `/api/${currentUserId}/woo`,
+      data: {
+        currentSongId,
+      },
+    })
+  };
+
+  const handleBenchClick = () => {
+    axios({
+      method: 'post',
+      url: `/api/${currentUserId}/bench`,
+      data: {
+        currentSongId,
+      },
+    })
+      .then(() => {
+        setNoPlayList({
+          ...noPlayList,
+          [currentSongId]: true,
+        });
+      });
+  };
+
+  let playPauseButton;
   if (currentState.matches('playing')) {
-    return (
-      <>
-        <div id="play-button" className="pointer">
-          <button type="button" onClick={handlePauseClick}>Pause</button>
-        </div>
-
-        <div id="like-button" className="pointer">
-          <button type="button" onClick={handleLikeClick}>Thumbs Up</button>
-        </div>
-      </>
-    );
+    playPauseButton = (
+      <div id="play-button" className="pointer">
+        <button type="button" onClick={handlePauseClick}>Pause</button>
+      </div>
+    )
   } else if (currentState.matches('paused')) {
-    return (
-      <>
-        <div id="play-button" className="pointer">
-          <button type="button" onClick={handlePlayClick}>Play</button>
-        </div>
-
-        <div id="like-button" className="pointer">
-          <button type="button" onClick={handleLikeClick}>Thumbs Up</button>
-        </div>
-      </>
-    );
+    playPauseButton = (
+      <div id="play-button" className="pointer">
+        <button type="button" onClick={handlePlayClick}>Play</button>
+      </div>
+    )
   }
-
 
   return (
     <>
-      <div id="play-button" className="pointer">
-        <button type="button" onClick={handlePlayClick}>Pause</button>
+      <div id="bench-button" className="pointer">
+        <button type="button" onClick={handleBenchClick}>I'm tired of this song</button>
       </div>
-
+      <div id="dislike-button" className="pointer">
+        <button type="button" onClick={handleDislikeClick}>Thumbs Down</button>
+      </div>
+      {playPauseButton}
       <div id="like-button" className="pointer">
         <button type="button" onClick={handleLikeClick}>Thumbs Up</button>
+      </div>
+      <div id="woo-button" className="pointer">
+        <button type="button" onClick={handleWooClick}>Woo!</button>
       </div>
     </>
   );
