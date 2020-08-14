@@ -30,12 +30,13 @@ module.exports.getFullUserData = (spotify_user_id, callback) => {
 };
 
 // Create the skeleton of a new user's data object.
-module.exports.createUserSkeleton = (spotify_user_id, email, callback) => {
+module.exports.createUserSkeleton = (spotify_user_id, email, country, callback) => {
   var params = {
     TableName: "Wooster",
     Item: {
       "spotify_user_id": spotify_user_id,
       "email": email,
+      "country": country,
       "songs": {},
     },
     ConditionExpression: "attribute_not_exists(spotify_user_id)",

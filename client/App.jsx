@@ -87,6 +87,7 @@ function App() {
                 url: `/api/${userData.id}/new`,
                 data: {
                   email: userData.email,
+                  country: userData.country,
                 }
               })
                 // Then, grab that skeleton object.
@@ -356,7 +357,9 @@ function App() {
       <div id="body-section">
         <div id="body-grid">
           <Header />
-          <SearchBar />
+          <SearchBar 
+            accessToken={accessToken}
+          />
         </div>
       </div>
     )
