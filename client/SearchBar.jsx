@@ -45,6 +45,9 @@ function SearchBar({ accessToken }) {
     // clear form
   };
 
+  // next steps : handle selection and submit
+  // next steps: switch to moment.js,  implement user createdAt and lastLogin
+
   return (
     <div id="search-container">
       <p>It looks like you're new to Wooster.</p>
