@@ -38,7 +38,7 @@ module.exports.createUserSkeleton = (spotify_user_id, email, country, callback) 
       "spotify_user_id": spotify_user_id,
       "email": email,
       "country": country,
-      "created_at": moment().format("MMM D [']YY [–] h[:]mm[:]ssa"),
+      "created_at": moment().tz('America/Los_Angeles').format("MMM D [']YY [–] h[:]mm[:]ssa z"),
       "songs": {},
     },
     ConditionExpression: "attribute_not_exists(spotify_user_id)",
@@ -66,7 +66,7 @@ module.exports.updateEmail = (spotify_user_id, email, callback) => {
     },
     ExpressionAttributeValues: {
       ":new_email": email,
-      ":last_modified": moment().format("MMM D [']YY [–] h[:]mm[:]ssa"),
+      ":last_modified": moment().tz('America/Los_Angeles').format("MMM D [']YY [–] h[:]mm[:]ssa z"),
     },
   };
 
@@ -101,7 +101,7 @@ module.exports.createSongSkeleton = (spotify_user_id, track_id, track_artists, t
         "woos": [],
         "benches": [],
       },
-      ":last_modified": moment().format("MMM D [']YY [–] h[:]mm[:]ssa"),
+      ":last_modified": moment().tz('America/Los_Angeles').format("MMM D [']YY [–] h[:]mm[:]ssa z"),
     },
   };
 
@@ -133,7 +133,7 @@ module.exports.logPlaytime = (spotify_user_id, track_id, start_time, duration, c
     },
     ExpressionAttributeValues: {
       ":duration": duration,
-      ":last_modified": moment().format("MMM D [']YY [–] h[:]mm[:]ssa"),
+      ":last_modified": moment().tz('America/Los_Angeles').format("MMM D [']YY [–] h[:]mm[:]ssa z"),
     },
   };
 
@@ -162,7 +162,7 @@ module.exports.like = (spotify_user_id, track_id, callback) => {
     },
     ExpressionAttributeValues: {
       ":new_status": true,
-      ":last_modified": moment().format("MMM D [']YY [–] h[:]mm[:]ssa"),
+      ":last_modified": moment().tz('America/Los_Angeles').format("MMM D [']YY [–] h[:]mm[:]ssa z"),
     },
   };
 
@@ -191,7 +191,7 @@ module.exports.dislike = (spotify_user_id, track_id, callback) => {
     },
     ExpressionAttributeValues: {
       ":new_status": false,
-      ":last_modified": moment().format("MMM D [']YY [–] h[:]mm[:]ssa"),
+      ":last_modified": moment().tz('America/Los_Angeles').format("MMM D [']YY [–] h[:]mm[:]ssa z"),
     },
   };
 
@@ -221,7 +221,7 @@ module.exports.woo = (spotify_user_id, track_id, woo_time, callback) => {
     },
     ExpressionAttributeValues: {
       ":woo_time": [woo_time],
-      ":last_modified": moment().format("MMM D [']YY [–] h[:]mm[:]ssa"),
+      ":last_modified": moment().tz('America/Los_Angeles').format("MMM D [']YY [–] h[:]mm[:]ssa z"),
     },
   };
 
@@ -251,7 +251,7 @@ module.exports.bench = (spotify_user_id, track_id, bench_time, callback) => {
     },
     ExpressionAttributeValues: {
       ":bench_time": [bench_time],
-      ":last_modified": moment().format("MMM D [']YY [–] h[:]mm[:]ssa"),
+      ":last_modified": moment().tz('America/Los_Angeles').format("MMM D [']YY [–] h[:]mm[:]ssa z"),
     },
   };
 

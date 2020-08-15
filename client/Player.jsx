@@ -80,7 +80,7 @@ function Player({
       url: `/api/${currentUserId}/woo`,
       data: {
         currentSongId,
-        wooTimestamp: moment().format("MMM D [']YY [–] h[:]mm[:]ssa"),
+        wooTimestamp: moment().tz('America/Los_Angeles').format("MMM D [']YY [–] h[:]mm[:]ssa z"),
       },
     })
   };
@@ -92,7 +92,7 @@ function Player({
       url: `/api/${currentUserId}/bench`,
       data: {
         currentSongId,
-        benchTimestamp: moment().format("MMM D [']YY [–] h[:]mm[:]ssa"),
+        benchTimestamp: moment().tz('America/Los_Angeles').format("MMM D [']YY [–] h[:]mm[:]ssa z"),
       },
     })
       .then(() => {

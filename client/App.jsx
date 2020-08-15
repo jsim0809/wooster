@@ -270,7 +270,7 @@ function App() {
     if (playbackLog.currentSongId !== playbackState.track_window?.current_track.id) {
       setPlaybackLog({
         currentSongId: playbackState.track_window.current_track.id,
-        startTimestamp: moment().format("MMM D [']YY [–] h[:]mm[:]ssa"),
+        startTimestamp: moment().tz('America/Los_Angeles').format("MMM D [']YY [–] h[:]mm[:]ssa z"),
         latestPosition: moment.duration(playbackState.position).seconds(),
         readyToPost: false,
       });

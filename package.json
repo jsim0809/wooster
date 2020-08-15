@@ -24,6 +24,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "moment": "^2.27.0",
+    "moment-timezone": "^0.5.31",
     "nodemon": "^2.0.4",
     "query-string": "^6.13.1",
     "scriptjs": "^2.5.9"
