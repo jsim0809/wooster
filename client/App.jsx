@@ -231,6 +231,8 @@ function App() {
           },
         })
           .then(() => {
+            console.log('current state: ', currentState);
+            console.log('sending PLAY event.');
             sendEvent('PLAY');
           });
       } else {
