@@ -1,6 +1,6 @@
 const AWS = require('aws-sdk');
 const secret = require('./secret.keys.js');
-const moment = require('moment');
+const moment = require('moment-timezone');
 
 AWS.config.update({
   accessKeyId: secret.AWS_ACCESS_KEY_ID,

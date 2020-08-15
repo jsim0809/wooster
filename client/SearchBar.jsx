@@ -46,7 +46,6 @@ function SearchBar({ accessToken }) {
   };
 
   // next steps : handle selection and submit
-  // next steps: switch to moment.js,  implement user createdAt and lastLogin
 
   return (
     <div id="search-container">
