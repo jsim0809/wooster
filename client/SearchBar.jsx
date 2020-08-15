@@ -88,26 +88,30 @@ function SearchBar({ accessToken, currentUserId, usersLikedSongs, setUsersLikedS
           },
         })
           .then(() => {
+            console.log('Posting new song to liked list');
             setUsersLikedSongs([
               ...usersLikedSongs,
               selectedSong.id
             ])
-          })
-          .then(() => {
-            populateSongs();
           });
       });
   };
- 
+
+  useEffect(() => {
+    if (usersLikedSongs.length) {
+      populateSongs();
+    }
+  }, [usersLikedSongs]);
+
   const resultsDisplay = searchResults.map((result, index) => {
     if (selectedIndex === index + 1) {
       return (
         <div className="selected-song" key={index + 1}>{`${pluralizeArtists(result.artists)} – ${result.name}`}</div>
       )
     } else {
-        return (
-          <div key={index + 1}>{`${pluralizeArtists(result.artists)} – ${result.name}`}</div>
-        )
+      return (
+        <div key={index + 1}>{`${pluralizeArtists(result.artists)} – ${result.name}`}</div>
+      )
     }
   })
 

@@ -16,7 +16,7 @@ const woosterMachine = Machine({
       }
     },
     promptForFirstSong: {
-      ENTERED: 'playing',
+      PLAY: 'playing',
     },
     playing: {
       on: {

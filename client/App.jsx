@@ -194,6 +194,7 @@ function App() {
   // // Handle song queueing and playing
 
   const getRandomLikedSong = () => {
+    console.log('Got random liked song: ', usersLikedSongs[Math.floor(Math.random() * usersLikedSongs.length)])
     return usersLikedSongs[Math.floor(Math.random() * usersLikedSongs.length)];
   };
 
