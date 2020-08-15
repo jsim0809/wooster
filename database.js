@@ -39,6 +39,7 @@ module.exports.createUserSkeleton = (spotify_user_id, email, country, callback) 
       "email": email,
       "country": country,
       "created_at": moment().tz('America/Los_Angeles').format("MMM D [']YY [–] h[:]mm[:]ssa z"),
+      "last_modified": moment().tz('America/Los_Angeles').format("MMM D [']YY [–] h[:]mm[:]ssa z"),
       "songs": {},
     },
     ConditionExpression: "attribute_not_exists(spotify_user_id)",
@@ -168,6 +169,7 @@ module.exports.like = (spotify_user_id, track_id, callback) => {
 
   docClient.update(params, function (err, data) {
     if (err) {
+      console.log(err)
       callback(err, null);
     } else {
       callback(null, data);

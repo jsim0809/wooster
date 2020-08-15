@@ -202,8 +202,10 @@ app.post('/api/:spotify_user_id/song', (req, res) => {
 // Like a song.
 app.post('/api/:spotify_user_id/like', (req, res) => {
   const { currentSongId } = req.body;
+  console.log(req.body);
   database.like(req.params.spotify_user_id, currentSongId, (err, data) => {
     if (err) {
+      console.log('db fail');
       res.status(500).send(err);
     } else {
       res.status(201).send(data);

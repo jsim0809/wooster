@@ -2,17 +2,32 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import queryString from 'query-string';
 
-function SearchBar({ accessToken }) {
-  const [suggestions, setSuggestions] = useState([]);
-  const [selectedSuggestion, setSelectedSuggestion] = useState();
+function SearchBar({ accessToken, currentUserId, usersLikedSongs, setUsersLikedSongs, populateSongs }) {
+  const [searchResults, setSearchResults] = useState([]);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [searchField, setSearchField] = useState('');
+  const [selectedSong, setSelectedSong] = useState(null);
+
+  const MAX_RESULTS = 5;
+
+  useEffect(() => {
+    const selectedSong = searchResults[selectedIndex - 1];
+    console.log(selectedSong);
+    if (selectedSong) {
+      setSearchField(`${pluralizeArtists(selectedSong.artists)} – ${selectedSong.name}`);
+      setSelectedSong(selectedSong);
+    };
+  }, [selectedIndex]);
 
   const handleChange = (event) => {
-    if (event.currentTarget.value) {
+    const { value } = event.currentTarget;
+    setSearchField(value);
+    if (value) {
       axios({
         method: 'get',
         url: 'https://api.spotify.com/v1/search?' +
           queryString.stringify({
-            q: event.currentTarget.value.split(' ').join('+'),
+            q: value.split(' ').join('+'),
             type: 'track',
             market: 'from_token',
             limit: 5,
@@ -23,15 +38,10 @@ function SearchBar({ accessToken }) {
       })
         .then((response) => response.data.tracks.items)
         .then((searchResults) => {
-          let resultsDisplay = searchResults.map((result, index) => {
-            return (
-              <div key={index}>{`${pluralizeArtists(result.artists)} – ${result.name}`}</div>
-            )
-          })
-          setSuggestions(resultsDisplay);
+          setSearchResults(searchResults);
         });
     } else {
-      setSuggestions([]);
+      setSearchResults([]);
     }
   };
 
@@ -39,11 +49,68 @@ function SearchBar({ accessToken }) {
     return artists.map(artist => artist.name).join(', ');
   };
 
+  const handleKeyDown = (event) => {
+    console.log(event.key);
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      if (selectedIndex === MAX_RESULTS) {
+        setSelectedIndex(0);
+      } else {
+        setSelectedIndex(selectedIndex + 1);
+      }
+    } else if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      if (selectedIndex === 0) {
+        setSelectedIndex(MAX_RESULTS);
+      } else {
+        setSelectedIndex(selectedIndex - 1);
+      }
+    }
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    // axios
-    // clear form
+    axios({
+      method: 'post',
+      url: `/api/${currentUserId}/song/new`,
+      data: {
+        currentSongId: selectedSong.id,
+        artists: selectedSong.artists.map(artist => artist.name),
+        name: selectedSong.name,
+      },
+    })
+      .then(() => {
+        axios({
+          method: 'post',
+          url: `/api/${currentUserId}/like`,
+          data: {
+            currentSongId: selectedSong.id,
+          },
+        })
+          .then(() => {
+            setUsersLikedSongs([
+              ...usersLikedSongs,
+              selectedSong.id
+            ])
+          })
+          .then(() => {
+            populateSongs();
+          });
+      });
   };
+ 
+  const resultsDisplay = searchResults.map((result, index) => {
+    if (selectedIndex === index + 1) {
+      return (
+        <div className="selected-song" key={index + 1}>{`${pluralizeArtists(result.artists)} – ${result.name}`}</div>
+      )
+    } else {
+        return (
+          <div key={index + 1}>{`${pluralizeArtists(result.artists)} – ${result.name}`}</div>
+        )
+    }
+  })
+
 
   // next steps : handle selection and submit
 
@@ -52,9 +119,9 @@ function SearchBar({ accessToken }) {
       <p>It looks like you're new to Wooster.</p>
       <form autoComplete="off" onSubmit={handleSubmit}>
         <label htmlFor="search-bar">Find a song to start with:</label>
-        <input type="text" onChange={handleChange} />
+        <input type="text" onChange={handleChange} onKeyDown={handleKeyDown} value={searchField} />
         <input type="submit" value="Go" />
-        {suggestions}
+        {resultsDisplay}
       </form>
     </div>
   );

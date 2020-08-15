@@ -236,3 +236,9 @@
     opacity: 1;
   }
 }
+
+/* Song selection box */
+
+.selected-song {
+  background: white;
+}

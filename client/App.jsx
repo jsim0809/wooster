@@ -360,6 +360,10 @@ function App() {
           <Header />
           <SearchBar 
             accessToken={accessToken}
+            currentUserId={currentUser.spotify_user_id}
+            usersLikedSongs={usersLikedSongs}
+            setUsersLikedSongs={setUsersLikedSongs}
+            populateSongs={populateSongs}
           />
         </div>
       </div>
