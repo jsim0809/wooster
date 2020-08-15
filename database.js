@@ -1,5 +1,6 @@
 const AWS = require('aws-sdk');
 const secret = require('./secret.keys.js');
+const moment = require('moment');
 
 AWS.config.update({
   accessKeyId: secret.AWS_ACCESS_KEY_ID,
@@ -37,6 +38,7 @@ module.exports.createUserSkeleton = (spotify_user_id, email, country, callback) 
       "spotify_user_id": spotify_user_id,
       "email": email,
       "country": country,
+      "created_at": moment().format("MMM D [']YY [–] h[:]mm[:]ssa"),
       "songs": {},
     },
     ConditionExpression: "attribute_not_exists(spotify_user_id)",
@@ -57,12 +59,14 @@ module.exports.updateEmail = (spotify_user_id, email, callback) => {
     Key: {
       "spotify_user_id": spotify_user_id,
     },
-    UpdateExpression: `SET #email = :new_email`,
+    UpdateExpression: "SET #email = :new_email, #last_modified = :last_modified",
     ExpressionAttributeNames: {
       "#email": "email",
+      "#last_modified": "last_modified",
     },
     ExpressionAttributeValues: {
       ":new_email": email,
+      ":last_modified": moment().format("MMM D [']YY [–] h[:]mm[:]ssa"),
     },
   };
 
@@ -83,10 +87,11 @@ module.exports.createSongSkeleton = (spotify_user_id, track_id, track_artists, t
       "spotify_user_id": spotify_user_id,
     },
     ConditionExpression: "attribute_not_exists(#songs.#track_id)",
-    UpdateExpression: `SET #songs.#track_id = :new_track`,
+    UpdateExpression: "SET #songs.#track_id = :new_track, #last_modified = :last_modified",
     ExpressionAttributeNames: {
       "#songs": "songs",
       "#track_id": track_id,
+      "#last_modified": "last_modified",
     },
     ExpressionAttributeValues: {
       ":new_track": {
@@ -96,6 +101,7 @@ module.exports.createSongSkeleton = (spotify_user_id, track_id, track_artists, t
         "woos": [],
         "benches": [],
       },
+      ":last_modified": moment().format("MMM D [']YY [–] h[:]mm[:]ssa"),
     },
   };
 
@@ -117,15 +123,17 @@ module.exports.logPlaytime = (spotify_user_id, track_id, start_time, duration, c
     Key: {
       "spotify_user_id": spotify_user_id,
     },
-    UpdateExpression: `SET #songs.#track_id.#plays.#start_time = :duration`,
+    UpdateExpression: "SET #songs.#track_id.#plays.#start_time = :duration, #last_modified = :last_modified",
     ExpressionAttributeNames: {
       "#songs": "songs",
       "#track_id": track_id,
       "#plays": "plays",
       "#start_time": start_time,
+      "#last_modified": "last_modified",
     },
     ExpressionAttributeValues: {
       ":duration": duration,
+      ":last_modified": moment().format("MMM D [']YY [–] h[:]mm[:]ssa"),
     },
   };
 
@@ -145,14 +153,16 @@ module.exports.like = (spotify_user_id, track_id, callback) => {
     Key: {
       "spotify_user_id": spotify_user_id,
     },
-    UpdateExpression: `SET #songs.#track_id.#liked = :new_status`,
+    UpdateExpression: "SET #songs.#track_id.#liked = :new_status, #last_modified = :last_modified",
     ExpressionAttributeNames: {
       "#songs": "songs",
       "#track_id": track_id,
       "#liked": "liked",
+      "#last_modified": "last_modified",
     },
     ExpressionAttributeValues: {
       ":new_status": true,
+      ":last_modified": moment().format("MMM D [']YY [–] h[:]mm[:]ssa"),
     },
   };
 
@@ -172,14 +182,16 @@ module.exports.dislike = (spotify_user_id, track_id, callback) => {
     Key: {
       "spotify_user_id": spotify_user_id,
     },
-    UpdateExpression: `SET #songs.#track_id.#liked = :new_status`,
+    UpdateExpression: "SET #songs.#track_id.#liked = :new_status, #last_modified = :last_modified",
     ExpressionAttributeNames: {
       "#songs": "songs",
       "#track_id": track_id,
       "#liked": "liked",
+      "#last_modified": "last_modified",
     },
     ExpressionAttributeValues: {
       ":new_status": false,
+      ":last_modified": moment().format("MMM D [']YY [–] h[:]mm[:]ssa"),
     },
   };
 
@@ -200,14 +212,16 @@ module.exports.woo = (spotify_user_id, track_id, woo_time, callback) => {
     Key: {
       "spotify_user_id": spotify_user_id,
     },
-    UpdateExpression: `SET #songs.#track_id.#woos = list_append(#songs.#track_id.#woos, :woo_time)`,
+    UpdateExpression: "SET #songs.#track_id.#woos = list_append(#songs.#track_id.#woos, :woo_time), #last_modified = :last_modified",
     ExpressionAttributeNames: {
       "#songs": "songs",
       "#track_id": track_id,
       "#woos": "woos",
+      "#last_modified": "last_modified",
     },
     ExpressionAttributeValues: {
       ":woo_time": [woo_time],
+      ":last_modified": moment().format("MMM D [']YY [–] h[:]mm[:]ssa"),
     },
   };
 
@@ -228,14 +242,16 @@ module.exports.bench = (spotify_user_id, track_id, bench_time, callback) => {
     Key: {
       "spotify_user_id": spotify_user_id,
     },
-    UpdateExpression: `SET #songs.#track_id.#benches = list_append(#songs.#track_id.#benches, :bench_time)`,
+    UpdateExpression: "SET #songs.#track_id.#benches = list_append(#songs.#track_id.#benches, :bench_time), #last_modified = :last_modified",
     ExpressionAttributeNames: {
       "#songs": "songs",
       "#track_id": track_id,
       "#benches": "benches",
+      "#last_modified": "last_modified",
     },
     ExpressionAttributeValues: {
       ":bench_time": [bench_time],
+      ":last_modified": moment().format("MMM D [']YY [–] h[:]mm[:]ssa"),
     },
   };
 

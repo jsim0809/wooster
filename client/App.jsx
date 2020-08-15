@@ -3,6 +3,7 @@ import { useMachine } from '@xstate/react';
 import axios from 'axios';
 import queryString from 'query-string';
 import $script from 'scriptjs';
+import moment from 'moment';
 
 import woosterMachine from './woosterMachine.js';
 
@@ -127,7 +128,7 @@ function App() {
       for (let songId in currentUser.songs) {
         const benches = currentUser.songs[songId].benches;
         if (currentUser.songs[songId].liked === false ||
-          Number(benches[benches.length - 1]) + 7_884_000_000 > Date.now()) {
+          moment(benches[benches.length - 1], "MMM D [']YY [–] h[:]mm[:]ssa").add(3, 'M').isAfter()) {
           bans[songId] === true;
         } else if (currentUser.songs[songId].liked) {
           likes.push(songId);
@@ -269,8 +270,8 @@ function App() {
     if (playbackLog.currentSongId !== playbackState.track_window?.current_track.id) {
       setPlaybackLog({
         currentSongId: playbackState.track_window.current_track.id,
-        startTimestamp: playbackState.timestamp,
-        latestPosition: playbackState.position,
+        startTimestamp: moment().format("MMM D [']YY [–] h[:]mm[:]ssa"),
+        latestPosition: moment.duration(playbackState.position).seconds(),
         readyToPost: false,
       });
       // Attempt to post the song skeleton (if it doesn't exist in DB yet);
@@ -292,14 +293,14 @@ function App() {
     } else if (playbackState.paused && playbackState.restrictions.disallow_resuming_reasons?.[0] === 'not_paused') {
       setPlaybackLog({
         ...playbackLog,
-        latestPosition: Math.max(playbackLog.latestPosition, playbackState.position),
+        latestPosition: Math.max(playbackLog.latestPosition, moment.duration(playbackState.position).seconds()),
         readyToPost: true,
       });
       // If song is somewhere in the middle, update the latest listening position.
     } else if (playbackLog.currentSongId === playbackState.track_window?.current_track.id) {
       setPlaybackLog({
         ...playbackLog,
-        latestPosition: Math.max(playbackLog.latestPosition, playbackState.position),
+        latestPosition: Math.max(playbackLog.latestPosition, moment.duration(playbackState.position).seconds()),
       });
     }
   }, [playbackState]);
