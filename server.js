@@ -143,6 +143,7 @@ app.get('/api/refresh', (req, res) => {
 app.get('/api/:spotify_user_id', (req, res) => {
   database.getFullUserData(req.params.spotify_user_id, (err, data) => {
     if (err) {
+      console.log(err);
       res.status(500).send(err);
     } else {
       res.status(200).send(data);
@@ -155,6 +156,7 @@ app.post('/api/:spotify_user_id/new', (req, res) => {
   const { email, country } = req.body;
   database.createUserSkeleton(req.params.spotify_user_id, email, country, (err, data) => {
     if (err) {
+      console.log(err);
       res.status(500).send(err);
     } else {
       res.status(201).send(data);
@@ -167,6 +169,7 @@ app.put('/api/:spotify_user_id/email', (req, res) => {
   const { email } = req.body;
   database.updateEmail(req.params.spotify_user_id, email, (err, data) => {
     if (err) {
+      console.log(err);
       res.status(500).send(err);
     } else {
       res.status(201).send(data);
@@ -180,6 +183,7 @@ app.post('/api/:spotify_user_id/song/new', (req, res) => {
   database.createSongSkeleton(req.params.spotify_user_id, currentSongId, artists, name, (err, data) => {
     // Song skeleton was already created.
     if (err && err.code !== 'ConditionalCheckFailedException') {
+      console.log(err);
       res.status(500).send(err);
     } else {
       res.status(201).send(data);
@@ -192,6 +196,7 @@ app.post('/api/:spotify_user_id/song', (req, res) => {
   const { currentSongId, startTimestamp, latestPosition } = req.body;
   database.logPlaytime(req.params.spotify_user_id, currentSongId, startTimestamp, latestPosition, (err, data) => {
     if (err) {
+      console.log(err);
       res.status(500).send(err);
     } else {
       res.status(201).send(data);
@@ -202,10 +207,9 @@ app.post('/api/:spotify_user_id/song', (req, res) => {
 // Like a song.
 app.post('/api/:spotify_user_id/like', (req, res) => {
   const { currentSongId } = req.body;
-  console.log(req.body);
   database.like(req.params.spotify_user_id, currentSongId, (err, data) => {
     if (err) {
-      console.log('db fail');
+      console.log(err);
       res.status(500).send(err);
     } else {
       res.status(201).send(data);
@@ -218,6 +222,7 @@ app.post('/api/:spotify_user_id/dislike', (req, res) => {
   const { currentSongId } = req.body;
   database.dislike(req.params.spotify_user_id, currentSongId, (err, data) => {
     if (err) {
+      console.log(err);
       res.status(500).send(err);
     } else {
       res.status(201).send(data);
@@ -230,6 +235,7 @@ app.post('/api/:spotify_user_id/woo', (req, res) => {
   const { currentSongId, wooTimestamp } = req.body;
   database.woo(req.params.spotify_user_id, currentSongId, wooTimestamp, (err, data) => {
     if (err) {
+      console.log(err);
       res.status(500).send(err);
     } else {
       res.status(201).send(data);
@@ -242,6 +248,7 @@ app.post('/api/:spotify_user_id/bench', (req, res) => {
   const { currentSongId, benchTimestamp } = req.body;
   database.bench(req.params.spotify_user_id, currentSongId, benchTimestamp, (err, data) => {
     if (err) {
+      console.log(err);
       res.status(500).send(err);
     } else {
       res.status(201).send(data);

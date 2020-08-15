@@ -23,6 +23,7 @@ module.exports.getFullUserData = (spotify_user_id, callback) => {
 
   docClient.get(params, (err, data) => {
     if (err) {
+      console.log(err);
       callback(err, null);
     } else {
       callback(null, data);
@@ -46,6 +47,7 @@ module.exports.createUserSkeleton = (spotify_user_id, email, country, callback) 
   };
   docClient.put(params, function (err, data) {
     if (err) {
+      console.log(err);
       callback(err, null);
     } else {
       callback(null, data);
@@ -73,6 +75,7 @@ module.exports.updateEmail = (spotify_user_id, email, callback) => {
 
   docClient.update(params, (err, data) => {
     if (err) {
+      console.log(err);
       callback(err, null);
     } else {
       callback(null, data);
@@ -108,6 +111,7 @@ module.exports.createSongSkeleton = (spotify_user_id, track_id, track_artists, t
 
   docClient.update(params, function (err, data) {
     if (err) {
+      console.log(err);
       callback(err, null);
     } else {
       callback(null, data);
@@ -140,6 +144,7 @@ module.exports.logPlaytime = (spotify_user_id, track_id, start_time, duration, c
 
   docClient.update(params, (err, data) => {
     if (err) {
+      console.log(err);
       callback(err, null);
     } else {
       callback(null, data);
@@ -169,7 +174,7 @@ module.exports.like = (spotify_user_id, track_id, callback) => {
 
   docClient.update(params, function (err, data) {
     if (err) {
-      console.log(err)
+      console.log(err);
       callback(err, null);
     } else {
       callback(null, data);
@@ -199,6 +204,7 @@ module.exports.dislike = (spotify_user_id, track_id, callback) => {
 
   docClient.update(params, function (err, data) {
     if (err) {
+      console.log(err);
       callback(err, null);
     } else {
       callback(null, data);
@@ -229,6 +235,7 @@ module.exports.woo = (spotify_user_id, track_id, woo_time, callback) => {
 
   docClient.update(params, (err, data) => {
     if (err) {
+      console.log(err);
       callback(err, null);
     } else {
       callback(null, data);
@@ -259,6 +266,7 @@ module.exports.bench = (spotify_user_id, track_id, bench_time, callback) => {
 
   docClient.update(params, (err, data) => {
     if (err) {
+      console.log(err);
       callback(err, null);
     } else {
       callback(null, data);
