@@ -7,6 +7,7 @@ import moment from 'moment-timezone';
 
 import woosterMachine from './woosterMachine.js';
 
+import WindowTooSmall from './WindowTooSmall.jsx';
 import Sidebar from './Sidebar.jsx';
 import Main from './Main.jsx';
 import Login from './Login.jsx';
@@ -16,6 +17,7 @@ import SearchBar from './SearchBar.jsx';
 
 function App() {
   const URL_HASH = queryString.parse(window.location.hash);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth)
   const [currentState, sendEvent] = useMachine(woosterMachine);
   const [accessToken, setAccessToken] = useState(URL_HASH.access_token);
   const [refreshToken, setRefreshToken] = useState(URL_HASH.refresh_token);
@@ -26,6 +28,14 @@ function App() {
   const [songQueue, setSongQueue] = useState([]);
   const [playbackState, setPlaybackState] = useState({});
   const [playbackLog, setPlaybackLog] = useState({});
+
+  useEffect(() => {
+    function handleResize() {
+      setWindowWidth(window.innerWidth);
+    }
+
+    window.addEventListener('resize', handleResize);
+  }, []);
 
   // Triggered effect: Runs once on component mount.
   // Detect logged-in state, removes access codes from URL bar, and runs initialization code.
@@ -335,12 +345,16 @@ function App() {
 
   // Render page based on state machine.
 
-  if (currentState.matches('landing')) {
+  if (windowWidth < 850) {
     return (
-      <>
+      <WindowTooSmall />
+    )
+  } else if (currentState.matches('landing')) {
+    return (
+      <div id="wooster">
         <Sidebar />
         <Main />
-      </>
+      </div>
     );
   }
   // } else if (currentState.matches('readyToPlay')) {
