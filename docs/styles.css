@@ -48,7 +48,7 @@ nav #wooster-music {
 nav li {
   margin-left: 12%;
   padding: 1rem;
-  border-left: 1px solid black;
+  border-left: 2px groove;
   font-family: 'Buenard', serif;
   font-size: 1.0625rem;
 }
@@ -91,6 +91,8 @@ main #logged-in-text {
 main #now-playing-text {
   font-size: 2.75rem;
   text-align: center;
+  position: relative;
+  top: 20%;
 }
 
 main #song-box {
@@ -101,11 +103,11 @@ main #song-box {
 
 main #song-box img {
   height: 20vh;
-  margin: 1rem;
+  margin: 1.25rem;
 }
 
 main #song-box #song-box-text {
-  margin: 1rem;
+  margin: 1.25rem;
 }
 
 main #song-box #song-box-text #song-title {
@@ -119,6 +121,50 @@ main #song-box #song-box-text #song-artists {
 }
 
 main #control-bar {
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: 2.5fr 1fr 1fr 1fr 1fr 1fr 2.5fr;
+  grid-template-rows: 1fr 3px;
+  place-items: center;
+}
+
+main #control-bar .control-bar-sleep {
+  position: relative;
+  top: 0.25rem;
+  left: 1rem;
+  grid-column: 2 / 3;
+  height: 1.8rem;
+}
+
+main #control-bar .control-bar-dislike {
+  position: relative;
+  top: 0.45rem;
+  grid-column: 3 / 4;
+  height: 2rem;
+}
+
+main #control-bar .control-bar-play-pause {
+  grid-column: 4 / 5;
+  height: 5rem;
+}
+
+main #control-bar .control-bar-like {
+  position: relative;
+  bottom: 0.3rem;
+  grid-column: 5 / 6;
+  height: 2rem;
+}
+
+main #control-bar .control-bar-woo {
+  position: relative;
+  bottom: 0.05rem;
+  right: 1rem;
+  grid-column: 6 / 7;
+  height: 1.5rem;
+}
+
+main #control-bar .control-bar-line {
+  position: relative;
+  top: 2rem;
+  grid-area: 2 / 7 / 3 / 2;
+  width: 75%;
 }

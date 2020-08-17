@@ -13,11 +13,12 @@ function Main() {
         </div>
       </div>
       <div id="control-bar">
-        <div>Sleep</div>
-        <div>Dislike</div>
-        <div>Play</div>
-        <div>Like</div>
-        <div>Woo!</div>
+        <img className="control-bar-sleep" src="assets/sleep.svg" />
+        <img className="control-bar-dislike" src="assets/dislike.svg" />
+        <img className="control-bar-play-pause" src="assets/play.svg" />
+        <img className="control-bar-like" src="assets/like.svg" />
+        <img className="control-bar-woo" src="assets/woo!.svg" />
+        <hr className="control-bar-line" />
       </div>
     </main> 
   )
