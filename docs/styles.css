@@ -68,35 +68,57 @@ nav #dark-mode-text img {
 
 /* Main panel */
 main {
-  height: calc(100vh - 6rem);
+  height: calc(100vh - 6rem - 3rem);
   background: rgba(255, 255, 255, 0.8);
   border-radius: 3px;
   margin: 3rem 2.5rem;
-  width: calc(100% - 5rem);
+  width: calc(100% - 5rem - 3rem);
   max-width: 1280px;
+  padding: 1.5rem;
 
   display: grid;
-  grid-template-rows: auto 0.4fr 1fr 1fr; 
+  grid-template-rows: auto 0.4fr 1fr 0.4fr 0.3fr; 
   align-items: center;
 
   font-family: 'Abel', sans-serif;
 }
 
 main #logged-in-text {
-  margin: 1.5rem;
   text-align: right;
   font-size: 0.9375rem;
 }
 
 main #now-playing-text {
-  font-size: 2.25rem;
+  font-size: 2.75rem;
   text-align: center;
 }
 
 main #song-box {
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+main #song-box img {
+  height: 20vh;
+  margin: 1rem;
+}
+
+main #song-box #song-box-text {
+  margin: 1rem;
+}
+
+main #song-box #song-box-text #song-title {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+main #song-box #song-box-text #song-artists {
+  font-size: 1.5rem;
+  margin-top: 0.5rem;
 }
 
 main #control-bar {
-  text-align: center;
+  display: flex;
+  justify-content: center;
 }
