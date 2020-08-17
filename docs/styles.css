@@ -23,7 +23,6 @@ nav {
 
   display: flex;
   flex-direction: column;
-  /* align-items: center; */
 }
 
 nav #wooster-music {
@@ -61,4 +60,18 @@ main {
   background: rgba(255, 255, 255, 0.8);
   border-radius: 3px;
   margin: 3rem 2.5rem;
+  width: calc(100% - 5rem);
+  max-width: 1280px;
+  /* padding: 1.5rem; */
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  font-family: 'Abel', sans-serif;
+}
+
+main #logged-in-text {
+  align-self: flex-end;
+  padding: 1.5rem;
 }
