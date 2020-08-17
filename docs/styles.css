@@ -1,0 +1,33 @@
+
+
+/* Background image */
+html { 
+  background: url(assets/winter-cafe.jpg) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+/* Main grid, dividing nav sidebar and main content */
+#app {
+  display: grid;
+  grid-template-columns: minmax(200px, 15%) 1fr;
+}
+
+nav {
+  height: 100vh;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 0 3px 3px 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#wooster-music {
+  margin-top: 1.5rem;
+  width: 66%;
+  position: relative;
+  left: -8%;
+}
