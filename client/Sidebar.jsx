@@ -10,8 +10,9 @@ function Sidebar() {
         <li>What is Wooster?</li>
         <li>About / Contact</li>
       </ul>
-      <div id="dark-mode-button">
+      <div id="dark-mode-text">
         Dark mode
+        <img src="assets/dark-light-mode.svg" alt="Dark mode"/>
       </div>
     </nav>
   )
