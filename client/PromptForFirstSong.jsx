@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-function Player({
+function PromptForFirstSong({
   currentState,
   sendEvent,
   accessToken,
@@ -141,4 +141,4 @@ function Player({
   );
 }
 
-export default Player;
+export default PromptForFirstSong;

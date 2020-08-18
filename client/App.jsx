@@ -341,70 +341,20 @@ function App() {
     setSongQueue(songQueue.slice(1));
   }
 
-  // // Handle page rendering.
-
-  // Render page based on state machine.
+  // // Render page based on state machine.
 
   if (windowWidth < 850) {
     return (
       <WindowTooSmall />
     )
-  } else if (currentState.matches('landing')) {
+  } else {
     return (
       <div id="wooster">
         <Sidebar />
-        <Main />
+        <Main currentState={currentState} />
       </div>
     );
   }
-  // } else if (currentState.matches('readyToPlay')) {
-  //   return (
-  //     <div id="body-section">
-  //       <div id="body-grid">
-  //         <Header />
-  //         <FakePlayer
-  //           currentState={currentState}
-  //           sendEvent={sendEvent}
-  //           populateSongs={populateSongs}
-  //         />
-  //       </div>
-  //     </div>
-  //   )
-  // } else if (currentState.matches('promptForFirstSong')) {
-  //   return (
-  //     <div id="body-section">
-  //       <div id="body-grid">
-  //         <Header />
-  //         <SearchBar 
-  //           accessToken={accessToken}
-  //           currentUserId={currentUser.spotify_user_id}
-  //           usersLikedSongs={usersLikedSongs}
-  //           setUsersLikedSongs={setUsersLikedSongs}
-  //           populateSongs={populateSongs}
-  //         />
-  //       </div>
-  //     </div>
-  //   )
-  // } else if (currentState.matches('playing') || currentState.matches('paused')) {
-  //   return (
-  //     <div id="body-section">
-  //       <div id="body-grid">
-  //         <Header />
-  //         <Player
-  //           currentState={currentState}
-  //           sendEvent={sendEvent}
-  //           accessToken={accessToken}
-  //           currentUserId={currentUser.spotify_user_id}
-  //           currentSongId={playbackLog.currentSongId}
-  //           usersLikedSongs={usersLikedSongs}
-  //           setUsersLikedSongs={setUsersLikedSongs}
-  //           noPlayList={noPlayList}
-  //           setNoPlayList={setNoPlayList}
-  //         />
-  //       </div>
-  //     </div>
-  //   )
-  // }
 }
 
 export default App;
