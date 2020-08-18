@@ -56,6 +56,12 @@ nav li {
   border-left: 2px groove;
   font-family: 'Buenard', serif;
   font-size: 1.0625rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+nav li.dimmed {
+  opacity: 50%;
 }
 
 nav #dark-mode-text {
@@ -69,6 +75,7 @@ nav #dark-mode-text img {
   bottom: -12%;
   margin-left: 0.5rem;
   height: 0.9375rem;
+  cursor: pointer;
 }
 
 /* Main panel - blurred sample page */
@@ -121,8 +128,16 @@ main #main-subtitle {
 }
 
 main #login-box img {
+  cursor: pointer;
   height: 2.45rem;
+  transition: filter 0.2s;
 }
+
+main #login-box img:hover {
+  filter: brightness(1.07);
+}
+
+/* Main panel - player */
 
 main #logged-in-text {
   text-align: right;
