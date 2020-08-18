@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useMachine } from '@xstate/react';
 import axios from 'axios';
 import queryString from 'query-string';
@@ -10,7 +10,6 @@ import woosterMachine from './woosterMachine.js';
 import WindowTooSmall from './WindowTooSmall.jsx';
 import Sidebar from './Sidebar.jsx';
 import Main from './Main.jsx';
-import Login from './Login.jsx';
 import FakePlayer from './FakePlayer.jsx';
 import Player from './Player.jsx';
 import SearchBar from './SearchBar.jsx';
@@ -22,7 +21,7 @@ function App() {
   const [accessToken, setAccessToken] = useState(URL_HASH.access_token);
   const [refreshToken, setRefreshToken] = useState(URL_HASH.refresh_token);
   const [deviceId, setDeviceId] = useState('');
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState({});
   const [usersLikedSongs, setUsersLikedSongs] = useState([]);
   const [noPlayList, setNoPlayList] = useState({});
   const [songQueue, setSongQueue] = useState([]);
@@ -354,7 +353,14 @@ function App() {
     return (
       <div id="wooster" className={`${lightOrDark} panel-layout`}>
         <Sidebar lightOrDark={lightOrDark} setLightOrDark={setLightOrDark} />
-        <Main currentState={currentState} />
+        <Main 
+          currentState={currentState} 
+          accessToken={accessToken}
+          currentUserId={currentUser.spotify_user_id} 
+          usersLikedSongs={usersLikedSongs}
+          setUsersLikedSongs={setUsersLikedSongs}
+          populateSongs={populateSongs}
+        />
       </div>
     );
   }

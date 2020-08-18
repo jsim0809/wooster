@@ -1,143 +1,157 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-function PromptForFirstSong({
-  currentState,
-  sendEvent,
-  accessToken,
-  currentUserId,
-  currentSongId,
-  usersLikedSongs,
-  setUsersLikedSongs,
-  noPlayList,
-  setNoPlayList
-}) {
+function PromptForFirstSong({ accessToken, currentUserId, usersLikedSongs, setUsersLikedSongs, populateSongs }) {
+  const [searchResults, setSearchResults] = useState([]);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [searchField, setSearchField] = useState('');
+  const [selectedSong, setSelectedSong] = useState(null);
 
-  const handlePauseClick = () => {
-    axios({
-      method: 'put',
-      url: 'https://api.spotify.com/v1/me/player/pause',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-      },
-    })
-      .then(() => {
-        sendEvent('PAUSE');
-      });
-  };
+  const MAX_RESULTS = 5;
 
-  const handlePlayClick = () => {
-    axios({
-      method: 'put',
-      url: 'https://api.spotify.com/v1/me/player/play',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-      },
-    })
-      .then(() => {
-        sendEvent('PLAY');
-      });
-  };
+  useEffect(() => {
+    const selectedSong = searchResults[selectedIndex - 1];
+    console.log(selectedSong);
+    if (selectedSong) {
+      setSearchField(`${pluralizeArtists(selectedSong.artists)} – ${selectedSong.name}`);
+      setSelectedSong(selectedSong);
+    };
+  }, [selectedIndex]);
 
-  const handleLikeClick = () => {
-    console.log('Like sent.');
-    axios({
-      method: 'post',
-      url: `/api/${currentUserId}/like`,
-      data: {
-        currentSongId,
-      },
-    })
-      .then(() => {
-        setUsersLikedSongs([
-          ...usersLikedSongs,
-          currentSongId
-        ])
-      });
-  };
-
-  const handleDislikeClick = () => {
-    console.log('Dislike sent.');
-    axios({
-      method: 'post',
-      url: `/api/${currentUserId}/dislike`,
-      data: {
-        currentSongId,
-      },
-    })
-      .then(() => {
-        setNoPlayList({
-          ...noPlayList,
-          [currentSongId]: true,
+  const handleChange = (event) => {
+    const { value } = event.currentTarget;
+    setSearchField(value);
+    if (value) {
+      axios({
+        method: 'get',
+        url: 'https://api.spotify.com/v1/search?' +
+          queryString.stringify({
+            q: value.split(' ').join('+'),
+            type: 'track',
+            market: 'from_token',
+            limit: 5,
+          }),
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        },
+      })
+        .then((response) => response.data.tracks.items)
+        .then((searchResults) => {
+          setSearchResults(searchResults);
         });
-      });
+    } else {
+      setSearchResults([]);
+    }
   };
 
-  const handleWooClick = () => {
-    console.log('Woo sent.');
-    axios({
-      method: 'post',
-      url: `/api/${currentUserId}/woo`,
-      data: {
-        currentSongId,
-        wooTimestamp: moment().tz('America/Los_Angeles').format("MMM D [']YY [–] h[:]mm[:]ssa z"),
-      },
-    })
+  const pluralizeArtists = (artists) => {
+    return artists.map(artist => artist.name).join(', ');
   };
 
-  const handleBenchClick = () => {
-    console.log('Bench sent.');
+  const handleKeyDown = (event) => {
+    console.log(event.key);
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      if (selectedIndex === MAX_RESULTS) {
+        setSelectedIndex(0);
+      } else {
+        setSelectedIndex(selectedIndex + 1);
+      }
+    } else if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      if (selectedIndex === 0) {
+        setSelectedIndex(MAX_RESULTS);
+      } else {
+        setSelectedIndex(selectedIndex - 1);
+      }
+    }
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
     axios({
       method: 'post',
-      url: `/api/${currentUserId}/bench`,
+      url: `/api/${currentUserId}/song/new`,
       data: {
-        currentSongId,
-        benchTimestamp: moment().tz('America/Los_Angeles').format("MMM D [']YY [–] h[:]mm[:]ssa z"),
+        currentSongId: selectedSong.id,
+        artists: selectedSong.artists.map(artist => artist.name),
+        name: selectedSong.name,
       },
     })
       .then(() => {
-        setNoPlayList({
-          ...noPlayList,
-          [currentSongId]: true,
-        });
+        axios({
+          method: 'post',
+          url: `/api/${currentUserId}/like`,
+          data: {
+            currentSongId: selectedSong.id,
+          },
+        })
+          .then(() => {
+            console.log('Posting new song to liked list');
+            setUsersLikedSongs([
+              ...usersLikedSongs,
+              selectedSong.id
+            ])
+          });
       });
   };
 
-  let playPauseButton;
-  if (currentState.matches('playing')) {
-    playPauseButton = (
-      <div id="play-button" className="pointer">
-        <button type="button" onClick={handlePauseClick}>Pause</button>
-      </div>
-    )
-  } else if (currentState.matches('paused')) {
-    playPauseButton = (
-      <div id="play-button" className="pointer">
-        <button type="button" onClick={handlePlayClick}>Play</button>
-      </div>
-    )
-  }
+  useEffect(() => {
+    if (usersLikedSongs.length) {
+      populateSongs();
+    }
+  }, [usersLikedSongs]);
+
+  const resultsDisplay = searchResults.map((result, index) => {
+    if (selectedIndex === index + 1) {
+      return (
+        <div className="selected-song" key={index + 1}>{`${pluralizeArtists(result.artists)} – ${result.name}`}</div>
+      )
+    } else {
+      return (
+        <div key={index + 1}>{`${pluralizeArtists(result.artists)} – ${result.name}`}</div>
+      )
+    }
+  })
+
+
+  // next steps : handle selection and submit
 
   return (
     <main>
-      <div id="logged-in-text">Logged in as jsim0809 (Log out)</div>
-      <div id="now-playing-text">Now Playing</div>
-      <div id="song-box">
-        <img src="assets/album-image-example.jpg" />
-        <div id="song-box-text">
-          <div id="song-title">I Like It Like That</div>
-          <div id="song-artists">Hot Chelle Rae</div>
+      <div id="sample-ui">
+        <div id="logged-in-text" style={{ visibility: 'hidden' }}>Logged in as samantha (Log out)</div>
+        <div id="main-title" className="blurred">Now Playing</div>
+        <div id="song-box" className="blurred">
+          <img src="assets/album-image-example.jpg" />
+          <div id="song-box-text">
+            <div id="song-title">I Like It Like That</div>
+            <div id="song-artists">Hot Chelle Rae</div>
+          </div>
+        </div>
+        <div id="control-bar" className="blurred">
+          <img className="control-bar-dislike" src="assets/dislike.svg" />
+          <img className="control-bar-skip-back" src="assets/skip-back.svg" />
+          <img className="control-bar-play-pause" src="assets/play.svg" />
+          <img className="control-bar-skip-forward" src="assets/skip-forward.svg" />
+          <img className="control-bar-like" src="assets/like.svg" />
+          <hr className="control-bar-line" />
         </div>
       </div>
-      <div id="control-bar">
-        <img className="control-bar-dislike" src="assets/dislike.svg" />
-        <img className="control-bar-skip-back" src="assets/skip-back.svg" />
-        <img className="control-bar-play-pause" src="assets/play.svg" />
-        <img className="control-bar-skip-forward" src="assets/skip-forward.svg" />
-        <img className="control-bar-like" src="assets/like.svg" />
-        <hr className="control-bar-line" />
+      <div id="prompt-for-first-song">
+        <div id="logged-in-text">Logged in as {currentUserId} (Log out)</div>
+        <div id="main-title">
+          <form autoComplete="off" onSubmit={handleSubmit}>
+            <input type="text" onChange={handleChange} onKeyDown={handleKeyDown} value={searchField} />
+            {resultsDisplay}
+          </form>
+        </div>
       </div>
     </main>
+
+
+
+
   );
 }
 

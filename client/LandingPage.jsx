@@ -27,7 +27,7 @@ function LandingPage() {
         <div id="main-title">Welcome to Wooster Music Player</div>
         <div id="login-box">
           <div id="main-subtitle">To get started, log in with your Spotify Premium account.</div>
-          <img src="assets/login-button-rectangular.svg" alt="Log in with Spotify"/>
+          <a href="/login"><img src="assets/login-button-rectangular.svg" alt="Log in with Spotify"/></a>
           <div></div>
         </div>
 
