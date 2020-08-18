@@ -28,6 +28,7 @@ function App() {
   const [songQueue, setSongQueue] = useState([]);
   const [playbackState, setPlaybackState] = useState({});
   const [playbackLog, setPlaybackLog] = useState({});
+  const [lightOrDark, setLightOrDark] = useState('light');
 
   useEffect(() => {
     function handleResize() {
@@ -345,12 +346,14 @@ function App() {
 
   if (windowWidth < 850) {
     return (
-      <WindowTooSmall />
+      <div id="wooster" className={lightOrDark}>
+        <WindowTooSmall />
+      </div>
     )
   } else {
     return (
-      <div id="wooster">
-        <Sidebar />
+      <div id="wooster" className={`${lightOrDark} panel-layout`}>
+        <Sidebar lightOrDark={lightOrDark} setLightOrDark={setLightOrDark} />
         <Main currentState={currentState} />
       </div>
     );

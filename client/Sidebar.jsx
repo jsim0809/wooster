@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function Sidebar() {
+function Sidebar({ lightOrDark, setLightOrDark }) {
   const [dimmerArray, setDimmerArray] = useState(['', '', '', '']);
 
   const handleMouseEnter = (event) => {
@@ -17,9 +17,19 @@ function Sidebar() {
     setDimmerArray(['', '', '', '']);
   };
 
+  const handleDarkModeClick = () => {
+    if (lightOrDark === 'light') {
+      setLightOrDark('dark');
+    } else {
+      setLightOrDark('light');
+    }
+  };
+
+  const darkModeText = lightOrDark === 'light' ? 'Dark mode' : 'Light mode';
+
   return (
     <nav>
-      <img id="wooster-music" src="assets/wooster-music.svg" alt="Wooster Music" />
+      <img id="wooster-music" className={lightOrDark} src="assets/wooster-music.svg" alt="Wooster Music" />
       <ul>
         <li id="0" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className={dimmerArray[0]}>Music Player</li>
         <li id="1" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className={dimmerArray[1]}>Your Music</li>
@@ -27,8 +37,8 @@ function Sidebar() {
         <li id="3" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className={dimmerArray[3]}>About / Contact</li>
       </ul>
       <div id="dark-mode-text">
-        Dark mode
-        <img src="assets/dark-light-mode.svg" alt="Dark mode"/>
+        {darkModeText}
+        <img src="assets/dark-light-mode.svg" className={lightOrDark} alt={darkModeText} onClick={handleDarkModeClick} />
       </div>
     </nav>
   )
