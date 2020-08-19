@@ -146,6 +146,16 @@ function PromptForFirstSong({ accessToken, currentUserId, usersLikedSongs, setUs
             {resultsDisplay}
           </form>
         </div>
+        <div id="main-box">
+          <div>
+            <img src="assets/arrow.svg" alt=""/>
+          </div>
+          <div>
+            <div className="search-instructions">It looks like you're new to Wooster.</div>
+            <div className="search-instructions">Type in a song you like and hit Enter!</div>
+          </div>
+          <div></div>
+        </div>
       </div>
     </main>
 

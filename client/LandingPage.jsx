@@ -25,12 +25,11 @@ function LandingPage() {
       <div id="login">
         <div id="logged-in-text" style={{ visibility: 'hidden' }}>Logged in as samantha (Log out)</div>
         <div id="main-title">Welcome to Wooster Music Player</div>
-        <div id="login-box">
+        <div id="main-box">
           <div id="main-subtitle">To get started, log in with your Spotify Premium account.</div>
           <a href="/login"><img src="assets/login-button-rectangular.svg" alt="Log in with Spotify"/></a>
           <div></div>
         </div>
-
       </div>
     </main>
   );

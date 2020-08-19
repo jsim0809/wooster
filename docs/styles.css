@@ -100,6 +100,10 @@ nav #dark-mode-text img.dark {
   filter: invert(98%) sepia(1%) saturate(2689%) hue-rotate(146deg) brightness(118%) contrast(74%);
 }
 
+main {
+  position: relative;
+}
+
 /* Main panel - blurred sample page */
 main #sample-ui {
   height: calc(100vh - 6rem - 3rem);
@@ -137,7 +141,7 @@ main #login {
   font-family: 'Abel', sans-serif;
 }
 
-main #login-box {
+main #main-box {
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -149,13 +153,13 @@ main #main-subtitle {
   font-size: 1.25rem;
 }
 
-main #login-box img {
+main #main-box img {
   cursor: pointer;
   height: 2.45rem;
   transition: filter 0.2s;
 }
 
-main #login-box img:hover {
+main #main-box img:hover {
   filter: brightness(1.07);
 }
 
@@ -181,7 +185,25 @@ main #prompt-for-first-song input {
   width: 50%;
   font-size: 1.25rem;
   font-family: inherit;
+  border: 2px groove;
 }
+
+main #prompt-for-first-song input:focus {
+  outline: none;
+  border: 2px groove #888888;
+}
+
+main #prompt-for-first-song img {
+  position: absolute;
+  height: 9vh;
+  transform: rotate(45deg) translateY(4vh);
+}
+
+main #prompt-for-first-song .search-instructions {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
 
 /* Main panel - player */
 
