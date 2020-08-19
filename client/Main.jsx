@@ -3,13 +3,14 @@ import LandingPage from './LandingPage.jsx';
 import PromptForFirstSong from './PromptForFirstSong.jsx';
 import Player from './Player.jsx';
 
-function Main({ currentState, accessToken, currentUserId, usersLikedSongs, setUsersLikedSongs, populateSongs }) {
+function Main({ currentState, sendEvent, accessToken, currentUserId, usersLikedSongs, setUsersLikedSongs, populateSongs }) {
   switch (currentState.value) {
     case 'landing':
       return <LandingPage />;
     case 'promptForFirstSong':
       return (
         <PromptForFirstSong
+          sendEvent={sendEvent}
           accessToken={accessToken}
           currentUserId={currentUserId} 
           usersLikedSongs={usersLikedSongs}

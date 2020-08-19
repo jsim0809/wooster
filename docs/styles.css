@@ -243,6 +243,11 @@ main #logged-in-text {
   font-size: 0.9375rem;
 }
 
+main #logout {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 main #main-title {
   font-size: 2.75rem;
   text-align: center;

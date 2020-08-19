@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import queryString from 'query-string';
 
-function PromptForFirstSong({ accessToken, currentUserId, usersLikedSongs, setUsersLikedSongs, populateSongs }) {
+function PromptForFirstSong({ sendEvent, accessToken, currentUserId, usersLikedSongs, setUsersLikedSongs, populateSongs }) {
   const [searchResults, setSearchResults] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [searchField, setSearchField] = useState('');
@@ -83,7 +83,7 @@ function PromptForFirstSong({ accessToken, currentUserId, usersLikedSongs, setUs
     setSelectedIndex(Number(event.currentTarget.getAttribute('name')));
   }
 
-  const handleClick = (event) => {
+  const handleSongClick = (event) => {
     setSearchResults([]);
   }
 
@@ -130,7 +130,7 @@ function PromptForFirstSong({ accessToken, currentUserId, usersLikedSongs, setUs
           key={index + 1} 
           name={index + 1} 
           onMouseEnter={handleMouseEnter}
-          onClick={handleClick}>
+          onClick={handleSongClick}>
             {`${pluralizeArtists(result.artists)} – ${result.name}`}
         </div>
       )
@@ -140,7 +140,7 @@ function PromptForFirstSong({ accessToken, currentUserId, usersLikedSongs, setUs
           key={index + 1} 
           name={index + 1} 
           onMouseEnter={handleMouseEnter}
-          onClick={handleClick}>
+          onClick={handleSongClick}>
             {`${pluralizeArtists(result.artists)} – ${result.name}`}
         </div>
       )
@@ -169,7 +169,9 @@ function PromptForFirstSong({ accessToken, currentUserId, usersLikedSongs, setUs
         </div>
       </div>
       <div id="prompt-for-first-song">
-        <div id="logged-in-text">Logged in as {currentUserId} (Log out)</div>
+        <div id="logged-in-text">
+          Logged in as {currentUserId} (<a id="logout" href='/'>Log out</a>)
+        </div>
         <div id="main-title">
           <form autoComplete="off" onSubmit={handleSubmit}>
             <input type="text" 

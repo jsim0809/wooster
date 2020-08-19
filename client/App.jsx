@@ -355,6 +355,7 @@ function App() {
         <Sidebar lightOrDark={lightOrDark} setLightOrDark={setLightOrDark} />
         <Main 
           currentState={currentState} 
+          sendEvent={sendEvent}
           accessToken={accessToken}
           currentUserId={currentUser.spotify_user_id} 
           usersLikedSongs={usersLikedSongs}
