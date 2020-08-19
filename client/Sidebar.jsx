@@ -5,7 +5,7 @@ function Sidebar({ lightOrDark, setLightOrDark }) {
 
   const handleMouseEnter = (event) => {
     setDimmerArray(dimmerArray.map((dimmer, index) => {
-      if (index == event.currentTarget.id) {
+      if (index == event.currentTarget.getAttribute('name')) {
         return '';
       } else {
         return 'dimmed'
@@ -31,10 +31,10 @@ function Sidebar({ lightOrDark, setLightOrDark }) {
     <nav>
       <img id="wooster-music" className={lightOrDark} src="assets/wooster-music.svg" alt="Wooster Music" />
       <ul>
-        <li id="0" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className={dimmerArray[0]}>Music Player</li>
-        <li id="1" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className={dimmerArray[1]}>Your Music</li>
-        <li id="2" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className={dimmerArray[2]}>What is Wooster?</li>
-        <li id="3" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className={dimmerArray[3]}>About / Contact</li>
+        <li name="0" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className={dimmerArray[0]}>Music Player</li>
+        <li name="1" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className={dimmerArray[1]}>Your Music</li>
+        <li name="2" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className={dimmerArray[2]}>What is Wooster?</li>
+        <li name="3" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className={dimmerArray[3]}>About / Contact</li>
       </ul>
       <div id="dark-mode-text">
         {darkModeText}

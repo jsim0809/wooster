@@ -79,6 +79,14 @@ function PromptForFirstSong({ accessToken, currentUserId, usersLikedSongs, setUs
     }
   };
 
+  const handleMouseEnter = (event) => {
+    setSelectedIndex(Number(event.currentTarget.getAttribute('name')));
+  }
+
+  const handleClick = (event) => {
+    setSearchResults([]);
+  }
+
   const handleSubmit = (event) => {
     event.preventDefault();
     axios({
@@ -117,11 +125,24 @@ function PromptForFirstSong({ accessToken, currentUserId, usersLikedSongs, setUs
   const resultsDisplay = searchResults.map((result, index) => {
     if (selectedIndex === index + 1) {
       return (
-        <div className="selected-song" key={index + 1}>{`${pluralizeArtists(result.artists)} – ${result.name}`}</div>
+        <div 
+          className="selected-song" 
+          key={index + 1} 
+          name={index + 1} 
+          onMouseEnter={handleMouseEnter}
+          onClick={handleClick}>
+            {`${pluralizeArtists(result.artists)} – ${result.name}`}
+        </div>
       )
     } else {
       return (
-        <div key={index + 1}>{`${pluralizeArtists(result.artists)} – ${result.name}`}</div>
+        <div 
+          key={index + 1} 
+          name={index + 1} 
+          onMouseEnter={handleMouseEnter}
+          onClick={handleClick}>
+            {`${pluralizeArtists(result.artists)} – ${result.name}`}
+        </div>
       )
     }
   })
@@ -151,7 +172,12 @@ function PromptForFirstSong({ accessToken, currentUserId, usersLikedSongs, setUs
         <div id="logged-in-text">Logged in as {currentUserId} (Log out)</div>
         <div id="main-title">
           <form autoComplete="off" onSubmit={handleSubmit}>
-            <input type="text" onChange={handleChange} onKeyDown={handleKeyDown} onBlur={handleBlur} value={searchField} />
+            <input type="text" 
+              onChange={handleChange} 
+              onKeyDown={handleKeyDown} 
+              onBlur={handleBlur} 
+              value={searchField} 
+            />
             <div id="search-results" className={searchResults.length ? 'active' : ''}>
               {resultsDisplay}
             </div>

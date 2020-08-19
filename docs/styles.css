@@ -217,6 +217,7 @@ main #prompt-for-first-song #search-results div {
   text-align: left;
   line-height: 120%;
   padding: 0.25rem;
+  cursor: default;
 }
 
 main #prompt-for-first-song #search-results div.selected-song {
