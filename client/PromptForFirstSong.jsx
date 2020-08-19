@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import queryString from 'query-string';
 
 function PromptForFirstSong({ accessToken, currentUserId, usersLikedSongs, setUsersLikedSongs, populateSongs }) {
   const [searchResults, setSearchResults] = useState([]);
@@ -7,11 +8,10 @@ function PromptForFirstSong({ accessToken, currentUserId, usersLikedSongs, setUs
   const [searchField, setSearchField] = useState('');
   const [selectedSong, setSelectedSong] = useState(null);
 
-  const MAX_RESULTS = 5;
+  const MAX_RESULTS = 10;
 
   useEffect(() => {
     const selectedSong = searchResults[selectedIndex - 1];
-    console.log(selectedSong);
     if (selectedSong) {
       setSearchField(`${pluralizeArtists(selectedSong.artists)} – ${selectedSong.name}`);
       setSelectedSong(selectedSong);
@@ -29,7 +29,7 @@ function PromptForFirstSong({ accessToken, currentUserId, usersLikedSongs, setUs
             q: value.split(' ').join('+'),
             type: 'track',
             market: 'from_token',
-            limit: 5,
+            limit: MAX_RESULTS,
           }),
         headers: {
           'Authorization': `Bearer ${accessToken}`,
@@ -38,11 +38,23 @@ function PromptForFirstSong({ accessToken, currentUserId, usersLikedSongs, setUs
         .then((response) => response.data.tracks.items)
         .then((searchResults) => {
           setSearchResults(searchResults);
+          setSelectedIndex(0);
+          setSelectedSong(null);
         });
     } else {
       setSearchResults([]);
+      setSelectedIndex(0);
+      setSelectedSong(null);
     }
   };
+
+  const handleBlur = () => {
+    if (!searchField) {
+      setSearchResults([]);
+      setSelectedIndex(0);
+      setSelectedSong(null);
+    }
+  }
 
   const pluralizeArtists = (artists) => {
     return artists.map(artist => artist.name).join(', ');
@@ -114,9 +126,6 @@ function PromptForFirstSong({ accessToken, currentUserId, usersLikedSongs, setUs
     }
   })
 
-
-  // next steps : handle selection and submit
-
   return (
     <main>
       <div id="sample-ui">
@@ -142,13 +151,15 @@ function PromptForFirstSong({ accessToken, currentUserId, usersLikedSongs, setUs
         <div id="logged-in-text">Logged in as {currentUserId} (Log out)</div>
         <div id="main-title">
           <form autoComplete="off" onSubmit={handleSubmit}>
-            <input type="text" onChange={handleChange} onKeyDown={handleKeyDown} value={searchField} />
-            {resultsDisplay}
+            <input type="text" onChange={handleChange} onKeyDown={handleKeyDown} onBlur={handleBlur} value={searchField} />
+            <div id="search-results" className={searchResults.length ? 'active' : ''}>
+              {resultsDisplay}
+            </div>
           </form>
         </div>
         <div id="main-box">
           <div>
-            <img src="assets/arrow.svg" alt=""/>
+            <img src="assets/arrow.svg" alt="" />
           </div>
           <div>
             <div className="search-instructions">It looks like you're new to Wooster.</div>
@@ -158,10 +169,6 @@ function PromptForFirstSong({ accessToken, currentUserId, usersLikedSongs, setUs
         </div>
       </div>
     </main>
-
-
-
-
   );
 }
 
