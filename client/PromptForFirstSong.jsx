@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import queryString from 'query-string';
 
-function PromptForFirstSong({ sendEvent, accessToken, currentUserId, usersLikedSongs, setUsersLikedSongs, populateSongs }) {
+function PromptForFirstSong({ accessToken, currentUserId, usersLikedSongs, setUsersLikedSongs, populateSongs }) {
   const [searchResults, setSearchResults] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [searchField, setSearchField] = useState('');

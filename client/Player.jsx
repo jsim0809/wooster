@@ -14,6 +14,10 @@ function Player({
   populateSongs
 }) {
 
+  const handleFirstPlayClick = () => {
+    populateSongs();
+  };
+
   const handlePauseClick = () => {
     axios({
       method: 'put',
@@ -105,18 +109,27 @@ function Player({
   };
 
   let playPauseButton;
-  if (currentState.matches('playing')) {
-    playPauseButton = (
-      <div id="play-button" className="pointer">
-        <button type="button" onClick={handlePauseClick}>Pause</button>
-      </div>
-    )
-  } else if (currentState.matches('paused')) {
-    playPauseButton = (
-      <div id="play-button" className="pointer">
-        <button type="button" onClick={handlePlayClick}>Play</button>
-      </div>
-    )
+  switch (currentState.value) {
+    case ('readyToPlay'):
+      playPauseButton = (
+        <div id="play-button" className="pointer">
+          <button type="button" onClick={handleFirstPlayClick}>Play</button>
+        </div>
+      );
+    case ('playing'):
+      playPauseButton = (
+        <div id="play-button" className="pointer">
+          <button type="button" onClick={handlePauseClick}>Pause</button>
+        </div>
+      );
+      break;
+    case ('paused'):
+      playPauseButton = (
+        <div id="play-button" className="pointer">
+          <button type="button" onClick={handlePlayClick}>Play</button>
+        </div>
+      );
+      break;
   }
 
   return (

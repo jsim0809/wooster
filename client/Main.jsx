@@ -26,7 +26,6 @@ function Main({
     case 'promptForFirstSong':
       playerDisplay = (
         <PromptForFirstSong
-          sendEvent={sendEvent}
           accessToken={accessToken}
           currentUserId={currentUserId}
           usersLikedSongs={usersLikedSongs}
