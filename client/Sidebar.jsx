@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 function Sidebar({ lightOrDark, setLightOrDark }) {
   const [dimmerArray, setDimmerArray] = useState(['', '', '', '']);
@@ -31,10 +32,18 @@ function Sidebar({ lightOrDark, setLightOrDark }) {
     <nav>
       <img id="wooster-music" className={lightOrDark} src="assets/wooster-music.svg" alt="Wooster Music" />
       <ul>
-        <li name="0" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className={dimmerArray[0]}>Music Player</li>
-        <li name="1" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className={dimmerArray[1]}>Your Music</li>
-        <li name="2" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className={dimmerArray[2]}>What is Wooster?</li>
-        <li name="3" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className={dimmerArray[3]}>About / Contact</li>
+        <li name="0" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className={dimmerArray[0]}>
+          <Link to="/">Music Player</Link>
+        </li>
+        <li name="1" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className={dimmerArray[1]}>
+          <Link to="/your">Your Music</Link>
+        </li>
+        <li name="2" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className={dimmerArray[2]}>
+          <Link to="/whatiswooster">What is Wooster?</Link>
+        </li>
+        <li name="3" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className={dimmerArray[3]}>
+          <Link to="/about">About</Link>
+        </li>
       </ul>
       <div id="dark-mode-text">
         {darkModeText}

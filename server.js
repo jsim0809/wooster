@@ -3,6 +3,7 @@ const axios = require('axios');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const queryString = require('query-string');
+const path = require('path');
 
 const secret = require('./secret.keys.js');
 const database = require('./database.js');
@@ -18,6 +19,20 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
 app.use(cookieParser());
+
+// // Regular URL paths
+
+app.get('/your', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'docs', 'index.html'),);
+});
+
+app.get('/whatiswooster', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'docs', 'index.html'),);
+});
+
+app.get('/about', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'docs', 'index.html'),);
+});
 
 // // Interacting with Spotify's login servers
 
