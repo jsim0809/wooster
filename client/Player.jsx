@@ -6,11 +6,12 @@ function Player({
   sendEvent,
   accessToken,
   currentUserId,
-  currentSongId,
+  currentSong,
   usersLikedSongs,
   setUsersLikedSongs,
   noPlayList,
-  setNoPlayList
+  setNoPlayList,
+  populateSongs
 }) {
 
   const handlePauseClick = () => {
@@ -45,13 +46,13 @@ function Player({
       method: 'post',
       url: `/api/${currentUserId}/like`,
       data: {
-        currentSongId,
+        currentSongId: currentSong?.id,
       },
     })
       .then(() => {
         setUsersLikedSongs([
           ...usersLikedSongs,
-          currentSongId
+          currentSong?.id
         ])
       });
   };
@@ -62,13 +63,13 @@ function Player({
       method: 'post',
       url: `/api/${currentUserId}/dislike`,
       data: {
-        currentSongId,
+        currentSongId: currentSong?.id,
       },
     })
       .then(() => {
         setNoPlayList({
           ...noPlayList,
-          [currentSongId]: true,
+          [currentSong?.id]: true,
         });
       });
   };
@@ -79,7 +80,7 @@ function Player({
       method: 'post',
       url: `/api/${currentUserId}/woo`,
       data: {
-        currentSongId,
+        currentSongId: currentSong?.id,
         wooTimestamp: moment().tz('America/Los_Angeles').format("MMM D [']YY [–] h[:]mm[:]ssa z"),
       },
     })
@@ -91,14 +92,14 @@ function Player({
       method: 'post',
       url: `/api/${currentUserId}/bench`,
       data: {
-        currentSongId,
+        currentSongId: currentSong?.id,
         benchTimestamp: moment().tz('America/Los_Angeles').format("MMM D [']YY [–] h[:]mm[:]ssa z"),
       },
     })
       .then(() => {
         setNoPlayList({
           ...noPlayList,
-          [currentSongId]: true,
+          [currentSong?.id]: true,
         });
       });
   };
@@ -120,22 +121,26 @@ function Player({
 
   return (
     <main>
-      <div id="logged-in-text">Logged in as jsim0809 (Log out)</div>
-      <div id="now-playing-text">Now Playing</div>
-      <div id="song-box">
-        <img src="assets/album-image-example.jpg" />
-        <div id="song-box-text">
-          <div id="song-title">I Like It Like That</div>
-          <div id="song-artists">Hot Chelle Rae</div>
+      <div id="player">
+        <div id="logged-in-text">
+          Logged in as {currentUserId} (<a id="logout" href='/'>Log out</a>)
         </div>
-      </div>
-      <div id="control-bar">
-        <img className="control-bar-dislike" src="assets/dislike.svg" />
-        <img className="control-bar-skip-back" src="assets/skip-back.svg" />
-        <img className="control-bar-play-pause" src="assets/play.svg" />
-        <img className="control-bar-skip-forward" src="assets/skip-forward.svg" />
-        <img className="control-bar-like" src="assets/like.svg" />
-        <hr className="control-bar-line" />
+        <div id="main-title">Now Playing</div>
+        <div id="song-box">
+          <img src="___" />
+          <div id="song-box-text">
+            <div id="song-title">___</div>
+            <div id="song-artists">___</div>
+          </div>
+        </div>
+        <div id="control-bar">
+          <img className="control-bar-dislike" src="assets/dislike.svg" />
+          <img className="control-bar-skip-back" src="assets/skip-back.svg" />
+          <img className="control-bar-play-pause" src="assets/play.svg" />
+          <img className="control-bar-skip-forward" src="assets/skip-forward.svg" />
+          <img className="control-bar-like" src="assets/like.svg" />
+          <hr className="control-bar-line" />
+        </div>
       </div>
     </main>
   );

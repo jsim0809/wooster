@@ -103,8 +103,9 @@ main {
   position: relative;
 }
 
-/* Main panel - blurred sample page */
-main #sample-ui, #login, #prompt-for-first-song, #under-construction {
+/* Main panel - overall layout */
+
+main #sample-ui, #login, #prompt-for-first-song, #under-construction, #player {
   height: calc(100vh - 6rem - 3rem);
   background: var(--glass-color);
   border-radius: 3px;
@@ -112,7 +113,7 @@ main #sample-ui, #login, #prompt-for-first-song, #under-construction {
   width: calc(100% - 5rem - 3rem);
   max-width: 1280px;
   padding: 1.5rem;
-
+  
   display: grid;
   grid-template-rows: auto 0.4fr 1fr 0.4fr 0.3fr; 
   align-items: center;
@@ -128,6 +129,23 @@ main #sample-ui {
 
 main #login, #prompt-for-first-song {
   background: var(--glass-color-front);
+}
+
+main #logged-in-text {
+  text-align: right;
+  font-size: 0.9375rem;
+}
+
+main #logout {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+main #main-title {
+  font-size: 2.75rem;
+  text-align: center;
+  position: relative;
+  top: 20%;
 }
 
 /* Main panel - login components */
@@ -211,23 +229,6 @@ main #prompt-for-first-song .search-instructions {
 }
 
 /* Main panel - player */
-
-main #logged-in-text {
-  text-align: right;
-  font-size: 0.9375rem;
-}
-
-main #logout {
-  text-decoration: underline;
-  cursor: pointer;
-}
-
-main #main-title {
-  font-size: 2.75rem;
-  text-align: center;
-  position: relative;
-  top: 20%;
-}
 
 main #song-box {
   display: flex;

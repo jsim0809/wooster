@@ -10,9 +10,12 @@ function Main({
   sendEvent, 
   accessToken, 
   currentUserId, 
+  currentSong,
   usersLikedSongs, 
   setUsersLikedSongs, 
-  populateSongs 
+  noPlayList,
+  setNoPlayList,
+  populateSongs
 }) {
   
   let playerDisplay;
@@ -35,7 +38,20 @@ function Main({
     case 'readyToPlay':
     case 'playing':
     case 'paused':
-      playerDisplay = <Player currentState={currentState} />;
+      playerDisplay = (
+        <Player 
+          currentState={currentState}
+          sendEvent={sendEvent}
+          accessToken={accessToken}
+          currentUserId={currentUserId}
+          currentSongId={currentSong}
+          usersLikedSongs={usersLikedSongs}
+          setUsersLikedSongs={setUsersLikedSongs}
+          noPlayList={noPlayList}
+          setNoPlayList={setNoPlayList}
+          populateSongs={populateSongs}
+        />
+      )
       break;
   }
   

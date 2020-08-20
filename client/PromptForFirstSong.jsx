@@ -111,7 +111,7 @@ function PromptForFirstSong({ sendEvent, accessToken, currentUserId, usersLikedS
             setUsersLikedSongs([
               ...usersLikedSongs,
               selectedSong.id
-            ])
+            ]);
           });
       });
   };

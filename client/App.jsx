@@ -10,14 +10,11 @@ import woosterMachine from './woosterMachine.js';
 import WindowTooSmall from './WindowTooSmall.jsx';
 import Sidebar from './Sidebar.jsx';
 import Main from './Main.jsx';
-import FakePlayer from './FakePlayer.jsx';
-import Player from './Player.jsx';
-import SearchBar from './SearchBar.jsx';
 
 function App() {
   const URL_HASH = queryString.parse(window.location.hash);
-  const [windowDimensions, setWindowDimensions] = useState([window.innerWidth, window.innerHeight])
   const [currentState, sendEvent] = useMachine(woosterMachine);
+  const [windowDimensions, setWindowDimensions] = useState([window.innerWidth, window.innerHeight])
   const [accessToken, setAccessToken] = useState(URL_HASH.access_token);
   const [refreshToken, setRefreshToken] = useState(URL_HASH.refresh_token);
   const [deviceId, setDeviceId] = useState('');
@@ -133,7 +130,7 @@ function App() {
 
   // When currentUser is set, populate the user's liked and banned songs.
   useEffect(() => {
-    if (currentUser) {
+    if (currentUser.id) {
       const likes = [];
       const bans = {};
       for (let songId in currentUser.songs) {
@@ -358,8 +355,11 @@ function App() {
           sendEvent={sendEvent}
           accessToken={accessToken}
           currentUserId={currentUser.spotify_user_id} 
+          currentSong={playbackState.track_window?.current_track}
           usersLikedSongs={usersLikedSongs}
           setUsersLikedSongs={setUsersLikedSongs}
+          noPlayList={noPlayList}
+          setNoPlayList={setNoPlayList}
           populateSongs={populateSongs}
         />
       </div>
