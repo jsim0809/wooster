@@ -16,7 +16,7 @@ import SearchBar from './SearchBar.jsx';
 
 function App() {
   const URL_HASH = queryString.parse(window.location.hash);
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth)
+  const [windowDimensions, setWindowDimensions] = useState([window.innerWidth, window.innerHeight])
   const [currentState, sendEvent] = useMachine(woosterMachine);
   const [accessToken, setAccessToken] = useState(URL_HASH.access_token);
   const [refreshToken, setRefreshToken] = useState(URL_HASH.refresh_token);
@@ -31,7 +31,7 @@ function App() {
 
   useEffect(() => {
     function handleResize() {
-      setWindowWidth(window.innerWidth);
+      setWindowDimensions([window.innerWidth, window.innerHeight]);
     }
 
     window.addEventListener('resize', handleResize);
@@ -343,7 +343,7 @@ function App() {
 
   // // Render page based on state machine.
 
-  if (windowWidth < 850) {
+  if (windowDimensions[0] < 900 || windowDimensions[1] < 680) {
     return (
       <div id="wooster" className={lightOrDark}>
         <WindowTooSmall />

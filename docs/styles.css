@@ -104,9 +104,9 @@ main {
 }
 
 /* Main panel - blurred sample page */
-main #sample-ui {
+main #sample-ui, #login, #prompt-for-first-song, #under-construction {
   height: calc(100vh - 6rem - 3rem);
-  background: var(--glass-color-behind);
+  background: var(--glass-color);
   border-radius: 3px;
   margin: 3rem 2.5rem;
   width: calc(100% - 5rem - 3rem);
@@ -118,27 +118,19 @@ main #sample-ui {
   align-items: center;
   
   font-family: 'Abel', sans-serif;
+}
 
+main #sample-ui {
+  background: var(--glass-color-behind);
   position: absolute;
   z-index: -1;
 }
 
-/* Main panel - login components */
-main #login {
-  height: calc(100vh - 6rem - 3rem);
+main #login, #prompt-for-first-song {
   background: var(--glass-color-front);
-  border-radius: 3px;
-  margin: 3rem 2.5rem;
-  width: calc(100% - 5rem - 3rem);
-  max-width: 1280px;
-  padding: 1.5rem;
-
-  display: grid;
-  grid-template-rows: auto 0.4fr 1fr 0.4fr 0.3fr; 
-  align-items: center;
-  
-  font-family: 'Abel', sans-serif;
 }
+
+/* Main panel - login components */
 
 main #main-box {
   height: 100%;
@@ -148,36 +140,20 @@ main #main-box {
   align-items: center;
 }
 
-main #main-subtitle {
+main #login #main-subtitle {
   font-size: 1.25rem;
 }
 
-main #main-box img {
+main #login #main-box img {
   cursor: pointer;
   height: 2.45rem;
 }
 
-main #main-box img:hover {
+main #login #main-box img:hover {
   filter: brightness(1.07);
 }
 
 /* Main panel - Prompt for first song */
-
-main #prompt-for-first-song {
-  height: calc(100vh - 6rem - 3rem);
-  background: var(--glass-color-front);
-  border-radius: 3px;
-  margin: 3rem 2.5rem;
-  width: calc(100% - 5rem - 3rem);
-  max-width: 1280px;
-  padding: 1.5rem;
-
-  display: grid;
-  grid-template-rows: auto 0.4fr 1fr 0.4fr 0.3fr; 
-  align-items: center;
-  
-  font-family: 'Abel', sans-serif;
-}
 
 main #prompt-for-first-song form {
   margin: 0 auto;
