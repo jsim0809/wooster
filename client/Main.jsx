@@ -15,9 +15,15 @@ function Main({
   setUsersLikedSongs, 
   noPlayList,
   setNoPlayList,
+  songQueue,
+  setSongQueue,
   populateSongs
 }) {
   
+  const pluralizeArtists = (artists) => {
+    return artists?.map(artist => artist.name).join(', ');
+  };
+
   let playerDisplay;
   switch (currentState.value) {
     case 'landing':
@@ -31,6 +37,7 @@ function Main({
           usersLikedSongs={usersLikedSongs}
           setUsersLikedSongs={setUsersLikedSongs}
           populateSongs={populateSongs}
+          pluralizeArtists={pluralizeArtists}
         />
       );
       break;
@@ -48,7 +55,10 @@ function Main({
           setUsersLikedSongs={setUsersLikedSongs}
           noPlayList={noPlayList}
           setNoPlayList={setNoPlayList}
+          songQueue={songQueue}
+          setSongQueue={setSongQueue}
           populateSongs={populateSongs}
+          pluralizeArtists={pluralizeArtists}
         />
       )
       break;

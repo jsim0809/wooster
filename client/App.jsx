@@ -21,7 +21,7 @@ function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [usersLikedSongs, setUsersLikedSongs] = useState([]);
   const [noPlayList, setNoPlayList] = useState({});
-  const [songQueue, setSongQueue] = useState([]);
+  const [songQueue, setSongQueue] = useState({});
   const [playbackState, setPlaybackState] = useState({});
   const [playbackLog, setPlaybackLog] = useState({});
   const [lightOrDark, setLightOrDark] = useState('light');
@@ -50,7 +50,7 @@ function App() {
 
   // Spotify access tokens last for 60 minutes. Every 55 minutes, grab a new one.
   const initializeRefreshLoop = () => {
-    setInterval(getNewToken, 3300000);
+    setInterval(getNewToken, moment.duration(55, 'm').asMilliseconds());
   }
 
   // Helper function: Use our refresh token to request a new access token.
@@ -209,19 +209,21 @@ function App() {
   // const LOVE_STORY = '1vrd6UOGamcKNGnSHJQlSt';
   // const NIGHT_CHANGES = '5O2P9iiztwhomNh8xkR9lJ';
   // const GETAWAY_CAR = '0VE4kBnHJUgtMf0dy6DRmW';
-  // setSongQueue([LOVE_STORY, NIGHT_CHANGES, GETAWAY_CAR]);
 
-  const populateSongs = () => {
+  const populateSongs = (playNow) => {
     const randomSong1 = getRandomLikedSong();
-    setSongQueue([randomSong1]);
+    setSongQueue({
+      playing: playNow,
+      songs: [randomSong1]
+    });
   };
 
   useEffect(() => {
-    if (songQueue.length === 1) {
+    if (songQueue.songs?.length === 1) {
       const randomSong2 = getRandomLikedSong();
-      loadThreeSongs(songQueue[0], randomSong2);
+      loadThreeSongs(songQueue.songs[0], randomSong2);
     }
-    if (songQueue.length > 1) {
+    if (songQueue.songs?.length > 1 && songQueue.playing) {
       if (!noPlayList[songQueue[0]]) {
         axios({
           method: 'put',
@@ -230,7 +232,7 @@ function App() {
               device_id: deviceId,
             }),
           data: JSON.stringify({
-            uris: [`spotify:track:${songQueue[0]}`],
+            uris: [`spotify:track:${songQueue.songs[0]}`],
           }),
           headers: {
             'Accept': 'application/json',
@@ -239,8 +241,6 @@ function App() {
           },
         })
           .then(() => {
-            console.log('current state: ', currentState);
-            console.log('sending PLAY event.');
             sendEvent('PLAY');
           });
       } else {
@@ -268,7 +268,10 @@ function App() {
         let middleSong = recommendations.find((song) => {
           return !noPlayList[song.id];
         }) ?? getRandomLikedSong();
-        setSongQueue([song1, middleSong.id, song2]);
+        setSongQueue({
+          songQueue,
+          songs: [song1, middleSong.id, song2],
+        });
       });
   };
 
@@ -335,7 +338,10 @@ function App() {
 
   // Triggers the play of the next song by moving the song queue forward.
   const playNextSong = () => {
-    setSongQueue(songQueue.slice(1));
+    setSongQueue({
+      songQueue,
+      songs: songQueue.songs.slice(1),
+    });
   }
 
   // // Render page based on state machine.
@@ -360,6 +366,8 @@ function App() {
           setUsersLikedSongs={setUsersLikedSongs}
           noPlayList={noPlayList}
           setNoPlayList={setNoPlayList}
+          songQueue={songQueue}
+          setSongQueue={setSongQueue}
           populateSongs={populateSongs}
         />
       </div>

@@ -2,7 +2,14 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import queryString from 'query-string';
 
-function PromptForFirstSong({ accessToken, currentUserId, usersLikedSongs, setUsersLikedSongs, populateSongs }) {
+function PromptForFirstSong({ 
+  accessToken, 
+  currentUserId, 
+  usersLikedSongs, 
+  setUsersLikedSongs, 
+  populateSongs, 
+  pluralizeArtists 
+}) {
   const [searchResults, setSearchResults] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [searchField, setSearchField] = useState('');
@@ -55,10 +62,6 @@ function PromptForFirstSong({ accessToken, currentUserId, usersLikedSongs, setUs
       setSelectedSong(null);
     }
   }
-
-  const pluralizeArtists = (artists) => {
-    return artists.map(artist => artist.name).join(', ');
-  };
 
   const handleKeyDown = (event) => {
     console.log(event.key);
@@ -118,7 +121,7 @@ function PromptForFirstSong({ accessToken, currentUserId, usersLikedSongs, setUs
 
   useEffect(() => {
     if (usersLikedSongs.length) {
-      populateSongs();
+      populateSongs(true);
     }
   }, [usersLikedSongs]);
 

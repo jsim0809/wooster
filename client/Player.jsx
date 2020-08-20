@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 function Player({
@@ -11,11 +11,21 @@ function Player({
   setUsersLikedSongs,
   noPlayList,
   setNoPlayList,
-  populateSongs
+  songQueue,
+  setSongQueue,
+  populateSongs,
+  pluralizeArtists
 }) {
 
+  useEffect(() => {
+    populateSongs(false);
+  }, []);
+
   const handleFirstPlayClick = () => {
-    populateSongs();
+    setSongQueue({
+      songQueue,
+      playing: true,
+    });
   };
 
   const handlePauseClick = () => {
@@ -142,8 +152,8 @@ function Player({
         <div id="song-box">
           <img src="___" />
           <div id="song-box-text">
-            <div id="song-title">___</div>
-            <div id="song-artists">___</div>
+            <div id="song-title">{songQueue.songs?.[0]?.name}</div>
+            <div id="song-artists">{pluralizeArtists(songQueue.songs?.[0]?.artists)}</div>
           </div>
         </div>
         <div id="control-bar">
