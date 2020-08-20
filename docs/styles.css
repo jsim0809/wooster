@@ -75,7 +75,6 @@ nav li {
   font-family: 'Buenard', serif;
   font-size: 1.0625rem;
   cursor: pointer;
-  transition: opacity 0.2s;
 }
 
 nav li.dimmed {
@@ -156,7 +155,6 @@ main #main-subtitle {
 main #main-box img {
   cursor: pointer;
   height: 2.45rem;
-  transition: filter 0.2s;
 }
 
 main #main-box img:hover {
