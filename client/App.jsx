@@ -246,7 +246,7 @@ function App() {
       loadThreeSongs(songQueue.songs[0], randomSong2);
     }
     if (songQueue.songs?.length > 1 && songQueue.playing) {
-      if (!noPlayList[songQueue[0]]) {
+      if (!noPlayList[songQueue.songs[0]]) {
         axios({
           method: 'put',
           url: 'https://api.spotify.com/v1/me/player/play?' +
