@@ -17,6 +17,7 @@ function Main({
   setNoPlayList,
   songQueue,
   setSongQueue,
+  firstSong,
   populateSongs
 }) {
   
@@ -50,13 +51,14 @@ function Main({
           sendEvent={sendEvent}
           accessToken={accessToken}
           currentUserId={currentUserId}
-          currentSongId={currentSong}
+          currentSong={currentSong}
           usersLikedSongs={usersLikedSongs}
           setUsersLikedSongs={setUsersLikedSongs}
           noPlayList={noPlayList}
           setNoPlayList={setNoPlayList}
           songQueue={songQueue}
           setSongQueue={setSongQueue}
+          firstSong={firstSong}
           populateSongs={populateSongs}
           pluralizeArtists={pluralizeArtists}
         />

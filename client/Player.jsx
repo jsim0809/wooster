@@ -13,19 +13,13 @@ function Player({
   setNoPlayList,
   songQueue,
   setSongQueue,
-  populateSongs,
+  firstSong,
   pluralizeArtists
 }) {
 
-  useEffect(() => {
-    if (usersLikedSongs.length && currentState.value === 'readyToPlay') {
-      populateSongs(false);
-    }
-  }, [usersLikedSongs]);
-
   const handleFirstPlayClick = () => {
     setSongQueue({
-      songQueue,
+      ...songQueue,
       playing: true,
     });
   };
@@ -120,29 +114,54 @@ function Player({
       });
   };
 
-  let playPauseButton;
+  let playPauseButtonDisplay;
+  let songBoxDisplay;
   switch (currentState.value) {
     case ('readyToPlay'):
-      playPauseButton = (
-        <div id="play-button" className="pointer">
-          <button type="button" onClick={handleFirstPlayClick}>Play</button>
+      playPauseButtonDisplay = (
+        <img className="control-bar-play-pause" onClick={handleFirstPlayClick} src="assets/play.svg" />
+      );
+      songBoxDisplay = (
+        <div id="song-box">
+          <img src={firstSong.album?.images[1].url} />
+          <div id="song-box-text">
+            <div id="song-title">{firstSong.name}</div>
+            <div id="song-artists">{pluralizeArtists(firstSong.artists)}</div>
+          </div>
         </div>
       );
+      break;
     case ('playing'):
-      playPauseButton = (
-        <div id="play-button" className="pointer">
-          <button type="button" onClick={handlePauseClick}>Pause</button>
+      playPauseButtonDisplay = (
+        <img className="control-bar-play-pause" onClick={handlePauseClick} src="assets/pause.svg" />
+      );
+      songBoxDisplay = (
+        <div id="song-box">
+          <img src={currentSong?.album.images[0].url} />
+          <div id="song-box-text">
+            <div id="song-title">{currentSong?.name}</div>
+            <div id="song-artists">{pluralizeArtists(currentSong?.artists)}</div>
+          </div>
         </div>
       );
       break;
     case ('paused'):
-      playPauseButton = (
-        <div id="play-button" className="pointer">
-          <button type="button" onClick={handlePlayClick}>Play</button>
+      playPauseButtonDisplay = (
+        <img className="control-bar-play-pause" onClick={handlePlayClick} src="assets/play.svg" />
+      );
+      songBoxDisplay = (
+        <div id="song-box">
+          <img src={currentSong?.album.images[0].url} />
+          <div id="song-box-text">
+            <div id="song-title">{currentSong?.name}</div>
+            <div id="song-artists">{pluralizeArtists(currentSong?.artists)}</div>
+          </div>
         </div>
       );
       break;
   }
+
+
 
   return (
     <main>
@@ -151,17 +170,11 @@ function Player({
           Logged in as {currentUserId} (<a id="logout" href='/'>Log out</a>)
         </div>
         <div id="main-title">Now Playing</div>
-        <div id="song-box">
-          <img src="___" />
-          <div id="song-box-text">
-            <div id="song-title">{songQueue.songs?.[0]?.name}</div>
-            <div id="song-artists">{pluralizeArtists(songQueue.songs?.[0]?.artists)}</div>
-          </div>
-        </div>
+        {songBoxDisplay}
         <div id="control-bar">
           <img className="control-bar-dislike" src="assets/dislike.svg" />
           <img className="control-bar-skip-back" src="assets/skip-back.svg" />
-          <img className="control-bar-play-pause" src="assets/play.svg" />
+          {playPauseButtonDisplay}
           <img className="control-bar-skip-forward" src="assets/skip-forward.svg" />
           <img className="control-bar-like" src="assets/like.svg" />
           <hr className="control-bar-line" />

@@ -272,33 +272,38 @@ main #control-bar {
 
 main #control-bar .control-bar-dislike {
   position: relative;
-  top: 0.45rem;
+  top: 0.425rem;
   grid-column: 2 / 3;
-  height: 1.75rem;
+  height: 1.7rem;
+  cursor: pointer;
 }
 
 main #control-bar .control-bar-skip-back {
   position: relative;
   grid-column: 3 / 4;
-  height: 2rem;
+  height: 1.7rem;
+  cursor: pointer;
 }
 
 main #control-bar .control-bar-play-pause {
   grid-column: 4 / 5;
-  height: 4.5rem;
+  height: 4rem;
+  cursor: pointer;
 }
 
 main #control-bar .control-bar-skip-forward {
   position: relative;
   grid-column: 5 / 6;
-  height: 2rem;
+  height: 1.7rem;
+  cursor: pointer;
 }
 
 main #control-bar .control-bar-like {
   position: relative;
-  bottom: 0.3rem;
+  bottom: 0.275rem;
   grid-column: 6 / 7;
-  height: 1.75rem;
+  height: 1.7rem;
+  cursor: pointer;
 }
 
 main #control-bar .control-bar-line {

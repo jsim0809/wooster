@@ -22,6 +22,7 @@ function App() {
   const [usersLikedSongs, setUsersLikedSongs] = useState([]);
   const [noPlayList, setNoPlayList] = useState({});
   const [songQueue, setSongQueue] = useState({});
+  const [firstSong, setFirstSong] = useState({});
   const [playbackState, setPlaybackState] = useState({});
   const [playbackLog, setPlaybackLog] = useState({});
   const [lightOrDark, setLightOrDark] = useState('light');
@@ -151,6 +152,13 @@ function App() {
     }
   }, [currentUser]);
 
+  // When likes are populated, populate the songQueue, but don't start playing yet.
+  useEffect(() => {
+    if (usersLikedSongs.length && currentState.value === 'readyToPlay') {
+      populateSongs(false);
+    }
+  }, [usersLikedSongs]);
+
   // // Initializing Spotify's Web Player
 
   // Helper function: Load Spotify's player, and set up listeners to update state while playing song
@@ -212,6 +220,20 @@ function App() {
 
   const populateSongs = (playNow) => {
     const randomSong1 = getRandomLikedSong();
+    if (!playNow) {
+      axios({
+        method: 'get',
+        url: 'https://api.spotify.com/v1/tracks/' + randomSong1,
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        },
+      })
+        .then((response) => response.data)
+        .then((song) => {
+          setFirstSong(song);
+        })
+    }
+
     setSongQueue({
       playing: playNow,
       songs: [randomSong1]
@@ -269,7 +291,7 @@ function App() {
           return !noPlayList[song.id];
         }) ?? getRandomLikedSong();
         setSongQueue({
-          songQueue,
+          ...songQueue,
           songs: [song1, middleSong.id, song2],
         });
       });
@@ -339,7 +361,7 @@ function App() {
   // Triggers the play of the next song by moving the song queue forward.
   const playNextSong = () => {
     setSongQueue({
-      songQueue,
+      ...songQueue,
       songs: songQueue.songs.slice(1),
     });
   }
@@ -368,6 +390,7 @@ function App() {
           setNoPlayList={setNoPlayList}
           songQueue={songQueue}
           setSongQueue={setSongQueue}
+          firstSong={firstSong}
           populateSongs={populateSongs}
         />
       </div>
