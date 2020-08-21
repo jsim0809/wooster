@@ -130,7 +130,7 @@ function App() {
 
   // When currentUser is set, populate the user's liked and banned songs.
   useEffect(() => {
-    if (currentUser.id) {
+    if (currentUser.spotify_user_id) {
       const likes = [];
       const bans = {};
       for (let songId in currentUser.songs) {

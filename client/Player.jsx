@@ -18,8 +18,10 @@ function Player({
 }) {
 
   useEffect(() => {
-    populateSongs(false);
-  }, []);
+    if (usersLikedSongs.length && currentState.value === 'readyToPlay') {
+      populateSongs(false);
+    }
+  }, [usersLikedSongs]);
 
   const handleFirstPlayClick = () => {
     setSongQueue({
