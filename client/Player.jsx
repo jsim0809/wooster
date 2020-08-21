@@ -84,16 +84,9 @@ function Player({
           ...noPlayList,
           [currentSong?.id]: true,
         });
+        playNextSong();
       });
   };
-
-  const handleSkipBackClick = () => {
-    playSameSong();
-  }
-
-  const handleSkipForwardClick = () => {
-    playNextSong();
-  }
 
   // const handleBenchClick = () => {
   //   console.log('Bench sent.');
@@ -160,8 +153,6 @@ function Player({
       break;
   }
 
-
-
   return (
     <main>
       <div id="player">
@@ -172,9 +163,9 @@ function Player({
         {songBoxDisplay}
         <div id="control-bar">
           <img className={`control-bar-dislike ${lightOrDark}`} onClick={handleDislikeClick} src="assets/dislike.svg" />
-          <img className={`control-bar-skip-back ${lightOrDark}`} onClick={handleSkipBackClick} src="assets/replay.svg" />
+          <img className={`control-bar-skip-back ${lightOrDark}`} onClick={playSameSong} src="assets/replay.svg" />
           {playPauseButtonDisplay}
-          <img className={`control-bar-skip-forward ${lightOrDark}`} onClick={handleSkipForwardClick} src="assets/skip-forward.svg" />
+          <img className={`control-bar-skip-forward ${lightOrDark}`} onClick={playNextSong} src="assets/skip-forward.svg" />
           <img className={`control-bar-like ${lightOrDark}`} onClick={handleLikeClick} src="assets/like.svg" />
           <hr className="control-bar-line" />
         </div>
