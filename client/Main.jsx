@@ -18,7 +18,9 @@ function Main({
   songQueue,
   setSongQueue,
   firstSong,
-  populateSongs
+  populateSongs,
+  playSameSong,
+  playNextSong
 }) {
   
   const pluralizeArtists = (artists) => {
@@ -60,6 +62,8 @@ function Main({
           setSongQueue={setSongQueue}
           firstSong={firstSong}
           populateSongs={populateSongs}
+          playSameSong={playSameSong}
+          playNextSong={playNextSong}
           pluralizeArtists={pluralizeArtists}
         />
       )

@@ -14,6 +14,8 @@ function Player({
   songQueue,
   setSongQueue,
   firstSong,
+  playSameSong,
+  playNextSong,
   pluralizeArtists
 }) {
 
@@ -84,17 +86,13 @@ function Player({
       });
   };
 
-  const handleWooClick = () => {
-    console.log('Woo sent.');
-    axios({
-      method: 'post',
-      url: `/api/${currentUserId}/woo`,
-      data: {
-        currentSongId: currentSong?.id,
-        wooTimestamp: moment().tz('America/Los_Angeles').format("MMM D [']YY [–] h[:]mm[:]ssa z"),
-      },
-    })
-  };
+  const handleSkipBackClick = () => {
+    playSameSong();
+  }
+
+  const handleSkipForwardClick = () => {
+    playNextSong();
+  }
 
   const handleBenchClick = () => {
     console.log('Bench sent.');
@@ -172,11 +170,11 @@ function Player({
         <div id="main-title">Now Playing</div>
         {songBoxDisplay}
         <div id="control-bar">
-          <img className="control-bar-dislike" src="assets/dislike.svg" />
-          <img className="control-bar-skip-back" src="assets/skip-back.svg" />
+          <img className="control-bar-dislike" onClick={handleDislikeClick} src="assets/dislike.svg" />
+          <img className="control-bar-skip-back" onClick={handleSkipBackClick} src="assets/replay.svg" />
           {playPauseButtonDisplay}
-          <img className="control-bar-skip-forward" src="assets/skip-forward.svg" />
-          <img className="control-bar-like" src="assets/like.svg" />
+          <img className="control-bar-skip-forward" onClick={handleSkipForwardClick} src="assets/skip-forward.svg" />
+          <img className="control-bar-like" onClick={handleLikeClick} src="assets/like.svg" />
           <hr className="control-bar-line" />
         </div>
       </div>

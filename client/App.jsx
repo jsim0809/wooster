@@ -358,6 +358,14 @@ function App() {
     }
   }, [playbackLog.readyToPost]);
 
+  // Triggers the play of the same song by resetting songQueue.
+  const playSameSong = () => {
+    setSongQueue({
+      ...songQueue,
+      songs: songQueue.songs.slice(),
+    });
+  }
+
   // Triggers the play of the next song by moving the song queue forward.
   const playNextSong = () => {
     setSongQueue({
@@ -392,6 +400,8 @@ function App() {
           setSongQueue={setSongQueue}
           firstSong={firstSong}
           populateSongs={populateSongs}
+          playSameSong={playSameSong}
+          playNextSong={playNextSong}
         />
       </div>
     );

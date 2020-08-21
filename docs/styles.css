@@ -281,7 +281,7 @@ main #control-bar .control-bar-dislike {
 main #control-bar .control-bar-skip-back {
   position: relative;
   grid-column: 3 / 4;
-  height: 1.7rem;
+  height: 1.8rem;
   cursor: pointer;
 }
 
