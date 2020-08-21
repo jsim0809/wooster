@@ -3,6 +3,7 @@ import axios from 'axios';
 import queryString from 'query-string';
 
 function PromptForFirstSong({ 
+  lightOrDark,
   accessToken, 
   currentUserId, 
   usersLikedSongs, 
@@ -190,7 +191,7 @@ function PromptForFirstSong({
         </div>
         <div id="main-box">
           <div>
-            <img src="assets/arrow.svg" alt="" />
+            <img className={lightOrDark} src="assets/arrow.svg" alt="" />
           </div>
           <div>
             <div className="search-instructions">It looks like you're new to Wooster.</div>

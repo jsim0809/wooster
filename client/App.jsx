@@ -387,6 +387,7 @@ function App() {
       <div id="wooster" className={`${lightOrDark} panel-layout`}>
         <Sidebar lightOrDark={lightOrDark} setLightOrDark={setLightOrDark} />
         <Main 
+          lightOrDark={lightOrDark}
           currentState={currentState} 
           sendEvent={sendEvent}
           accessToken={accessToken}

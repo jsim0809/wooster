@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 function Player({
+  lightOrDark,
   currentState,
   sendEvent,
   accessToken,
@@ -94,30 +95,30 @@ function Player({
     playNextSong();
   }
 
-  const handleBenchClick = () => {
-    console.log('Bench sent.');
-    axios({
-      method: 'post',
-      url: `/api/${currentUserId}/bench`,
-      data: {
-        currentSongId: currentSong?.id,
-        benchTimestamp: moment().tz('America/Los_Angeles').format("MMM D [']YY [–] h[:]mm[:]ssa z"),
-      },
-    })
-      .then(() => {
-        setNoPlayList({
-          ...noPlayList,
-          [currentSong?.id]: true,
-        });
-      });
-  };
+  // const handleBenchClick = () => {
+  //   console.log('Bench sent.');
+  //   axios({
+  //     method: 'post',
+  //     url: `/api/${currentUserId}/bench`,
+  //     data: {
+  //       currentSongId: currentSong?.id,
+  //       benchTimestamp: moment().tz('America/Los_Angeles').format("MMM D [']YY [–] h[:]mm[:]ssa z"),
+  //     },
+  //   })
+  //     .then(() => {
+  //       setNoPlayList({
+  //         ...noPlayList,
+  //         [currentSong?.id]: true,
+  //       });
+  //     });
+  // };
 
   let playPauseButtonDisplay;
   let songBoxDisplay;
   switch (currentState.value) {
     case ('readyToPlay'):
       playPauseButtonDisplay = (
-        <img className="control-bar-play-pause" onClick={handleFirstPlayClick} src="assets/play.svg" />
+        <img className={`control-bar-play-pause ${lightOrDark}`} onClick={handleFirstPlayClick} src="assets/play.svg" />
       );
       songBoxDisplay = (
         <div id="song-box">
@@ -131,7 +132,7 @@ function Player({
       break;
     case ('playing'):
       playPauseButtonDisplay = (
-        <img className="control-bar-play-pause" onClick={handlePauseClick} src="assets/pause.svg" />
+        <img className={`control-bar-play-pause ${lightOrDark}`} onClick={handlePauseClick} src="assets/pause.svg" />
       );
       songBoxDisplay = (
         <div id="song-box">
@@ -145,7 +146,7 @@ function Player({
       break;
     case ('paused'):
       playPauseButtonDisplay = (
-        <img className="control-bar-play-pause" onClick={handlePlayClick} src="assets/play.svg" />
+        <img className={`control-bar-play-pause ${lightOrDark}`} onClick={handlePlayClick} src="assets/play.svg" />
       );
       songBoxDisplay = (
         <div id="song-box">
@@ -170,11 +171,11 @@ function Player({
         <div id="main-title">Now Playing</div>
         {songBoxDisplay}
         <div id="control-bar">
-          <img className="control-bar-dislike" onClick={handleDislikeClick} src="assets/dislike.svg" />
-          <img className="control-bar-skip-back" onClick={handleSkipBackClick} src="assets/replay.svg" />
+          <img className={`control-bar-dislike ${lightOrDark}`} onClick={handleDislikeClick} src="assets/dislike.svg" />
+          <img className={`control-bar-skip-back ${lightOrDark}`} onClick={handleSkipBackClick} src="assets/replay.svg" />
           {playPauseButtonDisplay}
-          <img className="control-bar-skip-forward" onClick={handleSkipForwardClick} src="assets/skip-forward.svg" />
-          <img className="control-bar-like" onClick={handleLikeClick} src="assets/like.svg" />
+          <img className={`control-bar-skip-forward ${lightOrDark}`} onClick={handleSkipForwardClick} src="assets/skip-forward.svg" />
+          <img className={`control-bar-like ${lightOrDark}`} onClick={handleLikeClick} src="assets/like.svg" />
           <hr className="control-bar-line" />
         </div>
       </div>

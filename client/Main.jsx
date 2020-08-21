@@ -6,6 +6,7 @@ import Player from './Player.jsx';
 import UnderConstruction from './UnderConstruction.jsx';
 
 function Main({ 
+  lightOrDark,
   currentState, 
   sendEvent, 
   accessToken, 
@@ -35,6 +36,7 @@ function Main({
     case 'promptForFirstSong':
       playerDisplay = (
         <PromptForFirstSong
+          lightOrDark={lightOrDark}
           accessToken={accessToken}
           currentUserId={currentUserId}
           usersLikedSongs={usersLikedSongs}
@@ -49,6 +51,7 @@ function Main({
     case 'paused':
       playerDisplay = (
         <Player 
+          lightOrDark={lightOrDark}
           currentState={currentState}
           sendEvent={sendEvent}
           accessToken={accessToken}

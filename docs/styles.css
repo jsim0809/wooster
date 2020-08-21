@@ -5,6 +5,10 @@
   -webkit-filter: blur(8px);
 }
 
+img.dark {
+  filter: invert(98%) sepia(1%) saturate(2689%) hue-rotate(146deg) brightness(118%) contrast(74%);
+}
+
 /* Background image */
 html { 
   background: url(assets/winter-cafe.jpg) no-repeat center center fixed; 
@@ -64,10 +68,6 @@ nav #wooster-music {
   left: 12%;
 }
 
-nav #wooster-music.dark {
-  filter: invert(98%) sepia(1%) saturate(2689%) hue-rotate(146deg) brightness(118%) contrast(74%);
-}
-
 nav li {
   margin-left: 12%;
   padding: 1rem;
@@ -93,10 +93,6 @@ nav #dark-mode-text img {
   margin-left: 0.5rem;
   height: 0.9375rem;
   cursor: pointer;
-}
-
-nav #dark-mode-text img.dark {
-  filter: invert(98%) sepia(1%) saturate(2689%) hue-rotate(146deg) brightness(118%) contrast(74%);
 }
 
 main {
@@ -243,6 +239,7 @@ main #song-box img {
 
 main #song-box #song-box-text {
   margin: 1.25rem;
+  max-width: 50vh;
 }
 
 main #song-box #song-box-text #song-title {
