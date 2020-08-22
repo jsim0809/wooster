@@ -5,28 +5,67 @@ import PromptForFirstSong from './PromptForFirstSong.jsx';
 import Player from './Player.jsx';
 import UnderConstruction from './UnderConstruction.jsx';
 
-function Main({ 
+function Main({
   lightOrDark,
-  currentState, 
-  sendEvent, 
-  accessToken, 
-  currentUserId, 
-  currentSong,
-  usersLikedSongs, 
-  setUsersLikedSongs, 
-  noPlayList,
-  setNoPlayList,
+  state,
+  sendEvent,
+  accessToken,
+  user,
+  likesList,
+  dislikesList,
+  likes,
+  setLikes,
+  dislikes,
+  setDislikes,
+  stale,
+  setStale,
   songQueue,
   setSongQueue,
-  firstSong,
   populateSongs,
   playSameSong,
-  playNextSong
+  playNextSong,
+  refreshLikeAndDislikeLists
 }) {
-  
-  const pluralizeArtists = (artists) => {
+
+  const pluralize = (artists) => {
     return artists?.map(artist => artist.name).join(', ');
   };
+
+  const like = (id) => {
+    axios({
+      method: 'post',
+      url: `https://api.spotify.com/v1/playlists/${likesList.id}/tracks`,
+      data: JSON.stringify({
+        uris: [`spotify:track:${id}`],
+      }),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+      },
+    })
+      .then(() => {
+        refreshLikeAndDislikeLists();
+      });
+  }
+
+  const dislike = (id) => {
+    axios({
+      method: 'post',
+      url: `https://api.spotify.com/v1/playlists/${dislikesList.id}/tracks`,
+      data: JSON.stringify({
+        uris: [`spotify:track:${id}`],
+      }),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+      },
+    })
+      .then(() => {
+        refreshLikeAndDislikeLists();
+      });
+  }
 
   let playerDisplay;
   switch (currentState.value) {
@@ -38,11 +77,9 @@ function Main({
         <PromptForFirstSong
           lightOrDark={lightOrDark}
           accessToken={accessToken}
-          currentUserId={currentUserId}
-          usersLikedSongs={usersLikedSongs}
-          setUsersLikedSongs={setUsersLikedSongs}
-          populateSongs={populateSongs}
-          pluralizeArtists={pluralizeArtists}
+          user={user}
+          like={like}
+          pluralize={pluralize}
         />
       );
       break;
@@ -50,29 +87,23 @@ function Main({
     case 'playing':
     case 'paused':
       playerDisplay = (
-        <Player 
+        <Player
           lightOrDark={lightOrDark}
-          currentState={currentState}
+          state={state}
           sendEvent={sendEvent}
           accessToken={accessToken}
-          currentUserId={currentUserId}
-          currentSong={currentSong}
-          usersLikedSongs={usersLikedSongs}
-          setUsersLikedSongs={setUsersLikedSongs}
-          noPlayList={noPlayList}
-          setNoPlayList={setNoPlayList}
+          user={user}
           songQueue={songQueue}
-          setSongQueue={setSongQueue}
-          firstSong={firstSong}
-          populateSongs={populateSongs}
           playSameSong={playSameSong}
           playNextSong={playNextSong}
-          pluralizeArtists={pluralizeArtists}
+          like={like}
+          dislike={dislike}
+          pluralize={pluralize}
         />
       )
       break;
   }
-  
+
   return (
     <Switch>
       <Route exact path='/'>

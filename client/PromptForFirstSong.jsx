@@ -2,14 +2,12 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import queryString from 'query-string';
 
-function PromptForFirstSong({ 
+function PromptForFirstSong({
   lightOrDark,
-  accessToken, 
-  currentUserId, 
-  usersLikedSongs, 
-  setUsersLikedSongs, 
-  populateSongs, 
-  pluralizeArtists 
+  accessToken,
+  user,
+  like,
+  pluralizeArtists,
 }) {
   const [searchResults, setSearchResults] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -19,14 +17,14 @@ function PromptForFirstSong({
   const MAX_RESULTS = 10;
 
   useEffect(() => {
-    const selectedSong = searchResults[selectedIndex - 1];
-    if (selectedSong) {
-      setSearchField(`${pluralizeArtists(selectedSong.artists)} – ${selectedSong.name}`);
-      setSelectedSong(selectedSong);
-    };
+    const song = searchResults[selectedIndex - 1];
+    if (song) {
+      setSearchField(`${pluralizeArtists(song.artists)} – ${song.name}`);
+      setSelectedSong(song);
+    }
   }, [selectedIndex]);
 
-  const handleChange = (event) => {
+  const handleEntry = (event) => {
     const { value } = event.currentTarget;
     setSearchField(value);
     if (value) {
@@ -43,9 +41,8 @@ function PromptForFirstSong({
           'Authorization': `Bearer ${accessToken}`,
         },
       })
-        .then((response) => response.data.tracks.items)
-        .then((searchResults) => {
-          setSearchResults(searchResults);
+        .then((response) => {
+          setSearchResults(response.data.tracks.items);
           setSelectedIndex(0);
           setSelectedSong(null);
         });
@@ -93,63 +90,21 @@ function PromptForFirstSong({
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    axios({
-      method: 'post',
-      url: `/api/${currentUserId}/song/new`,
-      data: {
-        currentSongId: selectedSong.id,
-        artists: selectedSong.artists.map(artist => artist.name),
-        name: selectedSong.name,
-      },
-    })
-      .then(() => {
-        axios({
-          method: 'post',
-          url: `/api/${currentUserId}/like`,
-          data: {
-            currentSongId: selectedSong.id,
-          },
-        })
-          .then(() => {
-            console.log('Posting new song to liked list');
-            setUsersLikedSongs([
-              ...usersLikedSongs,
-              selectedSong.id
-            ]);
-          });
-      });
+    like(selectedSong.id);
   };
 
-  useEffect(() => {
-    if (usersLikedSongs.length) {
-      populateSongs(true);
-    }
-  }, [usersLikedSongs]);
-
   const resultsDisplay = searchResults.map((result, index) => {
-    if (selectedIndex === index + 1) {
-      return (
-        <div 
-          className="selected-song" 
-          key={index + 1} 
-          name={index + 1} 
-          onMouseEnter={handleMouseEnter}
-          onClick={handleSongClick}>
-            {`${pluralizeArtists(result.artists)} – ${result.name}`}
-        </div>
-      )
-    } else {
-      return (
-        <div 
-          key={index + 1} 
-          name={index + 1} 
-          onMouseEnter={handleMouseEnter}
-          onClick={handleSongClick}>
-            {`${pluralizeArtists(result.artists)} – ${result.name}`}
-        </div>
-      )
-    }
-  })
+    return (
+      <div
+        className={selectedIndex === index + 1 ? 'selected-song' : ''}
+        key={index + 1}
+        name={index + 1}
+        onMouseEnter={handleMouseEnter}
+        onClick={handleSongClick}>
+        {`${pluralizeArtists(result.artists)} – ${result.name}`}
+      </div>
+    )
+  });
 
   return (
     <main>
@@ -174,15 +129,15 @@ function PromptForFirstSong({
       </div>
       <div id="prompt-for-first-song">
         <div id="logged-in-text">
-          Logged in as {currentUserId} (<a id="logout" href='/'>Log out</a>)
+          Logged in as {user.id} (<a id="logout" href='/'>Log out</a>)
         </div>
         <div id="main-title">
           <form autoComplete="off" onSubmit={handleSubmit}>
-            <input type="text" 
-              onChange={handleChange} 
-              onKeyDown={handleKeyDown} 
-              onBlur={handleBlur} 
-              value={searchField} 
+            <input type="text"
+              onChange={handleEntry}
+              onKeyDown={handleKeyDown}
+              onBlur={handleBlur}
+              value={searchField}
             />
             <div id="search-results" className={searchResults.length ? 'active' : ''}>
               {resultsDisplay}

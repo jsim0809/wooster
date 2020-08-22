@@ -6,40 +6,34 @@ import $script from 'scriptjs';
 import moment from 'moment-timezone';
 
 import woosterMachine from './woosterMachine.js';
-
 import WindowTooSmall from './WindowTooSmall.jsx';
 import Sidebar from './Sidebar.jsx';
 import Main from './Main.jsx';
 
 function App() {
   const URL_HASH = queryString.parse(window.location.hash);
-  const [currentState, sendEvent] = useMachine(woosterMachine);
+  const [state, sendEvent] = useMachine(woosterMachine);
   const [windowDimensions, setWindowDimensions] = useState([window.innerWidth, window.innerHeight])
   const [accessToken, setAccessToken] = useState(URL_HASH.access_token);
   const [refreshToken, setRefreshToken] = useState(URL_HASH.refresh_token);
   const [deviceId, setDeviceId] = useState('');
-  const [currentUser, setCurrentUser] = useState({});
-  const [usersLikedSongs, setUsersLikedSongs] = useState([]);
-  const [noPlayList, setNoPlayList] = useState({});
-  const [songQueue, setSongQueue] = useState({});
-  const [firstSong, setFirstSong] = useState({});
-  const [playbackState, setPlaybackState] = useState({});
-  const [playbackLog, setPlaybackLog] = useState({});
+  const [user, setUser] = useState({});
+  const [playlists, setPlaylists] = useState({});
+  const [likesList, setLikesList] = useState({});
+  const [dislikesList, setDislikesList] = useState({});
+  const [likes, setLikes] = useState([]);
+  const [dislikes, setDislikes] = useState([]);
+  const [stale, setStale] = useState([]);
+  const [songQueue, setSongQueue] = useState([]);
   const [lightOrDark, setLightOrDark] = useState('light');
 
-  useEffect(() => {
-    function handleResize() {
-      setWindowDimensions([window.innerWidth, window.innerHeight]);
-    }
-
-    window.addEventListener('resize', handleResize);
-  }, []);
-
   // Triggered effect: Runs once on component mount.
+  // Adds a listener for window size.
   // Detect logged-in state, removes access codes from URL bar, and runs initialization code.
   useEffect(() => {
     if (accessToken) {
       window.location.hash = '';
+      window.addEventListener('resize', handleResize);
       sendEvent('LOGGED_IN');
       initializeRefreshLoop();
       initializeUser();
@@ -47,7 +41,12 @@ function App() {
     }
   }, []);
 
-  // // Initializing the refresh loop
+  // // Initializing helper functions, including the refresh loop.
+
+  // Stores the window size in state so we can respond to size changes.
+  const handleResize = () => {
+    setWindowDimensions([window.innerWidth, window.innerHeight]);
+  }
 
   // Spotify access tokens last for 60 minutes. Every 55 minutes, grab a new one.
   const initializeRefreshLoop = () => {
@@ -80,84 +79,110 @@ function App() {
         'Authorization': `Bearer ${accessToken}`,
       },
     })
-      .then((response) => response.data)
-      // Use that data to grab the database's object for that user.
-      .then((userData) => {
+      .then((response) => {
+        setUser(response.data);
         axios({
           method: 'get',
-          url: `/api/${userData.id}`,
+          url: 'https://api.spotify.com/v1/me/playlists?limit=50',
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+          },
         })
-          .then((response) => response.data)
-          .then((databaseObject) => {
-            // But if no such object exists..
-            if (!Object.keys(databaseObject).length) {
-              // Create a new skeleton object for that user.
-              axios({
-                method: 'post',
-                url: `/api/${userData.id}/new`,
-                data: {
-                  email: userData.email,
-                  country: userData.country,
-                }
-              })
-                // Then, grab that skeleton object.
-                .then(() => {
-                  axios({
-                    method: 'get',
-                    url: `/api/${userData.id}`,
-                  })
-                    // And save it to state.
-                    .then((response) => response.data)
-                    .then((databaseObject) => {
-                      setCurrentUser(databaseObject.Item);
-                    });
-                });
-              // If it does exist though, just grab it and save it to state.
-            } else {
-              if (databaseObject.Item.email !== userData.email) {
-                axios({
-                  method: 'put',
-                  url: `/api/${userData.id}/email`,
-                  data: {
-                    email: userData.email,
-                  },
-                });
-              }
-              setCurrentUser(databaseObject.Item);
-            }
+          .then((response) => {
+            setPlaylists(response.data);
           });
       });
   };
 
-  // When currentUser is set, populate the user's liked and banned songs.
+  // When playlists are set, identify the user's "Liked on Wooster" and "Disliked on Wooster" playlists.
   useEffect(() => {
-    if (currentUser.spotify_user_id) {
-      const likes = [];
-      const bans = {};
-      for (let songId in currentUser.songs) {
-        const benches = currentUser.songs[songId].benches;
-        if (currentUser.songs[songId].liked === false ||
-          moment(benches[benches.length - 1], "MMM D [']YY [–] h[:]mm[:]ssa").add(3, 'M').isAfter()) {
-          bans[songId] === true;
-        } else if (currentUser.songs[songId].liked) {
-          likes.push(songId);
-        }
-      }
-      setNoPlayList(bans);
-      if (!likes.length) {
-        sendEvent('NO_LIKES');
-      } else {
-        setUsersLikedSongs(likes);
-      }
+    if (playlists.items) {
+      refreshLikeAndDislikeLists();
     }
-  }, [currentUser]);
+  }, [playlists]);
 
   // When likes are populated, populate the songQueue, but don't start playing yet.
   useEffect(() => {
-    if (usersLikedSongs.length && currentState.value === 'readyToPlay') {
-      populateSongs(false);
+    if (likes.length && state.value === 'readyToPlay') {
+      populateSongs();
     }
-  }, [usersLikedSongs]);
+  }, [likes]);
+
+  const refreshLikeAndDislikeLists = () => {
+    let likes, dislikes;
+      for (let playlist of playlist.items) {
+        if (playlist.name === 'Liked on Wooster') {
+          likes = playlist;
+        } else if (playlist.name === 'Disliked on Wooster') {
+          dislikes = playlist;
+        }
+        if (likes && dislikes) {
+          break;
+        }
+      }
+
+      if (likes) {
+        axios({
+          method: 'get',
+          url: `https://api.spotify.com/v1/playlists/${likes.id}/tracks`,
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+          },
+        })
+          .then((response) => {
+            setLikesList(likes);
+            setLikes(response.data.items);
+          });
+      } else {
+        axios({
+          method: 'post',
+          url: `https://api.spotify.com/v1/users/${user.id}/playlists`,
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+          },
+          data: JSON.stringify({
+            name: 'Liked from Wooster',
+            description: 'Your liked songs on Wooster. You can edit this list to customize your Wooster experience.',
+            public: false,
+          }),
+        })
+          .then((response) => {
+            setLikesList(response.data);
+          });
+      }
+
+      if (dislikes) {
+        axios({
+          method: 'get',
+          url: `https://api.spotify.com/v1/playlists/${dislikes.id}/tracks`,
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+          },
+        })
+          .then((response) => {
+            setDislikesList(dislikes);
+            setDislikes(response.data.items);
+          });
+      } else {
+        axios({
+          method: 'post',
+          url: `https://api.spotify.com/v1/users/${user.id}/playlists`,
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+          },
+          data: JSON.stringify({
+            name: 'Liked from Wooster',
+            description: 'Your disliked songs on Wooster. You can edit this list to customize your Wooster experience.',
+            public: false,
+          }),
+        })
+          .then((response) => {
+            setDislikesList(response.data);
+          });
+      }
+  };
 
   // // Initializing Spotify's Web Player
 
@@ -210,43 +235,23 @@ function App() {
   // // Handle song queueing and playing
 
   const getRandomLikedSong = () => {
-    console.log('Got random liked song: ', usersLikedSongs[Math.floor(Math.random() * usersLikedSongs.length)])
-    return usersLikedSongs[Math.floor(Math.random() * usersLikedSongs.length)];
+    return likes[Math.floor(Math.random() * likes.length)];
   };
 
-  // const LOVE_STORY = '1vrd6UOGamcKNGnSHJQlSt';
-  // const NIGHT_CHANGES = '5O2P9iiztwhomNh8xkR9lJ';
-  // const GETAWAY_CAR = '0VE4kBnHJUgtMf0dy6DRmW';
-
-  const populateSongs = (playNow) => {
+  const populateSongs = () => {
     const randomSong1 = getRandomLikedSong();
-    if (!playNow) {
-      axios({
-        method: 'get',
-        url: 'https://api.spotify.com/v1/tracks/' + randomSong1,
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
-        },
-      })
-        .then((response) => response.data)
-        .then((song) => {
-          setFirstSong(song);
-        })
-    }
-
-    setSongQueue({
-      playing: playNow,
-      songs: [randomSong1]
-    });
+    setSongQueue([randomSong1]);
   };
 
   useEffect(() => {
-    if (songQueue.songs?.length === 1) {
+    if (songQueue.length === 1) {
       const randomSong2 = getRandomLikedSong();
-      loadThreeSongs(songQueue.songs[0], randomSong2);
+      loadThreeSongs(songQueue[0], randomSong2);
     }
-    if (songQueue.songs?.length > 1 && songQueue.playing) {
-      if (!noPlayList[songQueue.songs[0]]) {
+    if (songQueue.length > 1 && state.value === 'playing') {
+      if (![...dislikes, ...stale].find((dislikedSong) => {
+        return dislikedSong.id === songQueue[0].id;
+      })) {
         axios({
           method: 'put',
           url: 'https://api.spotify.com/v1/me/player/play?' +
@@ -254,7 +259,7 @@ function App() {
               device_id: deviceId,
             }),
           data: JSON.stringify({
-            uris: [`spotify:track:${songQueue.songs[0]}`],
+            uris: [`spotify:track:${songQueue[0].id}`],
           }),
           headers: {
             'Accept': 'application/json',
@@ -263,6 +268,10 @@ function App() {
           },
         })
           .then(() => {
+            setStale([
+              ...stale,
+              songQueue[0]
+            ])
             sendEvent('PLAY');
           });
       } else {
@@ -277,7 +286,7 @@ function App() {
       url: 'https://api.spotify.com/v1/recommendations?' +
         queryString.stringify({
           limit: 100,
-          seed_tracks: `${song1},${song2}`,
+          seed_tracks: `${song1.id},${song2.id}`,
         }),
       headers: {
         'Accept': 'application/json',
@@ -285,93 +294,24 @@ function App() {
         'Authorization': `Bearer ${accessToken}`,
       },
     })
-      .then((response) => response.data.tracks)
-      .then((recommendations) => {
-        let middleSong = recommendations.find((song) => {
-          return !noPlayList[song.id];
+      .then((response) => {
+        let middleSong = response.data.find((recommendation) => {
+          return ![...dislikes, ...stale].find((dislikedSong) => {
+            return dislikedSong.id === recommendation.id;
+          });
         }) ?? getRandomLikedSong();
-        setSongQueue({
-          ...songQueue,
-          songs: [song1, middleSong.id, song2],
-        });
+        setSongQueue([song1, middleSong, song2]);
       });
   };
 
-  // // Handle song logging
-
-  // Triggered effect: Runs when Spotify reports a change in playback state.
-  // Updates the playbackLog, which keeps track of listening time so we can update the database with it..
-  useEffect(() => {
-    // If song is just starting, initialize the playback log.
-    if (playbackLog.currentSongId !== playbackState.track_window?.current_track.id) {
-      setPlaybackLog({
-        currentSongId: playbackState.track_window.current_track.id,
-        startTimestamp: moment().tz('America/Los_Angeles').format("MMM D [']YY [–] h[:]mm[:]ssa z"),
-        latestPosition: moment.duration(playbackState.position).seconds(),
-        readyToPost: false,
-      });
-      // Attempt to post the song skeleton (if it doesn't exist in DB yet);
-      axios({
-        method: 'post',
-        url: `/api/${currentUser.spotify_user_id}/song/new`,
-        data: {
-          currentSongId: playbackState.track_window.current_track.id,
-          artists: playbackState.track_window.current_track.artists.map(artist => artist.name),
-          name: playbackState.track_window.current_track.name,
-        },
-      });
-      //Add the song to the noPlayList so it doesn't play again this session.
-      setNoPlayList({
-        ...noPlayList,
-        [playbackState.track_window.current_track.id]: true,
-      });
-      // If song ended naturally, log the playtime.
-    } else if (playbackState.paused && playbackState.restrictions.disallow_resuming_reasons?.[0] === 'not_paused') {
-      setPlaybackLog({
-        ...playbackLog,
-        latestPosition: Math.max(playbackLog.latestPosition, moment.duration(playbackState.position).seconds()),
-        readyToPost: true,
-      });
-      // If song is somewhere in the middle, update the latest listening position.
-    } else if (playbackLog.currentSongId === playbackState.track_window?.current_track.id) {
-      setPlaybackLog({
-        ...playbackLog,
-        latestPosition: Math.max(playbackLog.latestPosition, moment.duration(playbackState.position).seconds()),
-      });
-    }
-  }, [playbackState]);
-
-  // Triggered effect: Runs whenever playBacklog.readyToPost changes.
-  // When playbackLog.readyToPost is true,
-  // Post song listen timestamp and duration to database.
-  // Then clear current song log so that we can log the next song's data.
-  useEffect(() => {
-    if (playbackLog.readyToPost) {
-      axios({
-        method: 'post',
-        url: `/api/${currentUser.spotify_user_id}/song`,
-        data: playbackLog,
-      })
-        .then(() => {
-          playNextSong();
-        });
-    }
-  }, [playbackLog.readyToPost]);
-
   // Triggers the play of the same song by resetting songQueue.
   const playSameSong = () => {
-    setSongQueue({
-      ...songQueue,
-      songs: songQueue.songs.slice(),
-    });
+    setSongQueue(songQueue.slice());
   }
 
   // Triggers the play of the next song by moving the song queue forward.
   const playNextSong = () => {
-    setSongQueue({
-      ...songQueue,
-      songs: songQueue.songs.slice(1),
-    });
+    setSongQueue(songQueue.slice(1));
   }
 
   // // Render page based on state machine.
@@ -386,23 +326,26 @@ function App() {
     return (
       <div id="wooster" className={`${lightOrDark} panel-layout`}>
         <Sidebar lightOrDark={lightOrDark} setLightOrDark={setLightOrDark} />
-        <Main 
+        <Main
           lightOrDark={lightOrDark}
-          currentState={currentState} 
+          state={state}
           sendEvent={sendEvent}
           accessToken={accessToken}
-          currentUserId={currentUser.spotify_user_id} 
-          currentSong={playbackState.track_window?.current_track}
-          usersLikedSongs={usersLikedSongs}
-          setUsersLikedSongs={setUsersLikedSongs}
-          noPlayList={noPlayList}
-          setNoPlayList={setNoPlayList}
+          user={user}
+          likesList={likesList}
+          dislikesList={dislikesList}
+          likes={likes}
+          setLikes={setLikes}
+          dislikes={dislikes}
+          setDislikes={setDislikes}
+          stale={stale}
+          setStale={setStale}
           songQueue={songQueue}
           setSongQueue={setSongQueue}
-          firstSong={firstSong}
           populateSongs={populateSongs}
           playSameSong={playSameSong}
           playNextSong={playNextSong}
+          refreshLikeAndDislikeLists={refreshLikeAndDislikeLists}
         />
       </div>
     );
