@@ -12,53 +12,16 @@ function Main({
   sendEvent,
   accessToken,
   user,
-  likesList,
-  dislikesList,
   songQueue,
   playSameSong,
   playNextSong,
-  refreshPlaylists
+  like,
+  dislike
 }) {
 
   const pluralize = (artists) => {
     return artists?.map(artist => artist.name).join(', ');
   };
-
-  const like = (id) => {
-    axios({
-      method: 'post',
-      url: `https://api.spotify.com/v1/playlists/${likesList.id}/tracks`,
-      data: JSON.stringify({
-        uris: [`spotify:track:${id}`],
-      }),
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`,
-      },
-    })
-      .then(() => {
-        refreshPlaylists();
-      });
-  }
-
-  const dislike = (id) => {
-    axios({
-      method: 'post',
-      url: `https://api.spotify.com/v1/playlists/${dislikesList.id}/tracks`,
-      data: JSON.stringify({
-        uris: [`spotify:track:${id}`],
-      }),
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`,
-      },
-    })
-      .then(() => {
-        refreshPlaylists();
-      });
-  }
 
   let playerDisplay;
   switch (state.value) {
@@ -69,6 +32,7 @@ function Main({
       playerDisplay = (
         <PromptForFirstSong
           lightOrDark={lightOrDark}
+          sendEvent={sendEvent}
           accessToken={accessToken}
           user={user}
           like={like}

@@ -4,6 +4,7 @@ import queryString from 'query-string';
 
 function PromptForFirstSong({
   lightOrDark,
+  sendEvent,
   accessToken,
   user,
   like,
@@ -90,6 +91,7 @@ function PromptForFirstSong({
   const handleSubmit = (event) => {
     event.preventDefault();
     like(selectedSong.id);
+    sendEvent('PLAY');
   };
 
   const resultsDisplay = searchResults.map((result, index) => {

@@ -81,22 +81,18 @@ function App() {
     })
       .then((response) => {
         setUser(response.data);
-        refreshPlaylists();
-      });
-  };
-
-  const refreshPlaylists = () => {
-    axios({
-      method: 'get',
-      url: 'https://api.spotify.com/v1/me/playlists?limit=50',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => {
-        setPlaylists(response.data);
+        axios({
+          method: 'get',
+          url: 'https://api.spotify.com/v1/me/playlists?limit=50',
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+        })
+          .then((response) => {
+            setPlaylists(response.data);
+          });
       });
   };
 
@@ -105,9 +101,9 @@ function App() {
     if (playlists.items) {
       let l, d;
       for (let playlist of playlists.items) {
-        if (playlist.name === 'Liked on Wooster') {
+        if (playlist.name === 'Liked from Wooster') {
           l = playlist;
-        } else if (playlist.name === 'Disliked on Wooster') {
+        } else if (playlist.name === 'Disliked from Wooster') {
           d = playlist;
         }
         if (l && d) {
@@ -125,7 +121,7 @@ function App() {
         })
           .then((response) => {
             setLikesList(l);
-            setLikes(response.data.items);
+            setLikes(response.data.items.map(item => item.track));
           });
       } else {
         axios({
@@ -168,7 +164,7 @@ function App() {
             'Content-Type': 'application/json',
           },
           data: JSON.stringify({
-            name: 'Disiked from Wooster',
+            name: 'Disliked from Wooster',
             description: 'Your disliked songs on Wooster. You can edit this list to customize your Wooster experience.',
             public: false,
           }),
@@ -182,7 +178,7 @@ function App() {
 
   // When likes are populated, populate the songQueue, but don't start playing yet.
   useEffect(() => {
-    if (likes.length && state.value === 'readyToPlay') {
+    if (likes.length) {
       populateSongs();
     }
   }, [likes]);
@@ -248,6 +244,7 @@ function App() {
 
   useEffect(() => {
     if (songQueue.length === 1) {
+      console.log(state.value);
       const randomSong2 = getRandomLikedSong();
       loadThreeSongs(songQueue[0], randomSong2);
     }
@@ -298,7 +295,7 @@ function App() {
       },
     })
       .then((response) => {
-        let middleSong = response.data.find((recommendation) => {
+        let middleSong = response.data.tracks.find((recommendation) => {
           return ![...dislikes, ...stale].find((dislikedSong) => {
             return dislikedSong.id === recommendation.id;
           });
@@ -316,6 +313,73 @@ function App() {
   const playNextSong = () => {
     setSongQueue(songQueue.slice(1));
   }
+
+  const like = (id) => {
+    axios({
+      method: 'post',
+      url: `https://api.spotify.com/v1/playlists/${likesList.id}/tracks`,
+      data: JSON.stringify({
+        uris: [`spotify:track:${id}`],
+      }),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+      },
+    })
+      .then(() => {
+        refreshLikes();
+      });
+  }
+
+  const dislike = (id) => {
+    axios({
+      method: 'post',
+      url: `https://api.spotify.com/v1/playlists/${dislikesList.id}/tracks`,
+      data: JSON.stringify({
+        uris: [`spotify:track:${id}`],
+      }),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+      },
+    })
+      .then(() => {
+        refreshDislikes();
+      });
+  }
+
+  const refreshLikes = () => {
+    axios({
+      method: 'get',
+      url: `https://api.spotify.com/v1/playlists/${likesList.id}/tracks`,
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+      },
+    })
+      .then((response) => {
+        setLikes(response.data.items);
+      });
+  }
+
+  const refreshDislikes = () => {
+    axios({
+      method: 'get',
+      url: `https://api.spotify.com/v1/playlists/${dislikesList.id}/tracks`,
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+      },
+    })
+      .then((response) => {
+        setDislikes(response.data.items);
+      });
+  }
+
+  
+  useEffect(() => {
+    console.log("yoyo",likes)
+  }, [likes]);
 
   // // Render page based on state machine.
 
@@ -335,12 +399,11 @@ function App() {
           sendEvent={sendEvent}
           accessToken={accessToken}
           user={user}
-          likesList={likesList}
-          dislikesList={dislikesList}
           songQueue={songQueue}
           playSameSong={playSameSong}
           playNextSong={playNextSong}
-          refreshPlaylists={refreshPlaylists}
+          like={like}
+          dislike={dislike}
         />
       </div>
     );
