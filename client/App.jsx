@@ -14,6 +14,7 @@ function App() {
   const URL_HASH = queryString.parse(window.location.hash);
   const [state, sendEvent] = useMachine(woosterMachine);
   const [windowDimensions, setWindowDimensions] = useState([window.innerWidth, window.innerHeight])
+  const [lightOrDark, setLightOrDark] = useState('light');
   const [accessToken, setAccessToken] = useState(URL_HASH.access_token);
   const [refreshToken, setRefreshToken] = useState(URL_HASH.refresh_token);
   const [deviceId, setDeviceId] = useState('');
@@ -25,7 +26,7 @@ function App() {
   const [dislikes, setDislikes] = useState([]);
   const [stale, setStale] = useState([]);
   const [songQueue, setSongQueue] = useState([]);
-  const [lightOrDark, setLightOrDark] = useState('light');
+  const [playbackState, setPlaybackState] = useState({});
 
   // Triggered effect: Runs once on component mount.
   // Adds a listener for window size.
@@ -268,17 +269,13 @@ function App() {
           },
         })
           .then(() => {
-            setStale([
-              ...stale,
-              songQueue[0]
-            ])
             sendEvent('PLAY');
           });
       } else {
         playNextSong();
       }
     }
-  }, [songQueue]);
+  }, [songQueue, state]);
 
   const loadThreeSongs = (song1, song2) => {
     axios({
@@ -304,6 +301,12 @@ function App() {
       });
   };
 
+  useEffect(() => {
+    if (playbackState.paused && playbackState.restrictions.disallow_resuming_reasons?.[0] === 'not_paused') {
+      playNextSong();
+    }
+  }, [playbackState]);
+
   // Triggers the play of the same song by resetting songQueue.
   const playSameSong = () => {
     setSongQueue(songQueue.slice());
@@ -311,6 +314,10 @@ function App() {
 
   // Triggers the play of the next song by moving the song queue forward.
   const playNextSong = () => {
+    setStale([
+      ...stale,
+      songQueue[0]
+    ])
     setSongQueue(songQueue.slice(1));
   }
 
@@ -375,11 +382,6 @@ function App() {
         setLikes(response.data.items.map(item => item.track));
       });
   }
-
-  
-  useEffect(() => {
-    console.log("yoyo",likes)
-  }, [likes]);
 
   // // Render page based on state machine.
 
