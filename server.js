@@ -52,6 +52,7 @@ const generateRandomString = (length) => {
 // user-read-email: The user's email address and username.
 // user-read-private: The user's Spotify subscription information (Premium or Free).
 // user-modify-playback-state: Allows playing, pausing, and other player controls.
+// playlist-read-private: Allows us to read user's private playlists.
 // playlist-modify-private: Allows creation and modification of playlists.
 // Scopes documentation at https://developer.spotify.com/documentation/general/guides/scopes/
 app.get('/login', function (req, res) {
@@ -66,6 +67,7 @@ app.get('/login', function (req, res) {
     'user-read-email',
     'user-read-private',
     'user-modify-playback-state',
+    'playlist-read-private',
     'playlist-modify-private'
   ];
 

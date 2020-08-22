@@ -81,56 +81,50 @@ function App() {
     })
       .then((response) => {
         setUser(response.data);
-        axios({
-          method: 'get',
-          url: 'https://api.spotify.com/v1/me/playlists?limit=50',
-          headers: {
-            'Authorization': `Bearer ${accessToken}`,
-          },
-        })
-          .then((response) => {
-            setPlaylists(response.data);
-          });
+        refreshPlaylists();
+      });
+  };
+
+  const refreshPlaylists = () => {
+    axios({
+      method: 'get',
+      url: 'https://api.spotify.com/v1/me/playlists?limit=50',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => {
+        setPlaylists(response.data);
       });
   };
 
   // When playlists are set, identify the user's "Liked on Wooster" and "Disliked on Wooster" playlists.
   useEffect(() => {
     if (playlists.items) {
-      refreshLikeAndDislikeLists();
-    }
-  }, [playlists]);
-
-  // When likes are populated, populate the songQueue, but don't start playing yet.
-  useEffect(() => {
-    if (likes.length && state.value === 'readyToPlay') {
-      populateSongs();
-    }
-  }, [likes]);
-
-  const refreshLikeAndDislikeLists = () => {
-    let likes, dislikes;
-      for (let playlist of playlist.items) {
+      let l, d;
+      for (let playlist of playlists.items) {
         if (playlist.name === 'Liked on Wooster') {
-          likes = playlist;
+          l = playlist;
         } else if (playlist.name === 'Disliked on Wooster') {
-          dislikes = playlist;
+          d = playlist;
         }
-        if (likes && dislikes) {
+        if (l && d) {
           break;
         }
       }
 
-      if (likes) {
+      if (l) {
         axios({
           method: 'get',
-          url: `https://api.spotify.com/v1/playlists/${likes.id}/tracks`,
+          url: `https://api.spotify.com/v1/playlists/${l.id}/tracks`,
           headers: {
             'Authorization': `Bearer ${accessToken}`,
           },
         })
           .then((response) => {
-            setLikesList(likes);
+            setLikesList(l);
             setLikes(response.data.items);
           });
       } else {
@@ -149,19 +143,20 @@ function App() {
         })
           .then((response) => {
             setLikesList(response.data);
+            sendEvent('NO_LIKES');
           });
       }
 
-      if (dislikes) {
+      if (d) {
         axios({
           method: 'get',
-          url: `https://api.spotify.com/v1/playlists/${dislikes.id}/tracks`,
+          url: `https://api.spotify.com/v1/playlists/${d.id}/tracks`,
           headers: {
             'Authorization': `Bearer ${accessToken}`,
           },
         })
           .then((response) => {
-            setDislikesList(dislikes);
+            setDislikesList(d);
             setDislikes(response.data.items);
           });
       } else {
@@ -173,7 +168,7 @@ function App() {
             'Content-Type': 'application/json',
           },
           data: JSON.stringify({
-            name: 'Liked from Wooster',
+            name: 'Disiked from Wooster',
             description: 'Your disliked songs on Wooster. You can edit this list to customize your Wooster experience.',
             public: false,
           }),
@@ -182,7 +177,15 @@ function App() {
             setDislikesList(response.data);
           });
       }
-  };
+    }
+  }, [playlists]);
+
+  // When likes are populated, populate the songQueue, but don't start playing yet.
+  useEffect(() => {
+    if (likes.length && state.value === 'readyToPlay') {
+      populateSongs();
+    }
+  }, [likes]);
 
   // // Initializing Spotify's Web Player
 
@@ -334,18 +337,10 @@ function App() {
           user={user}
           likesList={likesList}
           dislikesList={dislikesList}
-          likes={likes}
-          setLikes={setLikes}
-          dislikes={dislikes}
-          setDislikes={setDislikes}
-          stale={stale}
-          setStale={setStale}
           songQueue={songQueue}
-          setSongQueue={setSongQueue}
-          populateSongs={populateSongs}
           playSameSong={playSameSong}
           playNextSong={playNextSong}
-          refreshLikeAndDislikeLists={refreshLikeAndDislikeLists}
+          refreshPlaylists={refreshPlaylists}
         />
       </div>
     );

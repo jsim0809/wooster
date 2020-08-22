@@ -7,7 +7,7 @@ function PromptForFirstSong({
   accessToken,
   user,
   like,
-  pluralizeArtists,
+  pluralize,
 }) {
   const [searchResults, setSearchResults] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -19,7 +19,7 @@ function PromptForFirstSong({
   useEffect(() => {
     const song = searchResults[selectedIndex - 1];
     if (song) {
-      setSearchField(`${pluralizeArtists(song.artists)} – ${song.name}`);
+      setSearchField(`${pluralize(song.artists)} – ${song.name}`);
       setSelectedSong(song);
     }
   }, [selectedIndex]);
@@ -62,7 +62,6 @@ function PromptForFirstSong({
   }
 
   const handleKeyDown = (event) => {
-    console.log(event.key);
     if (event.key === 'ArrowDown') {
       event.preventDefault();
       if (selectedIndex === MAX_RESULTS) {
@@ -101,7 +100,7 @@ function PromptForFirstSong({
         name={index + 1}
         onMouseEnter={handleMouseEnter}
         onClick={handleSongClick}>
-        {`${pluralizeArtists(result.artists)} – ${result.name}`}
+        {`${pluralize(result.artists)} – ${result.name}`}
       </div>
     )
   });

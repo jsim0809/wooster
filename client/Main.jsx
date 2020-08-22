@@ -1,5 +1,6 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
+import axios from 'axios';
 import LandingPage from './LandingPage.jsx';
 import PromptForFirstSong from './PromptForFirstSong.jsx';
 import Player from './Player.jsx';
@@ -13,18 +14,10 @@ function Main({
   user,
   likesList,
   dislikesList,
-  likes,
-  setLikes,
-  dislikes,
-  setDislikes,
-  stale,
-  setStale,
   songQueue,
-  setSongQueue,
-  populateSongs,
   playSameSong,
   playNextSong,
-  refreshLikeAndDislikeLists
+  refreshPlaylists
 }) {
 
   const pluralize = (artists) => {
@@ -45,7 +38,7 @@ function Main({
       },
     })
       .then(() => {
-        refreshLikeAndDislikeLists();
+        refreshPlaylists();
       });
   }
 
@@ -63,12 +56,12 @@ function Main({
       },
     })
       .then(() => {
-        refreshLikeAndDislikeLists();
+        refreshPlaylists();
       });
   }
 
   let playerDisplay;
-  switch (currentState.value) {
+  switch (state.value) {
     case 'landing':
       playerDisplay = <LandingPage />;
       break;

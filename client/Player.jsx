@@ -61,10 +61,10 @@ return (
         </div>
       <div id="main-title">Now Playing</div>
       <div id="song-box">
-        <img src={songQueue[0].album.images[0].url} />
+        <img src={songQueue[0]?.album.images[0].url} />
         <div id="song-box-text">
-          <div id="song-title">{songQueue[0].name}</div>
-          <div id="song-artists">{pluralize(songQueue[0].artists)}</div>
+          <div id="song-title">{songQueue[0]?.name}</div>
+          <div id="song-artists">{pluralize(songQueue[0]?.artists)}</div>
         </div>
       </div>
       <div id="control-bar">
