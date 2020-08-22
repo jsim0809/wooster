@@ -359,7 +359,7 @@ function App() {
       },
     })
       .then((response) => {
-        setLikes(response.data.items);
+        setLikes(response.data.items.map(item => item.track));
       });
   }
 
@@ -372,7 +372,7 @@ function App() {
       },
     })
       .then((response) => {
-        setDislikes(response.data.items);
+        setLikes(response.data.items.map(item => item.track));
       });
   }
 
