@@ -256,7 +256,7 @@ function App() {
       if (![...dislikes, ...stale].find((dislikedSong) => {
         console.log('0', dislikedSong)
         console.log('1', songQueue[0])
-        return dislikedSong.id === songQueue[0].id;
+        return dislikedSong?.id === songQueue[0].id;
       })) {
         axios({
           method: 'put',
