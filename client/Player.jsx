@@ -13,6 +13,7 @@ function Player({
   playSameSong,
   playNextSong,
   like,
+  unlike,
   dislike,
   pluralize
 }) {
@@ -56,16 +57,9 @@ function Player({
 
   let likeButtonDisplay;
   if (likes.find(song => song.id === songQueue[0]?.id)) {
-    likeButtonDisplay = <img className={`control-bar-like-selected ${lightOrDark}`} src="assets/like-selected.svg" />;
+    likeButtonDisplay = <img className={`control-bar-like-selected ${lightOrDark}`} onClick={unlike}  src="assets/like-selected.svg" />;
   } else {
     likeButtonDisplay = <img className={`control-bar-like ${lightOrDark}`} onClick={like} src="assets/like.svg" />;
-  }
-
-  let dislikeButtonDisplay;
-  if (dislikes.find(song => song.id === songQueue[0]?.id)) {
-    dislikeButtonDisplay = <img className={`control-bar-dislike-selected ${lightOrDark}`} src="assets/dislike-selected.svg" />;
-  } else {
-    dislikeButtonDisplay = <img className={`control-bar-dislike ${lightOrDark}`} onClick={dislike} src="assets/dislike.svg" />;
   }
 
 return (
@@ -83,7 +77,7 @@ return (
         </div>
       </div>
       <div id="control-bar">
-        {dislikeButtonDisplay}
+        <img className={`control-bar-dislike ${lightOrDark}`} onClick={dislike} src="assets/dislike.svg" />
         <img className={`control-bar-skip-back ${lightOrDark}`} onClick={playSameSong} src="assets/replay.svg" />
         {playPauseButtonDisplay}
         <img className={`control-bar-skip-forward ${lightOrDark}`} onClick={playNextSong} src="assets/skip-forward.svg" />

@@ -122,7 +122,11 @@ function App() {
         })
           .then((response) => {
             setLikesList(l);
-            setLikes(response.data.items.map(item => item.track));
+            if (response.data.items.length) {
+              setLikes(response.data.items.map(item => item.track));
+            } else {
+              sendEvent('NO_LIKES');
+            }
           });
       } else {
         axios({
@@ -179,10 +183,11 @@ function App() {
 
   // When likes are populated, populate the songQueue, but don't start playing yet.
   useEffect(() => {
+    console.log('populating songs with ', likes);
     if (likes.length && state.value === 'readyToPlay') {
       populateSongs();
     }
-  }, [likes]);
+  }, [likes, state]);
 
   // // Initializing Spotify's Web Player
 
@@ -327,10 +332,29 @@ function App() {
       method: 'post',
       url: `https://api.spotify.com/v1/playlists/${likesList.id}/tracks`,
       data: JSON.stringify({
-        uris: [`spotify:track:${songQueue[0].id}`],
+        uris: [`spotify:track:${id}`],
       }),
       headers: {
         'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+      },
+    })
+      .then(() => {
+        refreshLikes();
+      });
+  }
+
+  const unlike = () => {
+    axios({
+      method: 'delete',
+      url: `https://api.spotify.com/v1/playlists/${likesList.id}/tracks`,
+      data: JSON.stringify({
+        tracks: [
+          { uri: `spotify:track:${songQueue[0].id}` }
+        ],
+      }),
+      headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${accessToken}`,
       },
@@ -403,13 +427,16 @@ function App() {
           sendEvent={sendEvent}
           accessToken={accessToken}
           user={user}
+          likesList={likesList}
           likes={likes}
           dislikes={dislikes}
           songQueue={songQueue}
           playSameSong={playSameSong}
           playNextSong={playNextSong}
           like={like}
+          unlike={unlike}
           dislike={dislike}
+          refreshLikes={refreshLikes}
         />
       </div>
     );
