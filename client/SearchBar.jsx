@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import queryString from 'query-string';
 
-function SearchBar({ sendEvent, accessToken, like, pluralize }) {
+function SearchBar({ sendEvent, accessToken, like, setSongQueue, pluralize, parent }) {
   const [searchResults, setSearchResults] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [searchField, setSearchField] = useState('');
@@ -77,14 +77,13 @@ function SearchBar({ sendEvent, accessToken, like, pluralize }) {
     setSelectedIndex(Number(event.currentTarget.getAttribute('name')));
   }
 
-  const handleSongClick = (event) => {
-    like(null, selectedSong.id);
-    sendEvent('SELECTED');
-  }
-
   const handleSubmit = (event) => {
     event.preventDefault();
-    like(null, selectedSong.id);
+    if (parent === 'PromptForFirstSong') {
+      like(null, selectedSong.id);
+    } else {
+      setSongQueue([selectedSong]);
+    }
     sendEvent('SELECTED');
   };
 
@@ -95,7 +94,7 @@ function SearchBar({ sendEvent, accessToken, like, pluralize }) {
         key={index + 1}
         name={index + 1}
         onMouseEnter={handleMouseEnter}
-        onClick={handleSongClick}>
+        onClick={handleSubmit}>
         {`${pluralize(result.artists)} – ${result.name}`}
       </div>
     )

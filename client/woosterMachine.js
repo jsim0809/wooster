@@ -28,17 +28,20 @@ const woosterMachine = Machine({
     playing: {
       on: {
         PAUSE: 'paused',
+        SELECTED: 'firstSongSelected',
       }
     },
     paused: {
       on: {
         PLAY: 'resumed',
+        SELECTED: 'firstSongSelected',
       }
     }
     ,
     resumed: {
       on: {
         PAUSE: 'paused',
+        SELECTED: 'firstSongSelected',
         SONG_ENDED: 'playing',
       }
     }

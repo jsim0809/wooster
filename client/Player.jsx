@@ -10,6 +10,7 @@ function Player({
   user,
   likes,
   songQueue,
+  setSongQueue,
   playSameSong,
   playNextSong,
   like,
@@ -58,7 +59,9 @@ function Player({
           sendEvent={sendEvent}
           accessToken={accessToken}
           like={like}
+          setSongQueue={setSongQueue}
           pluralize={pluralize}
+          parent="Player"
         />
       </>
     );

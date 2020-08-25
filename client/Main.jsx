@@ -13,8 +13,8 @@ function Main({
   accessToken,
   user,
   likes,
-  dislikes,
   songQueue,
+  setSongQueue,
   playSameSong,
   playNextSong,
   like,
@@ -39,6 +39,7 @@ function Main({
           accessToken={accessToken}
           user={user}
           like={like}
+          setSongQueue={setSongQueue}
           pluralize={pluralize}
         />
       );
@@ -56,6 +57,7 @@ function Main({
           user={user}
           likes={likes}
           songQueue={songQueue}
+          setSongQueue={setSongQueue}
           playSameSong={playSameSong}
           playNextSong={playNextSong}
           like={like}

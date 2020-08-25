@@ -7,6 +7,7 @@ function PromptForFirstSong({
   accessToken,
   user,
   like,
+  setSongQueue,
   pluralize,
 }) {
   return (
@@ -39,7 +40,9 @@ function PromptForFirstSong({
             sendEvent={sendEvent}
             accessToken={accessToken}
             like={like}
+            setSongQueue={setSongQueue}
             pluralize={pluralize}
+            parent="PromptForFirstSong"
           />
         </div>
         <div id="main-box">

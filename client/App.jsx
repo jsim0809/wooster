@@ -428,6 +428,7 @@ function App() {
           user={user}
           likes={likes}
           songQueue={songQueue}
+          setSongQueue={setSongQueue}
           playSameSong={playSameSong}
           playNextSong={playNextSong}
           like={like}
