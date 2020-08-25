@@ -12,6 +12,8 @@ function Main({
   sendEvent,
   accessToken,
   user,
+  likes,
+  dislikes,
   songQueue,
   playSameSong,
   playNextSong,
@@ -51,6 +53,8 @@ function Main({
           sendEvent={sendEvent}
           accessToken={accessToken}
           user={user}
+          likes={likes}
+          dislikes={dislikes}
           songQueue={songQueue}
           playSameSong={playSameSong}
           playNextSong={playNextSong}

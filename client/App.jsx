@@ -403,6 +403,8 @@ function App() {
           sendEvent={sendEvent}
           accessToken={accessToken}
           user={user}
+          likes={likes}
+          dislikes={dislikes}
           songQueue={songQueue}
           playSameSong={playSameSong}
           playNextSong={playNextSong}

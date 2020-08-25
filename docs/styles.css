@@ -275,6 +275,14 @@ main #control-bar .control-bar-dislike {
   cursor: pointer;
 }
 
+main #control-bar .control-bar-dislike-selected {
+  position: relative;
+  top: 0.425rem;
+  grid-column: 2 / 3;
+  height: 1.7rem;
+  cursor: pointer;
+}
+
 main #control-bar .control-bar-skip-back {
   position: relative;
   grid-column: 3 / 4;
@@ -296,6 +304,14 @@ main #control-bar .control-bar-skip-forward {
 }
 
 main #control-bar .control-bar-like {
+  position: relative;
+  bottom: 0.275rem;
+  grid-column: 6 / 7;
+  height: 1.7rem;
+  cursor: pointer;
+}
+
+main #control-bar .control-bar-like-selected {
   position: relative;
   bottom: 0.275rem;
   grid-column: 6 / 7;
