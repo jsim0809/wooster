@@ -6,7 +6,6 @@ const queryString = require('query-string');
 const path = require('path');
 
 const secret = require('./secret.keys.js');
-const database = require('./database.js');
 
 const app = express();
 const PORT = 1234;
@@ -136,7 +135,7 @@ app.get('/callback', (req, res) => {
 
 // Every 55 minutes, the client will request a new access token. (It expires in 60.) 
 // We use their refresh token to request it from Spotify.
-app.get('/api/refresh', (req, res) => {
+app.get('/refresh', (req, res) => {
   axios({
     method: 'post',
     url: 'https://accounts.spotify.com/api/token',
@@ -154,125 +153,6 @@ app.get('/api/refresh', (req, res) => {
         'access_token': response.data.access_token,
       });
     });
-});
-
-// // Interacting with DynamoDB
-
-// Grab a user's entire data object
-app.get('/api/:spotify_user_id', (req, res) => {
-  database.getFullUserData(req.params.spotify_user_id, (err, data) => {
-    if (err) {
-      console.log(err);
-      res.status(500).send(err);
-    } else {
-      res.status(200).send(data);
-    }
-  });
-});
-
-// Create the skeleton of a user's data object.
-app.post('/api/:spotify_user_id/new', (req, res) => {
-  const { email, country } = req.body;
-  database.createUserSkeleton(req.params.spotify_user_id, email, country, (err, data) => {
-    if (err) {
-      console.log(err);
-      res.status(500).send(err);
-    } else {
-      res.status(201).send(data);
-    }
-  });
-});
-
-// Update the user's email in the database.
-app.put('/api/:spotify_user_id/email', (req, res) => {
-  const { email } = req.body;
-  database.updateEmail(req.params.spotify_user_id, email, (err, data) => {
-    if (err) {
-      console.log(err);
-      res.status(500).send(err);
-    } else {
-      res.status(201).send(data);
-    }
-  });
-});
-
-// Create the skeleton of a new song.
-app.post('/api/:spotify_user_id/song/new', (req, res) => {
-  const { currentSongId, artists, name } = req.body;
-  database.createSongSkeleton(req.params.spotify_user_id, currentSongId, artists, name, (err, data) => {
-    // Song skeleton was already created.
-    if (err && err.code !== 'ConditionalCheckFailedException') {
-      console.log(err);
-      res.status(500).send(err);
-    } else {
-      res.status(201).send(data);
-    }
-  });
-});
-
-// Record the song that a user just listened to.
-app.post('/api/:spotify_user_id/song', (req, res) => {
-  const { currentSongId, startTimestamp, latestPosition } = req.body;
-  database.logPlaytime(req.params.spotify_user_id, currentSongId, startTimestamp, latestPosition, (err, data) => {
-    if (err) {
-      console.log(err);
-      res.status(500).send(err);
-    } else {
-      res.status(201).send(data);
-    }
-  });
-});
-
-// Like a song.
-app.post('/api/:spotify_user_id/like', (req, res) => {
-  const { currentSongId } = req.body;
-  database.like(req.params.spotify_user_id, currentSongId, (err, data) => {
-    if (err) {
-      console.log(err);
-      res.status(500).send(err);
-    } else {
-      res.status(201).send(data);
-    }
-  });
-});
-
-// Dislike a song.
-app.post('/api/:spotify_user_id/dislike', (req, res) => {
-  const { currentSongId } = req.body;
-  database.dislike(req.params.spotify_user_id, currentSongId, (err, data) => {
-    if (err) {
-      console.log(err);
-      res.status(500).send(err);
-    } else {
-      res.status(201).send(data);
-    }
-  });
-});
-
-// Woo a song.
-app.post('/api/:spotify_user_id/woo', (req, res) => {
-  const { currentSongId, wooTimestamp } = req.body;
-  database.woo(req.params.spotify_user_id, currentSongId, wooTimestamp, (err, data) => {
-    if (err) {
-      console.log(err);
-      res.status(500).send(err);
-    } else {
-      res.status(201).send(data);
-    }
-  });
-});
-
-// Bench a song.
-app.post('/api/:spotify_user_id/bench', (req, res) => {
-  const { currentSongId, benchTimestamp } = req.body;
-  database.bench(req.params.spotify_user_id, currentSongId, benchTimestamp, (err, data) => {
-    if (err) {
-      console.log(err);
-      res.status(500).send(err);
-    } else {
-      res.status(201).send(data);
-    }
-  });
 });
 
 app.listen(PORT, () => {

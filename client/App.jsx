@@ -58,7 +58,7 @@ function App() {
   const getNewToken = () => {
     axios({
       method: 'get',
-      url: '/api/refresh?' +
+      url: '/refresh?' +
         queryString.stringify({
           refresh_token: refreshToken,
         }),
