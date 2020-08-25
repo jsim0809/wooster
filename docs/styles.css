@@ -169,25 +169,25 @@ main #login #main-box img:hover {
 
 /* Main panel - Prompt for first song */
 
-main #prompt-for-first-song form {
+main #main-title form {
   margin: 0 auto;
   width: 50%;
   position: relative;
 }
 
-main #prompt-for-first-song input {
+main #main-title input {
   width: 100%;
   font-size: 1.25rem;
   font-family: inherit;
   border: 2px groove;
 }
 
-main #prompt-for-first-song input:focus {
+main #main-title input:focus {
   outline: none;
   border: 2px groove #888888;
 }
 
-main #prompt-for-first-song #search-results {
+main #main-title #search-results {
   position: absolute;
   width: calc(100% + 6px);
   font-size: 1.25rem;
@@ -197,18 +197,18 @@ main #prompt-for-first-song #search-results {
   z-index: 1;
 }
 
-main #prompt-for-first-song #search-results.active {
+main #main-title #search-results.active {
   border: 1px solid #888888;
 }
 
-main #prompt-for-first-song #search-results div {
+main #main-title #search-results div {
   text-align: left;
   line-height: 120%;
   padding: 0.25rem;
   cursor: default;
 }
 
-main #prompt-for-first-song #search-results div.selected-song {
+main #main-title #search-results div.selected-song {
   background-color: #000000;
   color: #dedede;
 }
@@ -227,10 +227,14 @@ main #prompt-for-first-song .search-instructions {
 /* Main panel - player */
 
 main #main-title img {
- height: 1.75rem;
- margin: 0 0.75rem;
- filter: invert(58%) sepia(0%) saturate(46%) hue-rotate(149deg) brightness(92%) contrast(109%);
- cursor: pointer;
+  height: 1.75rem;
+  margin: 0 0.75rem;
+  filter: invert(58%) sepia(0%) saturate(46%) hue-rotate(149deg) brightness(92%) contrast(109%);
+  cursor: pointer;
+}
+
+main #main-title img.lowered-search-icon {
+  margin-bottom: -0.5rem;
 }
 
 main #song-box {

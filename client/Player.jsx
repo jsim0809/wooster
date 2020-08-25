@@ -52,17 +52,21 @@ function Player({
   let nowPlayingOrSearchBarDisplay;
   if (searchIsActive) {
     nowPlayingOrSearchBarDisplay = (
-      <SearchBar
-        sendEvent={sendEvent}
-        accessToken={accessToken}
-        like={like}
-        pluralize={pluralize}
-      />
+      <>
+        <img onClick={handleSearchClick} className="lowered-search-icon" src="assets/search.svg" />
+        <SearchBar
+          sendEvent={sendEvent}
+          accessToken={accessToken}
+          like={like}
+          pluralize={pluralize}
+        />
+      </>
     );
   } else {
     nowPlayingOrSearchBarDisplay = (
       <>
         Now Playing
+        <img onClick={handleSearchClick} src="assets/search.svg" />
       </>
     );
   }
@@ -93,7 +97,6 @@ function Player({
         </div>
         <div id="main-title">
           {nowPlayingOrSearchBarDisplay}
-          <img onClick={handleSearchClick} src="assets/search.svg" />
         </div>
         <div id="song-box">
           <img src={songQueue[0]?.album?.images[1].url} />

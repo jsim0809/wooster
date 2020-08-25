@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import queryString from 'query-string';
 
 function SearchBar({ sendEvent, accessToken, like, pluralize }) {
   const [searchResults, setSearchResults] = useState([]);
