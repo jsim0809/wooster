@@ -226,6 +226,13 @@ main #prompt-for-first-song .search-instructions {
 
 /* Main panel - player */
 
+main #main-title img {
+ height: 1.75rem;
+ margin: 0 0.75rem;
+ filter: invert(58%) sepia(0%) saturate(46%) hue-rotate(149deg) brightness(92%) contrast(109%);
+ cursor: pointer;
+}
+
 main #song-box {
   display: flex;
   justify-content: center;
@@ -299,7 +306,7 @@ main #control-bar .control-bar-like-selected {
   position: relative;
   bottom: 0.1rem;
   grid-column: 6 / 7;
-  height: 3rem;
+  height: 3.25rem;
   cursor: pointer;
 }
 
