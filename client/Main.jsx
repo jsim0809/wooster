@@ -43,6 +43,7 @@ function Main({
     case 'readyToPlay':
     case 'playing':
     case 'paused':
+    case 'resumed':
       playerDisplay = (
         <Player
           lightOrDark={lightOrDark}

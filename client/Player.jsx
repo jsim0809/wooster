@@ -29,7 +29,7 @@ function Player({
   };
 
   const handlePlayClick = () => {
-    if (state.value === 'playing') {
+    if (state.value === 'paused') {
       axios({
         method: 'put',
         url: 'https://api.spotify.com/v1/me/player/play',
@@ -42,7 +42,7 @@ function Player({
   };
 
   let playPauseButtonDisplay;
-  if (state.value === 'playing') {
+  if (state.value === 'playing' || state.value === 'resumed') {
     playPauseButtonDisplay = (
       <img className={`control-bar-play-pause ${lightOrDark}`} onClick={handlePauseClick} src="assets/pause.svg" />
     );

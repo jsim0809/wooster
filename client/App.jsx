@@ -179,7 +179,7 @@ function App() {
 
   // When likes are populated, populate the songQueue, but don't start playing yet.
   useEffect(() => {
-    if (likes.length) {
+    if (likes.length && state.value === 'readyToPlay') {
       populateSongs();
     }
   }, [likes]);
@@ -245,7 +245,6 @@ function App() {
 
   useEffect(() => {
     if (songQueue.length === 1) {
-      console.log(state.value);
       const randomSong2 = getRandomLikedSong();
       loadThreeSongs(songQueue[0], randomSong2);
     }
@@ -310,6 +309,7 @@ function App() {
   // Triggers the play of the same song by resetting songQueue.
   const playSameSong = () => {
     setSongQueue(songQueue.slice());
+    sendEvent('SONG_ENDED');
   }
 
   // Triggers the play of the next song by moving the song queue forward.
@@ -319,14 +319,15 @@ function App() {
       songQueue[0]
     ])
     setSongQueue(songQueue.slice(1));
+    sendEvent('SONG_ENDED');
   }
 
-  const like = (id) => {
+  const like = () => {
     axios({
       method: 'post',
       url: `https://api.spotify.com/v1/playlists/${likesList.id}/tracks`,
       data: JSON.stringify({
-        uris: [`spotify:track:${id}`],
+        uris: [`spotify:track:${songQueue[0].id}`],
       }),
       headers: {
         'Accept': 'application/json',
@@ -339,12 +340,12 @@ function App() {
       });
   }
 
-  const dislike = (id) => {
+  const dislike = () => {
     axios({
       method: 'post',
       url: `https://api.spotify.com/v1/playlists/${dislikesList.id}/tracks`,
       data: JSON.stringify({
-        uris: [`spotify:track:${id}`],
+        uris: [`spotify:track:${songQueue[0].id}`],
       }),
       headers: {
         'Accept': 'application/json',
@@ -354,6 +355,7 @@ function App() {
     })
       .then(() => {
         refreshDislikes();
+        playNextSong();
       });
   }
 
@@ -379,7 +381,7 @@ function App() {
       },
     })
       .then((response) => {
-        setLikes(response.data.items.map(item => item.track));
+        setDislikes(response.data.items.map(item => item.track));
       });
   }
 

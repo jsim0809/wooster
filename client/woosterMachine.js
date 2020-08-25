@@ -27,7 +27,14 @@ const woosterMachine = Machine({
     },
     paused: {
       on: {
-        PLAY: 'playing',
+        PLAY: 'resumed',
+      }
+    }
+    ,
+    resumed: {
+      on: {
+        PAUSE: 'paused',
+        SONG_ENDED: 'playing',
       }
     }
   },
