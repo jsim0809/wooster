@@ -7,10 +7,8 @@ function PromptForFirstSong({
   sendEvent,
   accessToken,
   user,
-  likesList,
   like,
   pluralize,
-  refreshLikes
 }) {
   const [searchResults, setSearchResults] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -92,22 +90,8 @@ function PromptForFirstSong({
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    axios({
-      method: 'post',
-      url: `https://api.spotify.com/v1/playlists/${likesList.id}/tracks`,
-      data: JSON.stringify({
-        uris: [`spotify:track:${selectedSong.id}`],
-      }),
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`,
-      },
-    })
-      .then(() => {
-        refreshLikes();
-        sendEvent('PLAY');
-      });
+    like(null, selectedSong.id);
+    sendEvent('SELECTED');
   };
 
   const resultsDisplay = searchResults.map((result, index) => {

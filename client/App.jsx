@@ -183,8 +183,7 @@ function App() {
 
   // When likes are populated, populate the songQueue, but don't start playing yet.
   useEffect(() => {
-    console.log('populating songs with ', likes);
-    if (likes.length && state.value === 'readyToPlay') {
+    if (likes.length && (state.matches('readyToPlay') || state.matches('firstSongSelected'))) {
       populateSongs();
     }
   }, [likes, state]);
@@ -253,7 +252,7 @@ function App() {
       const randomSong2 = getRandomLikedSong();
       loadThreeSongs(songQueue[0], randomSong2);
     }
-    if (songQueue.length > 1 && state.value === 'playing') {
+    if (songQueue.length > 1 && (state.matches('playing') || state.matches('firstSongSelected'))) {
       if (![...dislikes, ...stale].find((dislikedSong) => {
         return dislikedSong.id === songQueue[0].id;
       })) {
@@ -327,7 +326,7 @@ function App() {
     sendEvent('SONG_ENDED');
   }
 
-  const like = () => {
+  const like = (event, id = songQueue[0].id) => {
     axios({
       method: 'post',
       url: `https://api.spotify.com/v1/playlists/${likesList.id}/tracks`,
@@ -427,7 +426,6 @@ function App() {
           sendEvent={sendEvent}
           accessToken={accessToken}
           user={user}
-          likesList={likesList}
           likes={likes}
           dislikes={dislikes}
           songQueue={songQueue}
@@ -436,7 +434,6 @@ function App() {
           like={like}
           unlike={unlike}
           dislike={dislike}
-          refreshLikes={refreshLikes}
         />
       </div>
     );

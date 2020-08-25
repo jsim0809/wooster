@@ -259,27 +259,11 @@ main #control-bar {
   place-items: center;
 }
 
-/* main #control-bar .control-bar-sleep {
-  position: relative;
-  top: 0.25rem;
-  left: 1rem;
-  grid-column: 2 / 3;
-  height: 1.8rem;
-} */
-
 main #control-bar .control-bar-dislike {
   position: relative;
   top: 0.4rem;
   grid-column: 2 / 3;
   height: 1.7rem;
-  cursor: pointer;
-}
-
-main #control-bar .control-bar-dislike-selected {
-  position: relative;
-  top: 0.425rem;
-  grid-column: 2 / 3;
-  height: 2.5rem;
   cursor: pointer;
 }
 
@@ -313,9 +297,9 @@ main #control-bar .control-bar-like {
 
 main #control-bar .control-bar-like-selected {
   position: relative;
-  right: 0.25px;
+  bottom: 0.1rem;
   grid-column: 6 / 7;
-  height: 3.4rem;
+  height: 3rem;
   cursor: pointer;
 }
 

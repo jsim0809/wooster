@@ -17,6 +17,11 @@ const woosterMachine = Machine({
     },
     promptForFirstSong: {
       on: {
+        SELECTED: 'firstSongSelected',
+      }
+    },
+    firstSongSelected: {
+      on: {
         PLAY: 'playing',
       }
     },

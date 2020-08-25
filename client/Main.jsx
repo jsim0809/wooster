@@ -12,7 +12,6 @@ function Main({
   sendEvent,
   accessToken,
   user,
-  likesList,
   likes,
   dislikes,
   songQueue,
@@ -20,9 +19,7 @@ function Main({
   playNextSong,
   like,
   unlike,
-  dislike,
-  populateSongs,
-  refreshLikes
+  dislike
 }) {
 
   const pluralize = (artists) => {
@@ -41,10 +38,8 @@ function Main({
           sendEvent={sendEvent}
           accessToken={accessToken}
           user={user}
-          likesList={likesList}
           like={like}
           pluralize={pluralize}
-          refreshLikes={refreshLikes}
         />
       );
       break;
