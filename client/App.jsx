@@ -248,11 +248,15 @@ function App() {
   };
 
   useEffect(() => {
+    console.log('songqueue has been set to,', songQueue);
     if (songQueue.length === 1) {
       const randomSong2 = getRandomLikedSong();
       loadThreeSongs(songQueue[0], randomSong2);
     }
-    if (songQueue.length > 1 && (state.matches('playing') || state.matches('firstSongSelected'))) {
+    if (songQueue.length > 1 
+      && (state.matches('playing') 
+        || state.matches('firstSongSelected'
+        || state.matches('songSelected')))) {
       if (![...dislikes, ...stale].find((dislikedSong) => {
         console.log('0', dislikedSong)
         console.log('1', songQueue[0])

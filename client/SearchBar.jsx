@@ -79,6 +79,7 @@ function SearchBar({ sendEvent, accessToken, like, setSongQueue, pluralize, pare
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    console.log('parent is ', parent)
     if (parent === 'PromptForFirstSong') {
       like(null, selectedSong.id);
     } else {
