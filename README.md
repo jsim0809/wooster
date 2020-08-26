@@ -20,14 +20,18 @@ I want to include a feature to put a song on the shelf for a while if I'm gettin
 
 I want Wooster to learn my preferences based on my likes and dislikes.
 
+**Data-free.**
+
+Wooster uses the Spotify "Playlists" feature to store and calculate your preferences. I don't keep even a little bit of your data. In fact, I don't even know who you are anymore.
+
 ## Technology
 
 Wooster was built with:
 
 * [Spotify Web API](https://developer.spotify.com/documentation/web-api/)
 * [React (+Hooks)](https://reactjs.org/)
-* [Express.js](https://expressjs.com/)
-* [Node.js](https://nodejs.org/)
+* [XState](https://xstate.js.org/)
+* [Netlify](https://www.netlify.com)
 
 ## Author
 
