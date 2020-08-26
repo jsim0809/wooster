@@ -2,10 +2,10 @@
   "name": "wooster",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "functions/server.js",
   "scripts": {
     "dev": "webpack -w & nodemon server.js",
-    "build": "webpack"
+    "build-dev": "webpack -w"
   },
   "repository": {
     "type": "git",
