@@ -28,7 +28,8 @@
     "nodemon": "^2.0.4",
     "query-string": "^6.13.1",
     "react-router-dom": "^5.2.0",
-    "scriptjs": "^2.5.9"
+    "scriptjs": "^2.5.9",
+    "serverless-http": "^2.5.0"
   },
   "devDependencies": {
     "@babel/core": "^7.10.4",
