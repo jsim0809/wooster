@@ -305,7 +305,7 @@ function App() {
           return ![...dislikes, ...stale].find((dislikedSong) => {
             console.log('2', dislikedSong)
             console.log('3', recommendation)
-            return dislikedSong.id === recommendation.id;
+            return dislikedSong?.id === recommendation.id;
           });
         }) ?? getRandomLikedSong();
         setSongQueue([song1, middleSong, song2]);

@@ -85,6 +85,7 @@ function SearchBar({ sendEvent, accessToken, like, setSongQueue, pluralize, pare
     } else {
       setSongQueue([selectedSong]);
     }
+    setSearchResults([]);
     sendEvent('SELECTED');
   };
 

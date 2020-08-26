@@ -28,23 +28,27 @@ const woosterMachine = Machine({
     playing: {
       on: {
         PAUSE: 'paused',
-        SELECTED: 'firstSongSelected',
+        SELECTED: 'songSelected',
       }
     },
     paused: {
       on: {
         PLAY: 'resumed',
-        SELECTED: 'firstSongSelected',
+        SELECTED: 'songSelected',
       }
-    }
-    ,
+    },
     resumed: {
       on: {
         PAUSE: 'paused',
-        SELECTED: 'firstSongSelected',
+        SELECTED: 'songSelected',
         SONG_ENDED: 'playing',
       }
-    }
+    },
+    songSelected: {
+      on: {
+        PLAY: 'playing',
+      }
+    },
   },
 });
 
