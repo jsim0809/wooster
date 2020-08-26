@@ -58,7 +58,7 @@ function App() {
   const getNewToken = () => {
     axios({
       method: 'get',
-      url: '/refresh?' +
+      url: '/.netlify/functions/server/refresh?' +
         queryString.stringify({
           refresh_token: refreshToken,
         }),
