@@ -248,7 +248,6 @@ function App() {
   };
 
   useEffect(() => {
-    console.log('songqueue has been set to,', songQueue);
     if (songQueue.length === 1) {
       const randomSong2 = getRandomLikedSong();
       loadThreeSongs(songQueue[0], randomSong2);
@@ -258,8 +257,6 @@ function App() {
         || state.matches('firstSongSelected'
         || state.matches('songSelected')))) {
       if (![...dislikes, ...stale].find((dislikedSong) => {
-        console.log('0', dislikedSong)
-        console.log('1', songQueue[0])
         return dislikedSong?.id === songQueue[0].id;
       })) {
         axios({
@@ -303,8 +300,6 @@ function App() {
       .then((response) => {
         let middleSong = response.data.tracks.find((recommendation) => {
           return ![...dislikes, ...stale].find((dislikedSong) => {
-            console.log('2', dislikedSong)
-            console.log('3', recommendation)
             return dislikedSong?.id === recommendation.id;
           });
         }) ?? getRandomLikedSong();
