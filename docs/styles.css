@@ -274,7 +274,7 @@ main #control-bar .control-bar-dislike {
   position: relative;
   top: 0.4rem;
   grid-column: 2 / 3;
-  height: 1.7rem;
+  height: 1.625rem;
   cursor: pointer;
 }
 
@@ -302,7 +302,7 @@ main #control-bar .control-bar-like {
   position: relative;
   bottom: 0.25rem;
   grid-column: 6 / 7;
-  height: 1.7rem;
+  height: 1.625rem;
   cursor: pointer;
 }
 
@@ -310,7 +310,7 @@ main #control-bar .control-bar-like-selected {
   position: relative;
   bottom: 0.1rem;
   grid-column: 6 / 7;
-  height: 3.25rem;
+  height: 3.125rem;
   cursor: pointer;
 }
 
