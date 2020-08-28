@@ -321,7 +321,9 @@ function App() {
 
   // Triggers the play of the next song by moving the song queue forward.
   const playNextSong = () => {
+    console.log("Current songQueue: ", songQueue);
     const newStaleSong = songQueue[0];
+    console.log("Setting as stale: ", newStaleSong);
     setStale([
       ...stale,
       newStaleSong
