@@ -254,8 +254,8 @@ function App() {
     }
     if (songQueue.length > 1 
       && (state.matches('playing') 
-        || state.matches('firstSongSelected'
-        || state.matches('songSelected')))) {
+        || state.matches('firstSongSelected')
+        || state.matches('songSelected'))) {
       if (![...dislikes, ...stale].find((dislikedSong) => {
         return dislikedSong?.id === songQueue[0].id;
       })) {
