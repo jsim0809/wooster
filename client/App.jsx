@@ -283,7 +283,7 @@ function App() {
         playNextSong();
       }
     }
-  }, [songQueue, state]);
+  }, [songQueue, state.value]);
 
   const loadThreeSongs = (song1, song2) => {
     axios({
