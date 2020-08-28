@@ -62,6 +62,7 @@ function Player({
           setSongQueue={setSongQueue}
           pluralize={pluralize}
           parent="Player"
+          setSearchIsActive={setSearchIsActive}
         />
       </>
     );

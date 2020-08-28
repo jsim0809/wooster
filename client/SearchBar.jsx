@@ -2,7 +2,15 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import queryString from 'query-string';
 
-function SearchBar({ sendEvent, accessToken, like, setSongQueue, pluralize, parent }) {
+function SearchBar({ 
+  sendEvent, 
+  accessToken, 
+  like, 
+  setSongQueue, 
+  pluralize, 
+  parent, 
+  setSearchIsActive 
+}) {
   const [searchResults, setSearchResults] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [searchField, setSearchField] = useState('');
@@ -85,6 +93,9 @@ function SearchBar({ sendEvent, accessToken, like, setSongQueue, pluralize, pare
       setSongQueue([selectedSong]);
     }
     setSearchResults([]);
+    if (setSearchIsActive) {
+      setSearchIsActive(false);
+    }
     sendEvent('SELECTED');
   };
 
