@@ -321,9 +321,10 @@ function App() {
 
   // Triggers the play of the next song by moving the song queue forward.
   const playNextSong = () => {
+    const newStaleSong = songQueue[0];
     setStale([
       ...stale,
-      songQueue[0]
+      newStaleSong
     ])
     setSongQueue(songQueue.slice(1));
     sendEvent('SONG_ENDED');
