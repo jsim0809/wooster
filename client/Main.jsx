@@ -44,10 +44,7 @@ function Main({
         />
       );
       break;
-    case 'readyToPlay':
-    case 'playing':
-    case 'paused':
-    case 'resumed':
+    default:
       playerDisplay = (
         <Player
           lightOrDark={lightOrDark}
@@ -66,7 +63,6 @@ function Main({
           pluralize={pluralize}
         />
       )
-      break;
   }
 
   return (
