@@ -259,7 +259,6 @@ function App() {
       if (![...dislikes, ...stale].find((dislikedSong) => {
         return dislikedSong?.id === songQueue[0].id;
       })) {
-        console.log('attempting to play: ', songQueue[0].id)
         axios({
           method: 'put',
           url: 'https://api.spotify.com/v1/me/player/play?' +
@@ -276,7 +275,6 @@ function App() {
           },
         })
           .then(() => {
-            console.log('succeeded')
             sendEvent('PLAY');
           });
       } else {
