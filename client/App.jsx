@@ -288,6 +288,9 @@ function App() {
   }, [songQueue, state.value]);
 
   const loadThreeSongs = (song1, song2) => {
+    console.log('Attempting to load 3 songs ==')
+    console.log('First song: ' + song1 )
+    console.log('Second song: ' + song2 )
     axios({
       method: 'get',
       url: 'https://api.spotify.com/v1/recommendations?' +
