@@ -248,7 +248,7 @@ function App() {
   };
 
   useEffect(() => {
-    console.log('useEffect triggered with songQueue length', songQueue.length );
+    console.log('useEffect triggered with songQueue length', songQueue.length, 'and state value', state.value );
     if (songQueue.length === 1) {
       console.log('Samantha')
       const randomSong2 = getRandomLikedSong();
