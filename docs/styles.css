@@ -32,7 +32,7 @@ html {
   --glass-color: rgba(16, 16, 16, 0.9);
   --glass-color-behind: rgba(16, 16, 16, 0.5);
   --glass-color-front: rgba(16, 16, 16, 0.8);
-  --search-box-background-color: rgba(32, 32, 32, 1);
+  --search-box-background-color: rgba(48, 48, 48, 1);
   --search-box-color: #dedede;
 }
 
