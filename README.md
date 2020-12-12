@@ -22,7 +22,7 @@ I want Wooster to learn my preferences based on my likes and dislikes.
 
 **Data-free.**
 
-Wooster uses the Spotify "Playlists" feature to store and calculate preferences. This allows it to be completely data-free -- if you use Wooster, I won't keep even a little bit of your data, not even your name and email address.
+Wooster uses the Spotify "Playlists" feature to store and calculate preferences. This allows it to be completely data-free -- Wooster won't save even a bit of your personal data.
 
 ## Technology
 
