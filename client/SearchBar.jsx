@@ -109,7 +109,7 @@ function SearchBar({
         key={index + 1}
         name={index + 1}
         onMouseMove={handleMouseMove}
-        onClick={handleSubmit}>
+        onClick={ ()=>{ alert('yo') } }>
         {`${pluralize(result.artists)} – ${result.name}`}
       </div>
     )
