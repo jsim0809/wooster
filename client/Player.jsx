@@ -97,7 +97,7 @@ function Player({
     <main>
       <div id="player">
         <div id="logged-in-text">
-          Logged in as {user.id} (<a id="logout" href='/'>Log out</a>)
+          Logged in as {user.display_name} (<a id="logout" href='/'>Log out</a>)
         </div>
         <div id="main-title">
           {nowPlayingOrSearchBarDisplay}
