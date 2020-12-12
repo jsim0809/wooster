@@ -86,20 +86,17 @@ function SearchBar({
   }
 
   const handleSubmit = (event) => {
-    console.log('handleSubmit')
     event.preventDefault();
     if (parent === 'PromptForFirstSong') {
       like(null, selectedSong.id);
     } else {
       setSongQueue([selectedSong]);
-      console.log('song queue set: ', selectedSong)
     }
     setSearchResults([]);
     if (setSearchIsActive) {
       setSearchIsActive(false);
     }
     sendEvent('SELECTED');
-    console.log('SELECTED event sent')
   };
 
   const resultsDisplay = searchResults.map((result, index) => {

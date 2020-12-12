@@ -248,9 +248,7 @@ function App() {
   };
 
   useEffect(() => {
-    console.log('useEffect triggered with songQueue length', songQueue.length, 'and state value', state.value );
     if (songQueue.length === 1) {
-      console.log('Samantha')
       const randomSong2 = getRandomLikedSong();
       loadThreeSongs(songQueue[0], randomSong2);
     }
@@ -258,8 +256,6 @@ function App() {
       && (state.matches('playing')
         || state.matches('firstSongSelected')
         || state.matches('songSelected'))) {
-          console.log('Olaf')
-
       if (![...dislikes, ...stale].find((dislikedSong) => {
         return dislikedSong?.id === songQueue[0].id;
       })) {
@@ -288,9 +284,6 @@ function App() {
   }, [songQueue, state.value]);
 
   const loadThreeSongs = (song1, song2) => {
-    console.log('Attempting to load 3 songs ==')
-    console.log('First song: ' + song1 )
-    console.log('Second song: ' + song2 )
     axios({
       method: 'get',
       url: 'https://api.spotify.com/v1/recommendations?' +
