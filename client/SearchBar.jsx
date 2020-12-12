@@ -114,12 +114,11 @@ function SearchBar({
 
   return (
     <form autoComplete="off" onSubmit={handleSubmit}>
-      <div>Testing</div>
       <input type="text"
         onChange={handleEntry}
         onKeyDown={handleKeyDown}
         onBlur={handleBlur}
-        value="Hello"
+        value={searchField}
         autoFocus
       />
       <div id="search-results" className={searchResults.length ? 'active' : ''}>

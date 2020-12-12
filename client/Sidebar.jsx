@@ -33,7 +33,7 @@ function Sidebar({ lightOrDark, setLightOrDark }) {
       <img id="wooster-music" className={lightOrDark} src="assets/wooster-music.svg" alt="Wooster Music" />
       <ul>
         <li name="0" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className={dimmerArray[0]}>
-          <Link to="/">Music Player uwu</Link>
+          <Link to="/">Music Player</Link>
         </li>
         <li name="1" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className={dimmerArray[1]}>
           <Link to="/your">Your Music</Link>

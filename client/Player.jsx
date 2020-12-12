@@ -69,7 +69,7 @@ function Player({
   } else {
     nowPlayingOrSearchBarDisplay = (
       <>
-        Now Playingu
+        Now Playing
         <img onClick={handleSearchClick} src="assets/search.svg" />
       </>
     );
