@@ -119,6 +119,7 @@ function SearchBar({
         onKeyDown={handleKeyDown}
         onBlur={handleBlur}
         value={searchField}
+        autoFocus
       />
       <div id="search-results" className={searchResults.length ? 'active' : ''}>
         {resultsDisplay}
