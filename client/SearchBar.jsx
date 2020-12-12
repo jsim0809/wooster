@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import queryString from 'query-string';
 
-function SearchBar({ 
-  sendEvent, 
-  accessToken, 
-  like, 
-  setSongQueue, 
-  pluralize, 
-  parent, 
-  setSearchIsActive 
+function SearchBar({
+  sendEvent,
+  accessToken,
+  like,
+  setSongQueue,
+  pluralize,
+  parent,
+  setSearchIsActive
 }) {
   const [searchResults, setSearchResults] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -56,11 +56,11 @@ function SearchBar({
   };
 
   const handleBlur = () => {
-    if (!searchField) {
-        setSearchResults([]);
-        setSelectedIndex(0);
-        setSelectedSong(null);
-    }
+    setTimeout(() => {
+      setSearchResults([]);
+      setSelectedIndex(0);
+      setSelectedSong(null);
+    }, 100);
   }
 
   const handleKeyDown = (event) => {
