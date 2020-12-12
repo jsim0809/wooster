@@ -13,6 +13,7 @@ const woosterMachine = Machine({
       on: {
         NO_LIKES: 'promptForFirstSong',
         PLAY: 'playing',
+        SELECTED: 'songSelected',
       }
     },
     promptForFirstSong: {
