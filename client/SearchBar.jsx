@@ -57,8 +57,8 @@ function SearchBar({
 
   const handleBlur = () => {
     setSearchResults([]);
-    setSelectedIndex(0);
     if (!searchField) {
+      setSelectedIndex(0);
       setSelectedSong(null);
     }
   }
@@ -86,6 +86,7 @@ function SearchBar({
   }
 
   const handleSubmit = (event) => {
+    console.log('handleSubmit triggered')
     event.preventDefault();
     if (parent === 'PromptForFirstSong') {
       like(null, selectedSong.id);
