@@ -20,9 +20,9 @@ html {
 
 #wooster.light {
   color: #000000;
-  --glass-color: rgba(255, 255, 255, 0.9);
-  --glass-color-behind: rgba(255, 255, 255, 0.5);
-  --glass-color-front: rgba(255, 255, 255, 0.8);
+  --glass-color: rgba(240, 240, 240, 0.9);
+  --glass-color-behind: rgba(240, 240, 240, 0.5);
+  --glass-color-front: rgba(240, 240, 240, 0.8);
 }
 
 #wooster.dark {
