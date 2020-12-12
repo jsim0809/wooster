@@ -81,7 +81,7 @@ function SearchBar({
     }
   };
 
-  const handleMouseMove = (event) => {
+  const handleMouseEnter = (event) => {
     setSelectedIndex(Number(event.currentTarget.getAttribute('name')));
   }
 
@@ -108,7 +108,7 @@ function SearchBar({
         className={selectedIndex === index + 1 ? 'selected-song' : ''}
         key={index + 1}
         name={index + 1}
-        onMouseMove={handleMouseMove}
+        onMouseEnter={handleMouseEnter}
         onClick={ ()=>{ alert('yo') } }>
         {`${pluralize(result.artists)} – ${result.name}`}
       </div>
