@@ -248,6 +248,7 @@ function App() {
   };
 
   useEffect(() => {
+    console.log('useEffect triggered')
     if (songQueue.length === 1) {
       const randomSong2 = getRandomLikedSong();
       loadThreeSongs(songQueue[0], randomSong2);

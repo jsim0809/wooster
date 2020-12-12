@@ -91,12 +91,14 @@ function SearchBar({
       like(null, selectedSong.id);
     } else {
       setSongQueue([selectedSong]);
+      console.log('song queue set: ', selectedSong)
     }
     setSearchResults([]);
     if (setSearchIsActive) {
       setSearchIsActive(false);
     }
     sendEvent('SELECTED');
+    console.log('SELECTED event sent')
   };
 
   const resultsDisplay = searchResults.map((result, index) => {
