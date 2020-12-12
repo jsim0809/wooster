@@ -114,7 +114,7 @@ function SearchBar({
 
   return (
     <form autoComplete="off" onSubmit={handleSubmit}>
-      <input type="text"
+      <input id="search-input" type="text"
         onChange={handleEntry}
         onKeyDown={handleKeyDown}
         onBlur={handleBlur}

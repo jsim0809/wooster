@@ -23,6 +23,8 @@ html {
   --glass-color: rgba(240, 240, 240, 0.9);
   --glass-color-behind: rgba(240, 240, 240, 0.5);
   --glass-color-front: rgba(240, 240, 240, 0.8);
+  --search-box-background-color: #dedede;
+  --search-box-color: #000000;
 }
 
 #wooster.dark {
@@ -30,6 +32,8 @@ html {
   --glass-color: rgba(16, 16, 16, 0.9);
   --glass-color-behind: rgba(16, 16, 16, 0.5);
   --glass-color-front: rgba(16, 16, 16, 0.8);
+  --search-box-background-color: rgba(32, 32, 32, 1);
+  --search-box-color: #dedede;
 }
 
 /* Window Too Small message */
@@ -187,6 +191,11 @@ main #main-title input:focus {
   border: 2px groove #888888;
 }
 
+main #main-title #search-input {
+  background-color: var(--search-box-background-color);
+  color: var(--search-box-color);
+}
+
 main #main-title #search-results {
   position: absolute;
   width: calc(100% + 6px);
@@ -199,6 +208,8 @@ main #main-title #search-results {
 
 main #main-title #search-results.active {
   border: 1px solid #888888;
+  background-color: var(--search-box-background-color);
+  color: var(--search-box-color);
 }
 
 main #main-title #search-results div {
@@ -209,8 +220,8 @@ main #main-title #search-results div {
 }
 
 main #main-title #search-results div.selected-song {
-  background-color: #000000;
-  color: #dedede;
+  background-color: var(--search-box-color);
+  color: var(--search-box-background-color);
 }
 
 main #prompt-for-first-song img {
