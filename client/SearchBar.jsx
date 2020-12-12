@@ -56,10 +56,10 @@ function SearchBar({
   };
 
   const handleBlur = () => {
-    setSearchResults([]);
     if (!searchField) {
-      setSelectedIndex(0);
-      setSelectedSong(null);
+        setSearchResults([]);
+        setSelectedIndex(0);
+        setSelectedSong(null);
     }
   }
 
@@ -86,7 +86,7 @@ function SearchBar({
   }
 
   const handleSubmit = (event) => {
-    console.log('handleSubmit triggered')
+    console.log('handleSubmit')
     event.preventDefault();
     if (parent === 'PromptForFirstSong') {
       like(null, selectedSong.id);
@@ -109,7 +109,7 @@ function SearchBar({
         key={index + 1}
         name={index + 1}
         onMouseMove={handleMouseMove}
-        >
+        onClick={handleSubmit}>
         {`${pluralize(result.artists)} – ${result.name}`}
       </div>
     )
