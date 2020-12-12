@@ -20,16 +20,16 @@ html {
 
 #wooster.light {
   color: #000000;
-  --glass-color: rgba(255, 255, 255, 0.85);
-  --glass-color-behind: rgba(255, 255, 255, 0.4);
-  --glass-color-front: rgba(255, 255, 255, 0.7);
+  --glass-color: rgba(255, 255, 255, 0.9);
+  --glass-color-behind: rgba(255, 255, 255, 0.5);
+  --glass-color-front: rgba(255, 255, 255, 0.8);
 }
 
 #wooster.dark {
   color: #dedede;
-  --glass-color: rgba(0, 0, 0, 0.85);
-  --glass-color-behind: rgba(0, 0, 0, 0.4);
-  --glass-color-front: rgba(0, 0, 0, 0.7);
+  --glass-color: rgba(16, 16, 16, 0.9);
+  --glass-color-behind: rgba(16, 16, 16, 0.5);
+  --glass-color-front: rgba(16, 16, 16, 0.8);
 }
 
 /* Window Too Small message */
