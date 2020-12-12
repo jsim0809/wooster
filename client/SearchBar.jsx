@@ -114,6 +114,7 @@ function SearchBar({
 
   return (
     <form autoComplete="off" onSubmit={handleSubmit}>
+      <div>Testing</div>
       <input type="text"
         onChange={handleEntry}
         onKeyDown={handleKeyDown}
