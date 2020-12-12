@@ -250,7 +250,7 @@ function App() {
   useEffect(() => {
     if (songQueue.length === 1) {
       const randomSong2 = getRandomLikedSong();
-      loadThreeSongs(songQueue[0], randomSong2);
+      loadFourSongs(songQueue[0], randomSong2);
     }
     if (songQueue.length > 1
       && (state.matches('playing')
@@ -283,7 +283,7 @@ function App() {
     }
   }, [songQueue, state.value]);
 
-  const loadThreeSongs = (song1, song2) => {
+  const loadFourSongs = (song1, song2) => {
     axios({
       method: 'get',
       url: 'https://api.spotify.com/v1/recommendations?' +
@@ -298,12 +298,14 @@ function App() {
       },
     })
       .then((response) => {
-        let middleSong = response.data.tracks.find((recommendation) => {
+        let freshSongs = response.data.tracks.filter((recommendation) => {
           return ![...dislikes, ...stale].find((dislikedSong) => {
             return dislikedSong?.id === recommendation.id;
           });
-        }) ?? getRandomLikedSong();
-        setSongQueue([song1, middleSong, song2]);
+        });
+        let middleSong1 = freshSongs[0] ?? getRandomLikedSong();
+        let middleSong2 = freshSongs[1] ?? getRandomLikedSong();
+        setSongQueue([song1, middleSong1, middleSong2, song2]);
       });
   };
 
