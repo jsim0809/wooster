@@ -56,9 +56,9 @@ function SearchBar({
   };
 
   const handleBlur = () => {
+    setSearchResults([]);
+    setSelectedIndex(0);
     if (!searchField) {
-      setSearchResults([]);
-      setSelectedIndex(0);
       setSelectedSong(null);
     }
   }
