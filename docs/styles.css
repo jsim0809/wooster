@@ -340,7 +340,8 @@ main #control-bar .control-bar-progress-indicator {
   background-color: #888888;
   border-radius: 3px;
   animation-name: progress;
-  animation-duration: 20s;
+  animation-timing-function: linear;
+  animation-play-state: paused;
 }
 
 @keyframes progress {
@@ -352,4 +353,8 @@ main #control-bar .control-bar-progress-indicator {
     width: 76%;
     margin-right: 0%;
   }
+}
+
+main #control-bar .control-bar-progress-indicator.playing {
+  animation-play-state: running;
 }
