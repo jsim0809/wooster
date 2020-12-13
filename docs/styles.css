@@ -336,8 +336,20 @@ main #control-bar .control-bar-progress-indicator {
   position: relative;
   top: 2rem;
   grid-area: 2 / 7 / 3 / 2;
-  width: 76%;
   height: 3px;
   background-color: #888888;
   border-radius: 3px;
+  animation-name: progress;
+  animation-duration: 20s;
+}
+
+@keyframes progress {
+  from {
+    margin-left: 0%;
+    width: 76%;
+  }
+  to {
+    margin-left: 76%;
+    width: 0%;
+  }
 }
