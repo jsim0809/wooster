@@ -36,6 +36,7 @@ const woosterMachine = Machine({
       on: {
         PLAY: 'resumed',
         SELECTED: 'songSelected',
+        SONG_ENDED: 'playing',
       }
     },
     resumed: {
