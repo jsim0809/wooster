@@ -276,6 +276,7 @@ function App() {
         })
           .then(() => {
             sendEvent('PLAY');
+            console.log('Current songQueue:', songQueue);
           });
       } else {
         playNextSong();
