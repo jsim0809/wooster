@@ -105,7 +105,6 @@ function Player({
     likeButtonDisplay = <img className={`control-bar-like ${lightOrDark}`} onClick={like} src="assets/like.svg" />;
   }
 
-
   return (
     <main>
       <div id="player">
