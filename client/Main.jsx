@@ -19,7 +19,8 @@ function Main({
   playNextSong,
   like,
   unlike,
-  dislike
+  dislike,
+  progressBarAnimationKey
 }) {
 
   const pluralize = (artists) => {
@@ -61,6 +62,7 @@ function Main({
           unlike={unlike}
           dislike={dislike}
           pluralize={pluralize}
+          progressBarAnimationKey={progressBarAnimationKey}
         />
       )
   }

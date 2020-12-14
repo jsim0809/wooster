@@ -16,7 +16,8 @@ function Player({
   like,
   unlike,
   dislike,
-  pluralize
+  pluralize,
+  progressBarAnimationKey
 }) {
   const [searchIsActive, setSearchIsActive] = useState(false);
 
@@ -77,20 +78,19 @@ function Player({
   
   let playOrPauseButtonDisplay;
   let progressBar;
-  let randomKey = Math.random();
   if (state.matches('playing') || state.matches('resumed')) {
     playOrPauseButtonDisplay = (
       <img className={`control-bar-play-pause ${lightOrDark}`} onClick={handlePauseClick} src="assets/pause.svg" />
     );
     progressBar = (
-      <div key={randomKey} className={`control-bar-progress-indicator playing`} style={{'animation-duration': songQueue[0]?.duration_ms + 'ms'}}></div>
+      <div key={progressBarAnimationKey} className={`control-bar-progress-indicator playing`} style={{'animation-duration': songQueue[0]?.duration_ms + 'ms'}}></div>
     );
   } else {
     playOrPauseButtonDisplay = (
       <img className={`control-bar-play-pause ${lightOrDark}`} onClick={handlePlayClick} src="assets/play.svg" />
     );
     progressBar = (
-      <div key={randomKey} className={`control-bar-progress-indicator`} style={{'animation-duration': songQueue[0]?.duration_ms + 'ms'}}></div>
+      <div key={progressBarAnimationKey} className={`control-bar-progress-indicator`} style={{'animation-duration': songQueue[0]?.duration_ms + 'ms'}}></div>
     );
   }
 

@@ -27,6 +27,7 @@ function App() {
   const [stale, setStale] = useState([]);
   const [songQueue, setSongQueue] = useState([]);
   const [playbackState, setPlaybackState] = useState({});
+  const [progressBarAnimationKey, setProgressBarAnimationKey] = '';
 
   // Triggered effect: Runs once on component mount.
   // Adds a listener for window size.
@@ -276,6 +277,7 @@ function App() {
         })
           .then(() => {
             sendEvent('PLAY');
+            setProgressBarAnimationKey = Math.random();
             console.log('Current songQueue:', songQueue);
           });
       } else {
@@ -443,6 +445,7 @@ function App() {
           like={like}
           unlike={unlike}
           dislike={dislike}
+          progressBarAnimationKey={progressBarAnimationKey}
         />
       </div>
     );
