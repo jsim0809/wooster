@@ -63,7 +63,7 @@ function Player({
           accessToken={accessToken}
           like={like}
           stale={stale}
-          setStale={stale}
+          setStale={setStale}
           setSongQueue={setSongQueue}
           pluralize={pluralize}
           parent="Player"

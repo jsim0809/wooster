@@ -57,7 +57,7 @@ function Main({
           user={user}
           likes={likes}
           stale={stale}
-          setStale={stale}
+          setStale={setStale}
           songQueue={songQueue}
           setSongQueue={setSongQueue}
           playSameSong={playSameSong}
