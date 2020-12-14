@@ -74,12 +74,14 @@ function Player({
       </>
     );
   }
-
+  
   let playOrPauseButtonDisplay;
+  let playingOrPaused;
   if (state.matches('playing') || state.matches('resumed')) {
     playOrPauseButtonDisplay = (
       <img className={`control-bar-play-pause ${lightOrDark}`} onClick={handlePauseClick} src="assets/pause.svg" />
     );
+    playingOrPaused = 'playing';
   } else {
     playOrPauseButtonDisplay = (
       <img className={`control-bar-play-pause ${lightOrDark}`} onClick={handlePlayClick} src="assets/play.svg" />
@@ -91,11 +93,6 @@ function Player({
     likeButtonDisplay = <img className={`control-bar-like-selected ${lightOrDark}`} onClick={unlike} src="assets/like-selected.svg" />;
   } else {
     likeButtonDisplay = <img className={`control-bar-like ${lightOrDark}`} onClick={like} src="assets/like.svg" />;
-  }
-
-  let playingOrPaused;
-  if (state.matches('playing') || state.matches('resumed')) {
-    playingOrPaused = 'playing';
   }
 
   let songDuration = songQueue[0]?.duration;
@@ -123,7 +120,7 @@ function Player({
           <img className={`control-bar-skip-forward ${lightOrDark}`} onClick={playNextSong} src="assets/skip-forward.svg" />
           {likeButtonDisplay}
           <hr className="control-bar-line" />
-          <div className={`control-bar-progress-indicator ${playing}`} style={{'animation-duration': songDuration + 'ms'}}></div>
+          <div className={`control-bar-progress-indicator ${playingOrPaused}`} style={{'animation-duration': songDuration + 'ms'}}></div>
         </div>
       </div>
     </main>
