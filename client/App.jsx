@@ -277,7 +277,7 @@ function App() {
         })
           .then(() => {
             sendEvent('PLAY');
-            setProgressBarAnimationKey = Math.random();
+            setProgressBarAnimationKey(Math.random());
             console.log('Current songQueue:', songQueue);
           });
       } else {
