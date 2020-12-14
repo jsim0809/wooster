@@ -141,6 +141,10 @@ main #logout {
   cursor: pointer;
 }
 
+main #logout:hover {
+  color: #888888;
+}
+
 main #main-title {
   font-size: 2.75rem;
   text-align: center;
