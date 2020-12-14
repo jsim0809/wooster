@@ -123,7 +123,7 @@ function Player({
           {playOrPauseButtonDisplay}
           <img className={`control-bar-skip-forward ${lightOrDark}`} onClick={playNextSong} src="assets/skip-forward.svg" />
           {likeButtonDisplay}
-          <hr className="control-bar-line" />
+          <div className="control-bar-line"></div>
           {progressBar}
         </div>
       </div>

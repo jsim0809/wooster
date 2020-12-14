@@ -330,6 +330,8 @@ main #control-bar .control-bar-line {
   top: 2rem;
   grid-area: 2 / 7 / 3 / 2;
   width: 75%;
+  height: 1px;
+  background-color: var(--search-box-background-color);
 }
 
 main #control-bar .control-bar-progress-indicator {
