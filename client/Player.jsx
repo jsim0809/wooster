@@ -9,6 +9,8 @@ function Player({
   accessToken,
   user,
   likes,
+  stale,
+  setStale,
   songQueue,
   setSongQueue,
   playSameSong,
@@ -60,6 +62,8 @@ function Player({
           sendEvent={sendEvent}
           accessToken={accessToken}
           like={like}
+          stale={stale}
+          setStale={stale}
           setSongQueue={setSongQueue}
           pluralize={pluralize}
           parent="Player"

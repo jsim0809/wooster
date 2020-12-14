@@ -438,6 +438,8 @@ function App() {
           accessToken={accessToken}
           user={user}
           likes={likes}
+          stale={stale}
+          setStale={stale}
           songQueue={songQueue}
           setSongQueue={setSongQueue}
           playSameSong={playSameSong}

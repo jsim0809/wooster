@@ -6,6 +6,8 @@ function SearchBar({
   sendEvent,
   accessToken,
   like,
+  stale,
+  setStale,
   setSongQueue,
   pluralize,
   parent,
@@ -90,6 +92,12 @@ function SearchBar({
     if (parent === 'PromptForFirstSong') {
       like(null, selectedSong.id);
     } else {
+      let staleIndex = stale.findIndex((song) => {
+        return song.id === selectedSong.id;
+      });
+      if (staleIndex > -1) {
+        setStale(stale.splice(staleIndex, 1));
+      }
       setSongQueue([selectedSong]);
     }
     setSearchResults([]);
