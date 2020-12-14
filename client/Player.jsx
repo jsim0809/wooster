@@ -95,7 +95,7 @@ function Player({
     likeButtonDisplay = <img className={`control-bar-like ${lightOrDark}`} onClick={like} src="assets/like.svg" />;
   }
 
-  let songDuration = songQueue[0]?.duration;
+  let songDuration = songQueue[0]?.duration_ms;
 
   return (
     <main>
